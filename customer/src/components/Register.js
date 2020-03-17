@@ -2,6 +2,8 @@ import React from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Row, Col, Container, Form, Button, FormGroup } from "react-bootstrap";
 import FormErrors from "./FormErrors.js";
+import Swal from "sweetalert2";
+import SERVER_PREFIX from "./ServerConfig";
 
 class Register extends React.Component {
   constructor() {
@@ -17,7 +19,8 @@ class Register extends React.Component {
       emailValid: false,
       passwordValid: false,
       formValid: false,
-      redirect: false
+      redirect: false,
+      isSubmitting: false
     };
   }
 
@@ -67,20 +70,47 @@ class Register extends React.Component {
     });
   }
 
-  handleSubmit = event => {
-    console.log("name:" + this.state.name);
-    console.log("email:" + this.state.email);
-    console.log("password:" + this.state.password);
-    console.log("address:" + this.state.address);
-    console.log("postalCode:" + this.state.postalCode);
-    console.log("phone:" + this.state.phone);
-    console.log("Yepee! form submitted");
+  handleSubmit = async event => {
+    let values = {
+      customerName: this.state.name,
+      customerEmail: this.state.email,
+      customerPassword: this.state.password,
+      customerAddress: this.state.address,
+      customerPostalCode: this.state.postalCode,
+      customerPhone: this.state.phone
+    };
+    // console.log("values: ", values);
+
     event.preventDefault();
+
+    this.setState({ isSubmitting: true });
+
+    fetch(SERVER_PREFIX + "/customers", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res === 200) {
+          Swal("Registration Successful!", "Your account has been created!", "success");
+          this.setState({ isSubmitting: false, redirect: true });
+        }
+
+        return res.json();
+      })
+      .then(data => {
+        console.log(data);
+        !data.hasOwnProperty("error")
+          ? this.setState({ message: data.success })
+          : this.setState({ message: data.error, isError: true });
+      });
   };
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/login-page" />;
+      return <Redirect to="/login" />;
     }
     return (
       <Container fluid className="bg-white">
