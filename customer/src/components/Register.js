@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { Row, Col, Container, Form, Button, FormGroup } from "react-bootstrap";
+import FormErrors from "./FormErrors.js";
 
 class Register extends React.Component {
   constructor() {
@@ -11,22 +12,60 @@ class Register extends React.Component {
       password: "",
       address: "",
       postalCode: "",
-      phone: ""
+      phone: "",
+      formErrors: { email: "", password: "" },
+      emailValid: false,
+      passwordValid: false,
+      formValid: false,
+      redirect: false
     };
-    // this.handleChange = this.handleChange.bind(this);
   }
 
-  // handleChange = event => {
-  //   let fieldName = event.target.name;
-  //   let fleldVal = event.target.value;
-  //   this.setState({ newCustomer: { ...this.state.newCustomer, [fieldName]: fleldVal } });
-  // };
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   handleUserInput = event => {
     const name = event.target.id;
     const value = event.target.value;
-    this.setState({ [name]: value });
+    // this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
+    });
   };
+
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let emailValid = this.state.emailValid;
+    let passwordValid = this.state.passwordValid;
+
+    switch (fieldName) {
+      case "email":
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? "" : " is in an invalid format.";
+        break;
+      case "password":
+        passwordValid = value.length >= 7;
+        fieldValidationErrors.password = passwordValid ? "" : " must be at least 7 characters long.";
+        break;
+      default:
+        break;
+    }
+    this.setState(
+      {
+        formErrors: fieldValidationErrors,
+        emailValid: emailValid,
+        passwordValid: passwordValid
+      },
+      this.validateForm
+    );
+  }
+
+  validateForm() {
+    this.setState({
+      formValid: this.state.emailValid && this.state.passwordValid
+    });
+  }
 
   handleSubmit = event => {
     console.log("name:" + this.state.name);
@@ -40,6 +79,9 @@ class Register extends React.Component {
   };
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/login-page" />;
+    }
     return (
       <Container fluid className="bg-white">
         <Row>
@@ -50,6 +92,11 @@ class Register extends React.Component {
                 <Row>
                   <Col md={9} lg={8} className="mx-auto pl-5 pr-5">
                     <h3 className="login-heading mb-4">Welcome to KinKao!</h3>
+                    <p>
+                      Please fill in your particulars below to get started! All fields are required.
+                      {/* // Display error message here */}
+                      <FormErrors formErrors={this.state.formErrors} />
+                    </p>
                     <Form onSubmit={this.handleSubmit}>
                       <FormGroup controlId="name">
                         <Form.Control
@@ -105,7 +152,9 @@ class Register extends React.Component {
                           required
                         />
                       </FormGroup>
+
                       <Button
+                        disabled={!this.state.formValid}
                         type="submit"
                         to="/login"
                         className="btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2"
