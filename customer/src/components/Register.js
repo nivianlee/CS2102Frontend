@@ -1,27 +1,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Form, Button, FormGroup } from "react-bootstrap";
 
 class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      newCustomer: {
-        name: "",
-        email: "",
-        password: "",
-        address: "",
-        postalCode: "",
-        phone: ""
-      }
+      name: "",
+      email: "",
+      password: "",
+      address: "",
+      postalCode: "",
+      phone: ""
     };
-    this.handleChange = this.handleChange.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = event => {
-    let fieldName = event.target.name;
-    let fleldVal = event.target.value;
-    this.setState({ newCustomer: { ...this.state.newCustomer, [fieldName]: fleldVal } });
+  // handleChange = event => {
+  //   let fieldName = event.target.name;
+  //   let fleldVal = event.target.value;
+  //   this.setState({ newCustomer: { ...this.state.newCustomer, [fieldName]: fleldVal } });
+  // };
+
+  handleUserInput = event => {
+    const name = event.target.id;
+    const value = event.target.value;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = event => {
+    console.log("name:" + this.state.name);
+    console.log("email:" + this.state.email);
+    console.log("password:" + this.state.password);
+    console.log("address:" + this.state.address);
+    console.log("postalCode:" + this.state.postalCode);
+    console.log("phone:" + this.state.phone);
+    console.log("Yepee! form submitted");
+    event.preventDefault();
   };
 
   render() {
@@ -34,64 +49,62 @@ class Register extends React.Component {
               <Container>
                 <Row>
                   <Col md={9} lg={8} className="mx-auto pl-5 pr-5">
-                    <h3 className="login-heading mb-4">Welcome to DabaoFood!</h3>
-                    <Form>
-                      <div className="form-label-group">
+                    <h3 className="login-heading mb-4">Welcome to KinKao!</h3>
+                    <Form onSubmit={this.handleSubmit}>
+                      <FormGroup controlId="name">
+                        <Form.Control
+                          type="text"
+                          placeholder="Full Name"
+                          value={this.state.name}
+                          onChange={event => this.handleUserInput(event)}
+                          required
+                        />
+                      </FormGroup>
+                      <FormGroup controlId="email">
                         <Form.Control
                           type="email"
-                          id="inputEmail"
                           placeholder="Email address"
-                          defaultValue={this.state.email}
-                          onChange={this.handleChange}
+                          value={this.state.email}
+                          onChange={event => this.handleUserInput(event)}
                           required
                         />
-                        <Form.Label htmlFor="inputEmail">Email address</Form.Label>
-                      </div>
-                      <div className="form-label-group">
+                      </FormGroup>
+                      <FormGroup controlId="password">
                         <Form.Control
                           type="password"
-                          id="inputPassword"
                           placeholder="Password"
-                          defaultValue={this.state.password}
-                          onChange={this.handleChange}
+                          value={this.state.password}
+                          onChange={event => this.handleUserInput(event)}
                           required
                         />
-                        <Form.Label htmlFor="inputPassword">Password</Form.Label>
-                      </div>
-                      <div className="form-label-group">
+                      </FormGroup>
+                      <FormGroup controlId="address">
                         <Form.Control
                           type="text"
-                          id="inputAddress"
                           placeholder="Address"
-                          defaultValue={this.state.address}
-                          onChange={this.handleChange}
+                          value={this.state.address}
+                          onChange={event => this.handleUserInput(event)}
                           required
                         />
-                        <Form.Label htmlFor="inputAddress">Address</Form.Label>
-                      </div>
-                      <div className="form-label-group">
+                      </FormGroup>
+                      <FormGroup controlId="postalCode">
                         <Form.Control
                           type="text"
-                          id="inputPostalCode"
-                          placeholder="PostalCode"
-                          defaultValue={this.state.postalCode}
-                          onChange={this.handleChange}
+                          placeholder="Postal Code"
+                          value={this.state.postalCode}
+                          onChange={event => this.handleUserInput(event)}
                           required
                         />
-                        <Form.Label htmlFor="inputPostalCode">Postal Code</Form.Label>
-                      </div>
-                      <div className="form-label-group">
+                      </FormGroup>
+                      <FormGroup controlId="phone">
                         <Form.Control
                           type="text"
-                          id="inputPhone"
                           placeholder="Phone"
-                          defaultValue={this.state.phone}
-                          onChange={this.handleChange}
+                          value={this.state.phone}
+                          onChange={event => this.handleUserInput(event)}
                           required
                         />
-                        <Form.Label htmlFor="inputPhone">Mobile Number</Form.Label>
-                      </div>
-
+                      </FormGroup>
                       <Button
                         type="submit"
                         to="/login"
