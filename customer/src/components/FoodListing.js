@@ -7,24 +7,24 @@ import CardItem from './common/CardItem';
 import CategoriesCarousel from './common/CategoriesCarousel';
 import SERVER_PREFIX from './ServerConfig';
 
-class Restaurants extends React.Component {
+class FoodListing extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null,
       isLoaded: false,
-      restaurants: []
+      foodItems: []
     };
   }
 
   componentWillMount() {
-    fetch(SERVER_PREFIX + '/restaurants')
+    fetch(SERVER_PREFIX + '/foodItems')
       .then(res => res.json())
       .then(
         result => {
           this.setState({
             isLoaded: true,
-            restaurants: result
+            foodItems: result
           });
         },
         // Note: it's important to handle errors here
@@ -40,12 +40,7 @@ class Restaurants extends React.Component {
   }
 
   render() {
-    // for (var i = 0; i < this.state.restaurants.length; i++) {
-    //   var obj = this.state.restaurants[i];
-
-    //   console.log('hello' + obj.restaurantid);
-    // }
-    const { error, isLoaded, restaurants } = this.state;
+    const { error, isLoaded, foodItems } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -473,16 +468,16 @@ class Restaurants extends React.Component {
                 <Col md={9}>
                   <CategoriesCarousel />
                   <Row>
-                    {restaurants.map((item, index) => {
+                    {foodItems.map((item, index) => {
                       return (
                         <Col key={index} md={4} sm={6} className='mb-4 pb-2'>
                           <CardItem
-                            title={item.restaurantname}
-                            subTitle={item.address}
+                            title={item.fooditemname}
+                            subTitle={item.category}
                             imageAlt='Product'
                             image='img/list/1.png'
                             imageClass='img-fluid item-img'
-                            linkUrl={'restaurants/foods/' + item.restaurantid}
+                            linkUrl='detail'
                             offerText='65% off | Use Coupon OSAHAN50'
                             time='15–25 min'
                             price='$100 FOR TWO'
@@ -505,4 +500,4 @@ class Restaurants extends React.Component {
   }
 }
 
-export default Restaurants;
+export default FoodListing;
