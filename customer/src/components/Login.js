@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Row, Col, Container, Form, Button } from 'react-bootstrap';
 import FontAwesome from './common/FontAwesome';
+import Swal from 'sweetalert2';
 
 class Login extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Login extends React.Component {
 
   handleSubmit = event => {
     console.log('this.state', this.state);
-    fetch('http://localhost:3000/login', {
+    fetch('http://localhost:3000/customer/login', {
       method: 'POST',
       body: JSON.stringify({ user: this.state }),
       headers: new Headers({
@@ -31,8 +32,40 @@ class Login extends React.Component {
       })
     })
       .then(response => response.json())
-      .then(data => {
-        this.props.setToken(data.sessionToken);
+      .then(response => {
+        if (response.status === 200) {
+          // console.log('SUCCESSS');
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful!',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            timer: 2000
+          });
+
+          // Put UserId into Local Storage
+          localStorage.setItem('loggedInUserId', JSON.stringify(response.session.userId));
+          console.log(JSON.parse(localStorage.getItem('loggedInUserId')));
+
+          // Set loggedIn localStorage variable to True
+          localStorage.setItem('isLoggedIn', JSON.stringify('true'));
+          console.log(JSON.parse(localStorage.getItem('isLoggedIn')));
+
+          // Login success, redirect to landing page
+          this.setState({ isSubmitting: false, redirect: true });
+
+          // console.log('redirect: ' + this.state.redirect);
+          return response.json();
+        } else {
+          console.log('SOMETHING WENT WRONG');
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed!',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
       });
     event.preventDefault();
   };
@@ -42,7 +75,7 @@ class Login extends React.Component {
       return (
         <Redirect
           to={{
-            pathname: '/landing-page',
+            pathname: '/',
             isLoggedIn: true
           }}
         />
