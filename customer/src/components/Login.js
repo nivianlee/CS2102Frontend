@@ -3,16 +3,16 @@ import { Link, Redirect } from 'react-router-dom';
 import { Row, Col, Container, Form, Button } from 'react-bootstrap';
 import FontAwesome from './common/FontAwesome';
 import Swal from 'sweetalert2';
+//import localStorage from 'local-storage';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {
-        email: '',
-        password: ''
-      },
-      redirect: false
+      email: '',
+      password: '',
+      redirect: false,
+      user: []
     };
   }
 
@@ -23,18 +23,25 @@ class Login extends React.Component {
   };
 
   handleSubmit = event => {
-    console.log('this.state', this.state);
+    let values = {
+      customerEmail: this.state.email,
+      customerPassword: this.state.password
+    };
+    console.log('values:', values);
+
     fetch('http://localhost:3000/customer/login', {
       method: 'POST',
-      body: JSON.stringify({ user: this.state }),
+      body: JSON.stringify(values),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
     })
-      .then(response => response.json())
       .then(response => {
+        console.log('response.status: ' + response.status);
+
         if (response.status === 200) {
           // console.log('SUCCESSS');
+
           Swal.fire({
             icon: 'success',
             title: 'Login Successful!',
@@ -43,18 +50,6 @@ class Login extends React.Component {
             timer: 2000
           });
 
-          // Put UserId into Local Storage
-          localStorage.setItem('loggedInUserId', JSON.stringify(response.session.userId));
-          console.log(JSON.parse(localStorage.getItem('loggedInUserId')));
-
-          // Set loggedIn localStorage variable to True
-          localStorage.setItem('isLoggedIn', JSON.stringify('true'));
-          console.log(JSON.parse(localStorage.getItem('isLoggedIn')));
-
-          // Login success, redirect to landing page
-          this.setState({ isSubmitting: false, redirect: true });
-
-          // console.log('redirect: ' + this.state.redirect);
           return response.json();
         } else {
           console.log('SOMETHING WENT WRONG');
@@ -66,7 +61,21 @@ class Login extends React.Component {
             timer: 2000
           });
         }
-      });
+      })
+      .then(data => {
+        // Put UserId into Local Storage
+        console.log(data[0].customerid);
+        localStorage.setItem('loggedInUserId', data[0].customerid);
+        console.log('getItem[loggedInUserId]: ' + localStorage.getItem('loggedInUserId'));
+
+        // Set loggedIn localStorage variable to True
+        localStorage.setItem('isLoggedIn', JSON.stringify('true'));
+        console.log('getItem[isLoggedIn]: ' + localStorage.getItem('isLoggedIn'));
+
+        // Login success, redirect to landing page
+        this.setState({ redirect: true });
+      })
+      .catch(console.log);
     event.preventDefault();
   };
 

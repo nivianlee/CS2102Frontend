@@ -90,7 +90,7 @@ class Register extends React.Component {
   handleSubmit = async event => {
     let values = {
       customerName: this.state.name,
-      customerEmail: this.state.email,
+      customerEmail: this.state.email.toLowerCase(),
       customerPassword: this.state.password,
       customerAddress: this.state.address,
       customerPostalCode: this.state.postalCode,
