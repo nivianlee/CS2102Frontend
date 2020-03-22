@@ -29,6 +29,11 @@ class Header extends React.Component {
     }
   };
 
+  handleLogout() {
+    console.log("localStorage.getItem('loggedInUserId'): " + localStorage.getItem('loggedInUserId'));
+    localStorage.clear();
+  }
+
   componentDidMount() {
     document.addEventListener('click', this.handleClick, false);
   }
@@ -36,6 +41,7 @@ class Header extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('click', this.handleClick, false);
   }
+
   render() {
     return (
       <div ref={node => (this.node = node)}>
@@ -113,6 +119,9 @@ class Header extends React.Component {
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={4.5} as={NavLink} activeclassname='active' to='/myaccount/addresses'>
                     <Icofont icon='location-pin' /> Addresses
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} onClick={this.handleLogout} to='/login'>
+                    <Icofont icon='logout' /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown

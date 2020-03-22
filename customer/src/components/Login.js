@@ -47,7 +47,7 @@ class Login extends React.Component {
             title: 'Login Successful!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 2000
+            timer: 1000
           });
 
           return response.json();
@@ -84,7 +84,7 @@ class Login extends React.Component {
       return (
         <Redirect
           to={{
-            pathname: '/',
+            pathname: '/landing-page',
             isLoggedIn: true
           }}
         />
