@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Index from './components/Index';
@@ -17,17 +17,42 @@ import Invoice from './components/Invoice';
 import Checkout from './components/Checkout';
 import Detail from './components/Detail';
 import ResFoodItems from './components/ResFoodItems';
+import Auth from './components/auth/Auth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'react-select2-wrapper/css/select2.css';
 import './App.css';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sessionToken: ''
+    };
+  }
+  componentWillMount() {
+    const token = localStorage.getItem('token'); //4
+    if (token && !this.state.sessionToken) {
+      //5
+      this.setState({ sessionToken: token });
+    }
+  }
+  //2
+  setSessionState = token => {
+    localStorage.setItem('token', token); //3
+    this.setState({ sessionToken: token });
+  };
+
   render() {
     return (
       <>
         {this.props.location.pathname !== '/login' && this.props.location.pathname !== '/register' ? <Header /> : ''}
         <Switch>
+          <Router>
+            <div>
+              <Auth setToken={this.setSessionState} />
+            </div>
+          </Router>
           <Route path='/' exact component={Index} />
           <Route path='/offers' exact component={Offers} />
           <Route path='/myaccount' component={MyAccount} />
