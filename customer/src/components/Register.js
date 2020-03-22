@@ -4,6 +4,7 @@ import { Row, Col, Container, Form, Button, FormGroup } from 'react-bootstrap';
 import FormErrors from './FormErrors.js';
 import Swal from 'sweetalert2';
 import SERVER_PREFIX from './ServerConfig';
+import Navbar from 'react-bootstrap/Navbar';
 
 class Register extends React.Component {
   constructor() {
@@ -148,7 +149,7 @@ class Register extends React.Component {
               <Container>
                 <Row>
                   <Col md={9} lg={8} className='mx-auto pl-5 pr-5'>
-                    <h3 className='login-heading mb-4'>Welcome to KinKao!</h3>
+                    <Navbar.Brand href='#home'>Welcome to Kin Kao!</Navbar.Brand>
                     <p>
                       Please fill in your particulars below to get started! All fields are required.
                       {/* // Display error message here */}

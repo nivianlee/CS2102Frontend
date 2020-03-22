@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Row, Col, Container, Form, Button } from 'react-bootstrap';
-import FontAwesome from './common/FontAwesome';
 import Swal from 'sweetalert2';
+import Navbar from 'react-bootstrap/Navbar';
 //import localStorage from 'local-storage';
 
 class Login extends React.Component {
@@ -47,7 +47,7 @@ class Login extends React.Component {
             title: 'Login Successful!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 1000
+            timer: 700
           });
 
           return response.json();
@@ -58,15 +58,26 @@ class Login extends React.Component {
             title: 'Login Failed!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 2000
+            timer: 700
           });
         }
       })
       .then(data => {
         // Put UserId into Local Storage
+        console.log();
         console.log(data[0].customerid);
         localStorage.setItem('loggedInUserId', data[0].customerid);
+        localStorage.setItem('loggedInUserEmail', data[0].customeremail);
+        localStorage.setItem('loggedInUserName', data[0].customername);
+        localStorage.setItem('loggedInUserPhone', data[0].customerphone);
+        localStorage.setItem('loggedInUserRewardPt', data[0].rewardpoints);
+        localStorage.setItem('loggedInUserPassword', data[0].customerpassword);
         console.log('getItem[loggedInUserId]: ' + localStorage.getItem('loggedInUserId'));
+        console.log('getItem[loggedInUserEmail]: ' + localStorage.getItem('loggedInUserEmail'));
+        console.log('getItem[loggedInUserName]: ' + localStorage.getItem('loggedInUserName'));
+        console.log('getItem[loggedInUserPhone]: ' + localStorage.getItem('loggedInUserPhone'));
+        console.log('getItem[loggedInUserRewardPt]: ' + localStorage.getItem('loggedInUserRewardPt'));
+        console.log('getItem[loggedInUserPassword]: ' + localStorage.getItem('loggedInUserPassword'));
 
         // Set loggedIn localStorage variable to True
         localStorage.setItem('isLoggedIn', JSON.stringify('true'));
@@ -101,7 +112,7 @@ class Login extends React.Component {
                 <Container>
                   <Row>
                     <Col md={9} lg={8} className='mx-auto pl-5 pr-5'>
-                      <h3 className='login-heading mb-4'>Welcome back!</h3>
+                      <Navbar.Brand href='#home'>Welcome back!</Navbar.Brand>
                       <Form onSubmit={this.handleSubmit}>
                         <div className='form-label-group'>
                           <Form.Control
@@ -146,25 +157,6 @@ class Login extends React.Component {
                           </Link>
                         </div>
                         <hr className='my-4' />
-                        <p className='text-center'>LOGIN WITH</p>
-                        <div className='row'>
-                          <div className='col pr-2'>
-                            <Button
-                              className='btn pl-1 pr-1 btn-lg btn-google font-weight-normal text-white btn-block text-uppercase'
-                              type='submit'
-                            >
-                              <FontAwesome icon='google' className='mr-2' /> Google
-                            </Button>
-                          </div>
-                          <div className='col pl-2'>
-                            <Button
-                              className='btn pl-1 pr-1 btn-lg btn-facebook font-weight-normal text-white btn-block text-uppercase'
-                              type='submit'
-                            >
-                              <FontAwesome icon='facebook' className='mr-2' /> Facebook
-                            </Button>
-                          </div>
-                        </div>
                       </Form>
                     </Col>
                   </Row>

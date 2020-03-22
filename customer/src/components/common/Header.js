@@ -59,39 +59,34 @@ class Header extends React.Component {
             <Navbar.Toggle />
             <Navbar.Collapse id='navbarNavDropdown'>
               <Nav activeKey={0} className='ml-auto' onSelect={this.closeMenu}>
-                <Nav.Link eventKey={0} as={NavLink} activeclassname='active' exact to='/'>
+                <Nav.Link eventKey={0} as={NavLink} activeclassname='active' exact to='/landing-page'>
                   Home <span className='sr-only'>(current)</span>
                 </Nav.Link>
                 <Nav.Link eventKey={1} as={NavLink} activeclassname='active' to='/offers'>
                   <Icofont icon='sale-discount' /> Offers <Badge variant='danger'>New</Badge>
                 </Nav.Link>
-                <NavDropdown title='Restaurants' alignRight className='border-0'>
-                  <NavDropdown.Item eventKey={2.1} as={NavLink} activeclassname='active' to='/restaurants'>
-                    Restaurants
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={2.3} as={NavLink} activeclassname='active' to='/checkout'>
-                    Checkout
-                  </NavDropdown.Item>
-                </NavDropdown>
-                <NavDropdown title='Pages' alignRight>
+                <Nav.Link as={NavLink} activeclassname='active' to='/restaurants'>
+                  <Icofont /> Restaurants
+                </Nav.Link>
+                <NavDropdown title='Current Order' alignRight>
                   <NavDropdown.Item eventKey={3.1} as={NavLink} activeclassname='active' to='/track-order'>
                     Track Order
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={3.2} as={NavLink} activeclassname='active' to='/invoice'>
                     Invoice
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.3} as={NavLink} activeclassname='active' to='/login'>
+                  {/* <NavDropdown.Item eventKey={3.3} as={NavLink} activeclassname='active' to='/login'>
                     Login
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={3.4} as={NavLink} activeclassname='active' to='/register'>
                     Register
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.5} as={NavLink} activeclassname='active' to='/404'>
+                  </NavDropdown.Item> */}
+                  {/* <NavDropdown.Item eventKey={3.5} as={NavLink} activeclassname='active' to='/404'>
                     404
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={3.6} as={NavLink} activeclassname='active' to='/extra'>
                     Extra
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                 </NavDropdown>
                 <NavDropdown
                   alignRight
@@ -106,16 +101,16 @@ class Header extends React.Component {
                   }
                 >
                   <NavDropdown.Item eventKey={4.1} as={NavLink} activeclassname='active' to='/myaccount/orders'>
-                    <Icofont icon='food-cart' /> Orders
+                    <Icofont icon='food-cart' /> Past Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={4.2} as={NavLink} activeclassname='active' to='/myaccount/offers'>
-                    <Icofont icon='sale-discount' /> Offers
+                    <Icofont icon='sale-discount' /> My Offers
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={4.3} as={NavLink} activeclassname='active' to='/myaccount/favourites'>
+                  {/* <NavDropdown.Item eventKey={4.3} as={NavLink} activeclassname='active' to='/myaccount/favourites'>
                     <Icofont icon='heart' /> Favourites
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                   <NavDropdown.Item eventKey={4.4} as={NavLink} activeclassname='active' to='/myaccount/payments'>
-                    <Icofont icon='credit-card' /> Payments
+                    <Icofont icon='credit-card' /> Credit Cards
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={4.5} as={NavLink} activeclassname='active' to='/myaccount/addresses'>
                     <Icofont icon='location-pin' /> Addresses
