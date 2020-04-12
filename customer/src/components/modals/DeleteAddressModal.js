@@ -1,10 +1,49 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import SERVER_PREFIX from '../ServerConfig';
+import Swal from 'sweetalert2';
 
 class DeleteAddressModal extends React.Component {
+  handleDelete = (event) => {
+    setTimeout(
+      fetch(
+        SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/addresses/' + this.props.addressId,
+        {
+          method: 'DELETE',
+        }
+      )
+        .then((response) => {
+          // console.log("response.status: " + response.status);
+          if (response.status === 200) {
+            // console.log('SUCCESSS');
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted successfully!',
+              timerProgressBar: true,
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            this.setState(this.props.onHide, this.props.reload);
+          } else {
+            // console.log('SOMETHING WENT WRONG');
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed!',
+              text: 'Please try again!',
+              timerProgressBar: true,
+              showConfirmButton: false,
+              timer: 700,
+            });
+          }
+        })
+        .catch(() => console.log('Can’t access the url response. Blocked by browser?')),
+      1
+    );
+  };
+
   render() {
     return (
-      <Modal show={this.props.show} onHide={this.props.onHide} centered size="sm">
+      <Modal show={this.props.show} onHide={this.props.onHide} centered>
         <Modal.Header closeButton={true}>
           <Modal.Title as="h5" id="delete-address">
             Delete
@@ -12,7 +51,11 @@ class DeleteAddressModal extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <p className="mb-0 text-black">Are you sure you want to delete this address?</p>
+          <p className="mb-0 text-black">
+            Do you want to delete this address
+            <br />
+            {this.props.address} ({this.props.postalCode}) ?
+          </p>
         </Modal.Body>
 
         <Modal.Footer>
@@ -24,7 +67,12 @@ class DeleteAddressModal extends React.Component {
           >
             CANCEL
           </Button>
-          <Button type="button" variant="primary" className="d-flex w-50 text-center justify-content-center">
+          <Button
+            type="button"
+            variant="primary"
+            onClick={this.handleDelete}
+            className="d-flex w-50 text-center justify-content-center"
+          >
             DELETE
           </Button>
         </Modal.Footer>
