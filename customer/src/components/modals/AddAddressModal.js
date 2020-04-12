@@ -23,7 +23,7 @@ class AddAddressModal extends React.Component {
       postalCode: '',
       postalCodeValid: false,
       formValid: false,
-      formErrors: { email: '', password: '' },
+      formErrors: { postalCode: '' },
     };
   }
   handleUserInput = (event) => {
@@ -75,7 +75,7 @@ class AddAddressModal extends React.Component {
       customerid: localStorage.getItem('loggedInUserId'),
     };
 
-    fetch(SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/address', {
+    fetch(SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/addresses', {
       method: 'POST',
       body: JSON.stringify(values),
       headers: {
@@ -93,7 +93,13 @@ class AddAddressModal extends React.Component {
             timer: 700,
           });
 
-          this.setState(this.props.onHide);
+          this.setState(this.props.onHide, this.props.reload, {
+            newAddress: '',
+            postalCode: '',
+            postalCodeValid: false,
+            formValid: false,
+            formErrors: { postalCode: '' },
+          });
           // console.log('redirect: ' + this.state.redirect);
           return response.json();
         } else {
@@ -109,10 +115,10 @@ class AddAddressModal extends React.Component {
         }
       })
       .then((data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
       })
       .catch(console.log);
-    console.log('handleSubmit is clicked! ');
+    // console.log('handleSubmit is clicked! ');
   };
 
   render() {
