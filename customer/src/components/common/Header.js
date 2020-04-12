@@ -48,31 +48,31 @@ class Header extends React.Component {
         <Navbar
           onToggle={this.setIsNavExpanded}
           expanded={this.state.isNavExpanded}
-          color='light'
-          expand='lg'
-          className='navbar-light osahan-nav shadow-sm'
+          color="light"
+          expand="lg"
+          className="navbar-light osahan-nav shadow-sm"
         >
           <Container>
-            <Navbar.Brand to='/'>
-              <Image src='/img/logo.png' alt='' />
+            <Navbar.Brand to="/">
+              <Image src="/img/KinKao.png" alt="" />
             </Navbar.Brand>
             <Navbar.Toggle />
-            <Navbar.Collapse id='navbarNavDropdown'>
-              <Nav activeKey={0} className='ml-auto' onSelect={this.closeMenu}>
-                <Nav.Link eventKey={0} as={NavLink} activeclassname='active' exact to='/landing-page'>
-                  Home <span className='sr-only'>(current)</span>
+            <Navbar.Collapse id="navbarNavDropdown">
+              <Nav activeKey={0} className="ml-auto" onSelect={this.closeMenu}>
+                <Nav.Link eventKey={0} as={NavLink} activeclassname="active" exact to="/landing-page">
+                  Home <span className="sr-only">(current)</span>
                 </Nav.Link>
-                <Nav.Link eventKey={1} as={NavLink} activeclassname='active' to='/offers'>
-                  <Icofont icon='sale-discount' /> Offers <Badge variant='danger'>New</Badge>
+                <Nav.Link eventKey={1} as={NavLink} activeclassname="active" to="/offers">
+                  <Icofont icon="sale-discount" /> Offers <Badge variant="danger">New</Badge>
                 </Nav.Link>
-                <Nav.Link as={NavLink} activeclassname='active' to='/restaurants'>
+                <Nav.Link as={NavLink} activeclassname="active" to="/restaurants">
                   <Icofont /> Restaurants
                 </Nav.Link>
-                <NavDropdown title='Current Order' alignRight>
-                  <NavDropdown.Item eventKey={3.1} as={NavLink} activeclassname='active' to='/track-order'>
+                <NavDropdown title="Current Order" alignRight>
+                  <NavDropdown.Item eventKey={3.1} as={NavLink} activeclassname="active" to="/track-order">
                     Track Order
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.2} as={NavLink} activeclassname='active' to='/invoice'>
+                  <NavDropdown.Item eventKey={3.2} as={NavLink} activeclassname="active" to="/invoice">
                     Invoice
                   </NavDropdown.Item>
                   {/* <NavDropdown.Item eventKey={3.3} as={NavLink} activeclassname='active' to='/login'>
@@ -92,103 +92,103 @@ class Header extends React.Component {
                   alignRight
                   title={
                     <DropDownTitle
-                      className='d-inline-block'
-                      image='img/user/4.png'
-                      imageAlt='user'
-                      imageClass='nav-osahan-pic rounded-pill'
-                      title='My Account'
+                      className="d-inline-block"
+                      image="img/user/4.png"
+                      imageAlt="user"
+                      imageClass="nav-osahan-pic rounded-pill"
+                      title="My Account"
                     />
                   }
                 >
-                  <NavDropdown.Item eventKey={4.1} as={NavLink} activeclassname='active' to='/myaccount/orders'>
-                    <Icofont icon='food-cart' /> Past Orders
+                  <NavDropdown.Item eventKey={4.1} as={NavLink} activeclassname="active" to="/myaccount/orders">
+                    <Icofont icon="food-cart" /> Past Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={4.2} as={NavLink} activeclassname='active' to='/myaccount/offers'>
-                    <Icofont icon='sale-discount' /> My Offers
+                  <NavDropdown.Item eventKey={4.2} as={NavLink} activeclassname="active" to="/myaccount/offers">
+                    <Icofont icon="sale-discount" /> My Offers
                   </NavDropdown.Item>
                   {/* <NavDropdown.Item eventKey={4.3} as={NavLink} activeclassname='active' to='/myaccount/favourites'>
                     <Icofont icon='heart' /> Favourites
                   </NavDropdown.Item> */}
-                  <NavDropdown.Item eventKey={4.4} as={NavLink} activeclassname='active' to='/myaccount/payments'>
-                    <Icofont icon='credit-card' /> Credit Cards
+                  <NavDropdown.Item eventKey={4.4} as={NavLink} activeclassname="active" to="/myaccount/payments">
+                    <Icofont icon="credit-card" /> Credit Cards
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={4.5} as={NavLink} activeclassname='active' to='/myaccount/addresses'>
-                    <Icofont icon='location-pin' /> Addresses
+                  <NavDropdown.Item eventKey={4.5} as={NavLink} activeclassname="active" to="/myaccount/addresses">
+                    <Icofont icon="location-pin" /> Addresses
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} onClick={this.handleLogout} to='/login'>
-                    <Icofont icon='logout' /> Logout
+                  <NavDropdown.Item as={NavLink} onClick={this.handleLogout} to="/login">
+                    <Icofont icon="logout" /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown
-                  activeclassname='active'
+                  activeclassname="active"
                   alignRight
-                  className='dropdown-cart'
+                  className="dropdown-cart"
                   title={
                     <DropDownTitle
-                      className='d-inline-block'
-                      faIcon='shopping-basket'
-                      iconClass='mr-1'
-                      title='Cart'
-                      badgeClass='ml-1'
-                      badgeVariant='success'
+                      className="d-inline-block"
+                      faIcon="shopping-basket"
+                      iconClass="mr-1"
+                      title="Cart"
+                      badgeClass="ml-1"
+                      badgeVariant="success"
                       badgeValue={5}
                     />
                   }
                 >
-                  <div className='dropdown-cart-top shadow-sm'>
+                  <div className="dropdown-cart-top shadow-sm">
                     {
                       <CartDropdownHeader
-                        className='dropdown-cart-top-header p-4'
+                        className="dropdown-cart-top-header p-4"
                         title="Gus's World Famous Chicken"
-                        subTitle='310 S Front St, Memphis, USA'
-                        image='img/cart.jpg'
-                        imageClass='img-fluid mr-3'
-                        imageAlt='osahan'
-                        NavLinkUrl='#'
-                        NavLinkText='View Full Menu'
+                        subTitle="310 S Front St, Memphis, USA"
+                        image="img/cart.jpg"
+                        imageClass="img-fluid mr-3"
+                        imageAlt="osahan"
+                        NavLinkUrl="#"
+                        NavLinkText="View Full Menu"
                       />
                     }
-                    <div className='dropdown-cart-top-body border-top p-4'>
+                    <div className="dropdown-cart-top-body border-top p-4">
                       <CartDropdownItem
-                        icoIcon='ui-press'
-                        iconClass='text-success food-item'
-                        title='Corn & Peas Salad x 1'
-                        price='$209'
+                        icoIcon="ui-press"
+                        iconClass="text-success food-item"
+                        title="Corn & Peas Salad x 1"
+                        price="$209"
                       />
 
                       <CartDropdownItem
-                        icoIcon='ui-press'
-                        iconClass='text-success food-item'
+                        icoIcon="ui-press"
+                        iconClass="text-success food-item"
                         title='Veg Seekh Sub 6" (15 cm) x 1'
-                        price='$133'
+                        price="$133"
                       />
 
                       <CartDropdownItem
-                        icoIcon='ui-press'
-                        iconClass='text-danger food-item'
+                        icoIcon="ui-press"
+                        iconClass="text-danger food-item"
                         title='Chicken Tikka Sub 12" (30 cm) x 1'
-                        price='$314'
+                        price="$314"
                       />
 
                       <CartDropdownItem
-                        icoIcon='ui-press'
-                        iconClass='text-success food-item'
-                        title='Corn & Peas Salad x 1 '
-                        price='$209'
+                        icoIcon="ui-press"
+                        iconClass="text-success food-item"
+                        title="Corn & Peas Salad x 1 "
+                        price="$209"
                       />
                     </div>
-                    <div className='dropdown-cart-top-footer border-top p-4'>
-                      <p className='mb-0 font-weight-bold text-secondary'>
-                        Sub Total <span className='float-right text-dark'>$499</span>
+                    <div className="dropdown-cart-top-footer border-top p-4">
+                      <p className="mb-0 font-weight-bold text-secondary">
+                        Sub Total <span className="float-right text-dark">$499</span>
                       </p>
-                      <small className='text-info'>Extra charges may apply</small>
+                      <small className="text-info">Extra charges may apply</small>
                     </div>
-                    <div className='dropdown-cart-top-footer border-top p-2'>
+                    <div className="dropdown-cart-top-footer border-top p-2">
                       <NavDropdown.Item
                         eventKey={5.1}
                         as={Link}
-                        className='btn btn-success btn-block py-3 text-white text-center dropdown-item'
-                        to='/checkout'
+                        className="btn btn-success btn-block py-3 text-white text-center dropdown-item"
+                        to="/checkout"
                       >
                         {' '}
                         Checkout

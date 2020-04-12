@@ -47,7 +47,7 @@ class Login extends React.Component {
             title: 'Login Successful!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 700
+            timer: 500
           });
 
           return response.json();
@@ -58,7 +58,7 @@ class Login extends React.Component {
             title: 'Login Failed!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 700
+            timer: 500
           });
         }
       })
@@ -104,59 +104,59 @@ class Login extends React.Component {
 
     return (
       <div>
-        <Container fluid className='bg-white'>
+        <Container fluid className="bg-white">
           <Row>
-            <Col md={4} lg={6} className='d-none d-md-flex bg-signup'></Col>
+            <Col md={4} lg={6} className="d-none d-md-flex bg-signup"></Col>
             <Col md={8} lg={6}>
-              <div className='login d-flex align-items-center py-5'>
+              <div className="login d-flex align-items-center py-5">
                 <Container>
                   <Row>
-                    <Col md={9} lg={8} className='mx-auto pl-5 pr-5'>
-                      <Navbar.Brand href='#home'>Welcome back!</Navbar.Brand>
+                    <Col md={9} lg={8} className="mx-auto pl-5 pr-5">
+                      <Navbar.Brand href="#home">Welcome back!</Navbar.Brand>
                       <Form onSubmit={this.handleSubmit}>
-                        <div className='form-label-group'>
+                        <div className="form-label-group">
                           <Form.Control
-                            type='email'
-                            name='email'
-                            id='inputEmail'
-                            placeholder='Email address'
-                            class='form-control'
+                            type="email"
+                            name="email"
+                            id="inputEmail"
+                            placeholder="Email address"
+                            class="form-control"
                             onChange={this.handleUserInput}
                             required
                           />
-                          <Form.Label htmlFor='inputEmail'>Email address / Mobile</Form.Label>
+                          <Form.Label htmlFor="inputEmail">Email address / Mobile</Form.Label>
                         </div>
-                        <div className='form-label-group'>
+                        <div className="form-label-group">
                           <Form.Control
-                            type='password'
-                            name='password'
-                            id='inputPassword'
-                            placeholder='Password'
+                            type="password"
+                            name="password"
+                            id="inputPassword"
+                            placeholder="Password"
                             onChange={this.handleUserInput}
                           />
-                          <Form.Label htmlFor='inputPassword'>Password</Form.Label>
+                          <Form.Label htmlFor="inputPassword">Password</Form.Label>
                         </div>
                         <Form.Check
-                          className='mb-3'
+                          className="mb-3"
                           custom
-                          type='checkbox'
-                          id='custom-checkbox'
-                          label='Remember password'
+                          type="checkbox"
+                          id="custom-checkbox"
+                          label="Remember password"
                         />
                         <Button
-                          to='/'
-                          type='submit'
-                          className='btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2'
+                          to="/"
+                          type="submit"
+                          className="btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2"
                         >
                           Sign in
                         </Button>
-                        <div className='text-center pt-3'>
+                        <div className="text-center pt-3">
                           Don’t have an account?{' '}
-                          <Link className='font-weight-bold' to='/register'>
+                          <Link className="font-weight-bold" to="/register">
                             Sign Up
                           </Link>
                         </div>
-                        <hr className='my-4' />
+                        <hr className="my-4" />
                       </Form>
                     </Col>
                   </Row>

@@ -24,16 +24,16 @@ class Register extends React.Component {
       formValid: false,
       redirect: false,
       isSubmitting: false,
-      requestFailed: false
+      requestFailed: false,
     };
     this.handleSuccess = this.handleSubmit.bind(this);
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleUserInput = event => {
+  handleUserInput = (event) => {
     const name = event.target.id;
     const value = event.target.value;
     // this.setState({ [name]: value });
@@ -75,7 +75,7 @@ class Register extends React.Component {
         emailValid: emailValid,
         passwordValid: passwordValid,
         phoneValid: phoneValid,
-        postalCodeValid: postalCodeValid
+        postalCodeValid: postalCodeValid,
       },
       this.validateForm
     );
@@ -84,18 +84,18 @@ class Register extends React.Component {
   validateForm() {
     this.setState({
       formValid:
-        this.state.emailValid && this.state.passwordValid && this.state.phoneValid && this.state.postalCodeValid
+        this.state.emailValid && this.state.passwordValid && this.state.phoneValid && this.state.postalCodeValid,
     });
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     let values = {
       customerName: this.state.name,
       customerEmail: this.state.email.toLowerCase(),
       customerPassword: this.state.password,
       customerAddress: this.state.address,
       customerPostalCode: this.state.postalCode,
-      customerPhone: this.state.phone
+      customerPhone: this.state.phone,
     };
     // console.log("values: ", values);
 
@@ -107,10 +107,10 @@ class Register extends React.Component {
       method: 'POST',
       body: JSON.stringify(values),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 201) {
           // console.log('SUCCESSS');
           Swal.fire({
@@ -118,7 +118,7 @@ class Register extends React.Component {
             title: 'Registration Successful!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 2000
+            timer: 700,
           });
 
           this.setState({ isSubmitting: false, redirect: true });
@@ -129,7 +129,7 @@ class Register extends React.Component {
           this.setState({ requestFailed: true });
         }
       })
-      .then(data => {
+      .then((data) => {
         console.log('data: ', data);
       })
       .catch(console.log);
@@ -137,91 +137,91 @@ class Register extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to='/login' />;
+      return <Redirect to="/login" />;
     }
 
     return (
-      <Container fluid className='bg-white'>
+      <Container fluid className="bg-white">
         <Row>
-          <Col md={4} lg={6} className='d-none d-md-flex bg-signup'></Col>
+          <Col md={4} lg={6} className="d-none d-md-flex bg-signup"></Col>
           <Col md={8} lg={6}>
-            <div className='login d-flex align-items-center py-5'>
+            <div className="login d-flex align-items-center py-5">
               <Container>
                 <Row>
-                  <Col md={9} lg={8} className='mx-auto pl-5 pr-5'>
-                    <Navbar.Brand href='#home'>Welcome to Kin Kao!</Navbar.Brand>
+                  <Col md={9} lg={8} className="mx-auto pl-5 pr-5">
+                    <Navbar.Brand href="#home">Welcome to Kin Kao!</Navbar.Brand>
                     <p>
                       Please fill in your particulars below to get started! All fields are required.
                       {/* // Display error message here */}
                       <FormErrors formErrors={this.state.formErrors} />
                     </p>
                     <Form onSubmit={this.handleSubmit}>
-                      <FormGroup controlId='name'>
+                      <FormGroup controlId="name">
                         <Form.Control
-                          type='text'
-                          placeholder='Full Name'
+                          type="text"
+                          placeholder="Full Name"
                           value={this.state.name}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
-                      <FormGroup controlId='email'>
+                      <FormGroup controlId="email">
                         <Form.Control
-                          type='email'
-                          placeholder='Email address'
+                          type="email"
+                          placeholder="Email address"
                           value={this.state.email}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
-                      <FormGroup controlId='password'>
+                      <FormGroup controlId="password">
                         <Form.Control
-                          type='password'
-                          placeholder='Password'
+                          type="password"
+                          placeholder="Password"
                           value={this.state.password}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
-                      <FormGroup controlId='address'>
+                      <FormGroup controlId="address">
                         <Form.Control
-                          type='text'
-                          placeholder='Address'
+                          type="text"
+                          placeholder="Address"
                           value={this.state.address}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
-                      <FormGroup controlId='postalCode'>
+                      <FormGroup controlId="postalCode">
                         <Form.Control
-                          type='text'
-                          placeholder='Postal Code'
+                          type="text"
+                          placeholder="Postal Code"
                           value={this.state.postalCode}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
-                      <FormGroup controlId='phone'>
+                      <FormGroup controlId="phone">
                         <Form.Control
-                          type='text'
-                          placeholder='Phone'
+                          type="text"
+                          placeholder="Phone"
                           value={this.state.phone}
-                          onChange={event => this.handleUserInput(event)}
+                          onChange={(event) => this.handleUserInput(event)}
                           required
                         />
                       </FormGroup>
 
                       <Button
                         disabled={!this.state.formValid}
-                        type='submit'
-                        to='/login'
-                        className='btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2'
+                        type="submit"
+                        to="/login"
+                        className="btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2"
                       >
                         Sign Up
                       </Button>
-                      <div className='text-center pt-3'>
+                      <div className="text-center pt-3">
                         Already have an account?{' '}
-                        <Link className='font-weight-bold' to='/login'>
+                        <Link className="font-weight-bold" to="/login">
                           Sign In
                         </Link>
                       </div>

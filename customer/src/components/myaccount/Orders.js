@@ -60,7 +60,7 @@ class Orders extends React.Component {
                 orderProducts='Veg Masala Roll x 1, Veg Burger x 1, Veg Penne Pasta in Red Sauce x 1'
                 orderTotal='$300'
                 helpLink='#'
-                detailLink={'/restaurants/foods/'+}
+                detailLink={'/restaurants/foods/'}
               />
             );
           })}
