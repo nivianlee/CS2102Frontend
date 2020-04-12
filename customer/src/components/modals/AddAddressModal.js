@@ -13,6 +13,7 @@ import {
 import Icofont from 'react-icofont';
 import Swal from 'sweetalert2';
 import SERVER_PREFIX from '../ServerConfig';
+import FormErrors from '../FormErrors.js';
 
 class AddAddressModal extends React.Component {
   constructor(props) {
@@ -20,14 +21,50 @@ class AddAddressModal extends React.Component {
     this.state = {
       newAddress: '',
       postalCode: '',
+      postalCodeValid: false,
+      formValid: false,
+      formErrors: { email: '', password: '' },
     };
   }
   handleUserInput = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
+    const name = event.target.id;
+    const value = event.target.value;
+    // this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
     });
-    console.log('results: ', this.state.newAddress, this.state.postalCode);
+    // this.setState({
+    //   [event.target.name]: event.target.value,
+    // });
+    // console.log('results: ', this.state.newAddress, this.state.postalCode);
   };
+
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let postalCodeValid = this.state.postalCodeValid;
+
+    switch (fieldName) {
+      case 'postalCode':
+        postalCodeValid = value.match(/\b\d{6}\b/);
+        fieldValidationErrors.postalCode = postalCodeValid ? '' : ' must contains 6 digits.';
+        break;
+      default:
+        break;
+    }
+    this.setState(
+      {
+        formErrors: fieldValidationErrors,
+        postalCodeValid: postalCodeValid,
+      },
+      this.validateForm
+    );
+  }
+
+  validateForm() {
+    this.setState({
+      formValid: this.state.postalCodeValid,
+    });
+  }
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -87,59 +124,48 @@ class AddAddressModal extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="invalid-feedback">Please don't leave blanks.</div>
-          <Form>
+          <FormErrors formErrors={this.state.formErrors} />
+
+          <Form onSubmit={this.handleSubmit}>
             <div className="form-row">
-              <Form.Group className="col-md-12">
+              <Form.Group className="col-md-12" controlId="newAddress">
                 <Form.Label>Address:</Form.Label>
-                <Form.Control type="text" name="newAddress" onChange={this.handleUserInput} required />
+                <Form.Control
+                  type="text"
+                  value={this.state.newAddress}
+                  onChange={(event) => this.handleUserInput(event)}
+                  required
+                />
               </Form.Group>
-              <Form.Group className="col-md-12">
+              <Form.Group className="col-md-12" controlId="postalCode">
                 <Form.Label>Postal Code:</Form.Label>
-                <Form.Control type="text" name="postalCode" onChange={this.handleUserInput} required />
+                <Form.Control
+                  type="text"
+                  value={this.state.postalCode}
+                  onChange={(event) => this.handleUserInput(event)}
+                  required
+                />
               </Form.Group>
-              {/* <Form.Group className="col-md-12">
-                <Form.Label>Delivery Instructions</Form.Label>
-                <Form.Control type="text" placeholder="Delivery Instructions e.g. Opposite Gold Souk Mall" />
-              </Form.Group> */}
-              {/* <Form.Group className="mb-0 col-md-12">
-                <Form.Label>Nickname</Form.Label>
-                <ButtonToolbar>
-                  <ToggleButtonGroup className="d-flex w-100" type="radio" name="options" defaultValue={1}>
-                    <ToggleButton variant="info" value={1}>
-                      Home
-                    </ToggleButton>
-                    <ToggleButton variant="info" value={2}>
-                      Work
-                    </ToggleButton>
-                    <ToggleButton variant="info" value={3}>
-                      Other
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </ButtonToolbar>
-              </Form.Group> */}
+              <Button
+                type="button"
+                onClick={this.props.onHide}
+                variant="outline-primary"
+                className="d-flex w-50 text-center justify-content-center"
+              >
+                CANCEL
+              </Button>
+              <Button
+                type="submit"
+                // onClick={this.handleSubmit}
+                variant="primary"
+                className="d-flex w-50 text-center justify-content-center"
+                disabled={!this.state.formValid}
+              >
+                SUBMIT
+              </Button>
             </div>
           </Form>
         </Modal.Body>
-
-        <Modal.Footer>
-          <Button
-            type="button"
-            onClick={this.props.onHide}
-            variant="outline-primary"
-            className="d-flex w-50 text-center justify-content-center"
-          >
-            CANCEL
-          </Button>
-          <Button
-            type="button"
-            onClick={this.handleSubmit}
-            variant="primary"
-            className="d-flex w-50 text-center justify-content-center"
-          >
-            SUBMIT
-          </Button>
-        </Modal.Footer>
       </Modal>
     );
   }

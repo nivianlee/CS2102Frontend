@@ -75,7 +75,6 @@ class Addresses extends React.Component {
             <Col md={3}>
               <Button
                 onClick={() => this.setState({ showAddressModal: true })}
-                onHide={this.hideAddressModal}
                 type="button"
                 variant="primary"
                 className="text-center justify-content-center"
@@ -90,6 +89,7 @@ class Addresses extends React.Component {
                     boxClass="shadow-sm"
                     title="Recent Address"
                     iconclassName="icofont-3x"
+                    key={item.addressid}
                     isSaved={item.issaved}
                     address={item.address}
                     postalCode={item.postalcode}

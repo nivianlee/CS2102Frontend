@@ -63,7 +63,7 @@ class Register extends React.Component {
         fieldValidationErrors.phone = phoneValid ? '' : ' must contains 8 digits.';
         break;
       case 'postalCode':
-        postalCodeValid = value.match(/[0-9]{6}/g);
+        postalCodeValid = value.match(/\b\d{6}\b/);
         fieldValidationErrors.postalCode = postalCodeValid ? '' : ' must contains 6 digits.';
         break;
       default:
