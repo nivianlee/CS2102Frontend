@@ -19,6 +19,7 @@ class Addresses extends React.Component {
       currAddress: '',
       currPostalCode: '',
       currAddId: '',
+      // reloadNow: false,
     };
   }
 
@@ -54,19 +55,32 @@ class Addresses extends React.Component {
   hideDeleteModal = () => this.setState({ showDeleteModal: false });
   hideAddressModal = () => this.setState({ showAddressModal: false });
   hideEditModal = () => this.setState({ showEditModal: false });
+  reloadAllData = () => this.reloadData();
 
   render() {
     return (
       <>
-        <AddAddressModal show={this.state.showAddressModal} onHide={this.hideAddressModal} />
+        <AddAddressModal
+          show={this.state.showAddressModal}
+          onHide={this.hideAddressModal}
+          reload={this.reloadAllData}
+        />
         <EditAddressModal
           addressId={this.state.currAddId}
           address={this.state.currAddress}
           postalCode={this.state.currPostalCode}
           show={this.state.showEditModal}
           onHide={this.hideEditModal}
+          reload={this.reloadAllData}
         />
-        <DeleteAddressModal show={this.state.showDeleteModal} onHide={this.hideDeleteModal} />
+        <DeleteAddressModal
+          addressId={this.state.currAddId}
+          address={this.state.currAddress}
+          postalCode={this.state.currPostalCode}
+          show={this.state.showDeleteModal}
+          onHide={this.hideDeleteModal}
+          reload={this.reloadAllData}
+        />
         <div className="p-4 bg-white shadow-sm">
           <Row>
             <Col md={9}>
@@ -94,69 +108,25 @@ class Addresses extends React.Component {
                     address={item.address}
                     postalCode={item.postalcode}
                     onEditClick={() =>
-                      this.setState({ showEditModal: true, currAddress: item.address, currPostalCode: item.postalcode })
+                      this.setState({
+                        showEditModal: true,
+                        currAddId: item.addressid,
+                        currAddress: item.address,
+                        currPostalCode: item.postalcode,
+                      })
                     }
-                    onDeleteClick={() => this.setState({ showDeleteModal: true, currAddId: item.addressid })}
+                    onDeleteClick={() =>
+                      this.setState({
+                        showDeleteModal: true,
+                        currAddId: item.addressid,
+                        currAddress: item.address,
+                        currPostalCode: item.postalcode,
+                      })
+                    }
                   />
                 );
               })}
             </Col>
-
-            {/* <Col md={6}>
-              <AddressCard
-                boxClass="shadow-sm"
-                title="Work"
-                icoIcon="briefcase"
-                iconclassName="icofont-3x"
-                address="NCC, Model Town Rd, Pritm Nagar, Model Town, Ludhiana, Punjab 141002, India"
-                onEditClick={() => this.setState({ showAddressModal: true })}
-                onDeleteClick={() => this.setState({ showDeleteModal: true })}
-              />
-            </Col>
-            <Col md={6}>
-              <AddressCard
-                boxClass="shadow-sm"
-                title="Other"
-                icoIcon="location-pin"
-                iconclassName="icofont-3x"
-                address="Delhi Bypass Rd, Jawaddi Taksal, Ludhiana, Punjab 141002, India"
-                onEditClick={() => this.setState({ showAddressModal: true })}
-                onDeleteClick={() => this.setState({ showDeleteModal: true })}
-              />
-            </Col>
-            <Col md={6}>
-              <AddressCard
-                boxClass="shadow-sm"
-                title="Other"
-                icoIcon="location-pin"
-                iconclassName="icofont-3x"
-                address="MT, Model Town Rd, Pritm Nagar, Model Town, Ludhiana, Punjab 141002, India"
-                onEditClick={() => this.setState({ showAddressModal: true })}
-                onDeleteClick={() => this.setState({ showDeleteModal: true })}
-              />
-            </Col>
-            <Col md={6}>
-              <AddressCard
-                boxClass="shadow-sm"
-                title="Other"
-                icoIcon="location-pin"
-                iconclassName="icofont-3x"
-                address="GNE Rd, Jawaddi Taksal, Ludhiana, Punjab 141002, India"
-                onEditClick={() => this.setState({ showAddressModal: true })}
-                onDeleteClick={() => this.setState({ showDeleteModal: true })}
-              />
-            </Col>
-            <Col md={6}>
-              <AddressCard
-                boxClass="shadow-sm"
-                title="Other"
-                icoIcon="location-pin"
-                iconclassName="icofont-3x"
-                address="GTTT, Model Town Rd, Pritm Nagar, Model Town, Ludhiana, Punjab 141002, India"
-                onEditClick={() => this.setState({ showAddressModal: true })}
-                onDeleteClick={() => this.setState({ showDeleteModal: true })}
-              />
-            </Col> */}
           </Row>
         </div>
       </>

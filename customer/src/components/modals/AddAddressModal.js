@@ -67,8 +67,6 @@ class AddAddressModal extends React.Component {
   }
 
   handleSubmit = (event) => {
-    event.preventDefault();
-
     let values = {
       address: this.state.newAddress,
       postalcode: this.state.postalCode,
@@ -119,6 +117,7 @@ class AddAddressModal extends React.Component {
       })
       .catch(console.log);
     // console.log('handleSubmit is clicked! ');
+    event.preventDefault();
   };
 
   render() {
