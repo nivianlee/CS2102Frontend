@@ -1,13 +1,12 @@
 export function reducer(
   state = {
     errorMessage: '',
+    loggedInUser: {},
+    loggedInUserType: '',
     fdsManagers: [],
     selectedFDSManager: {},
     restaurants: [],
     selectedRestaurant: {},
-    loggedInRestaurant: {},
-    isAccountFDSManager: false,
-    isAccountRestaurant: false,
   },
   action
 ) {
@@ -16,6 +15,16 @@ export function reducer(
       return {
         ...state,
         errorMessage: action.data,
+      };
+    case 'SET_LOGGEDIN_USER':
+      return {
+        ...state,
+        loggedInUser: action.data,
+      };
+    case 'SET_LOGGEDIN_USERTYPE':
+      return {
+        ...state,
+        loggedInUserType: action.data,
       };
     case 'SET_FDSMANAGERS':
       return {
@@ -36,21 +45,6 @@ export function reducer(
       return {
         ...state,
         selectedRestaurant: action.data,
-      };
-    case 'SET_LOGGEDIN_RESTAURANT':
-      return {
-        ...state,
-        loggedInRestaurant: action.data,
-      };
-    case 'SET_ACCOUNT_FDSMANAGER':
-      return {
-        ...state,
-        isAccountFDSManager: action.data,
-      };
-    case 'SET_ACCOUNT_RESTAURANT':
-      return {
-        ...state,
-        isAccountRestaurant: action.data,
       };
     default:
       return state;

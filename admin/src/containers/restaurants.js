@@ -7,9 +7,12 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import Link from '@material-ui/core/Link';
 import AddAlert from '@material-ui/icons/AddAlert';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import Fab from '@material-ui/core/Fab';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -18,7 +21,7 @@ import { ThemeProvider } from '@material-ui/styles';
 
 import * as RestaurantsApis from '../api/restaurants';
 import Sidebar from '../components/sidebar';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +66,35 @@ const Restaurants = (props) => {
       { title: 'Id', field: 'restaurantid' },
       { title: 'Name', field: 'restaurantname' },
       { title: 'Address', field: 'address' },
-      { title: 'Postal Code', field: 'postalcode' },
+      {
+        title: 'Postal Code',
+        render: (rowData) => (
+          <>
+            <Link
+              underline='none'
+              target='_blank'
+              href={`https://www.google.com/maps/place/Singapore+${rowData.postalcode}`}
+            >
+              <Tooltip title='View on Google Maps' placement='bottom'>
+                <Typography
+                  variant='button'
+                  display='block'
+                  align='left'
+                  style={{
+                    color: '#ff3008',
+                    width: 90,
+                    borderRadius: 5,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {rowData.postalcode.toString().length === 5 ? `0${rowData.postalcode}` : `${rowData.postalcode}`}
+                  <OpenInNewIcon fontSize={'small'} />
+                </Typography>
+              </Tooltip>
+            </Link>
+          </>
+        ),
+      },
       { title: 'Min. Order ($)', field: 'minordercost' },
     ],
   });
@@ -76,13 +107,18 @@ const Restaurants = (props) => {
     RestaurantsApis.getRestaurants()
       .then((response) => {
         if (response.status !== 200) {
-          throw Error(response.status);
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error retrieving restaurants. Please contact administrators for assistance',
+          });
         }
-        console.log(response.data);
         props.dispatch({ type: 'SET_RESTAURANTS', data: response.data });
       })
       .catch((err) => {
-        //handle error
+        props.dispatch({
+          type: 'SET_ERRORMESSAGE',
+          data: 'Error retrieving restaurants. Please contact administrators for assistance',
+        });
       });
   };
 

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 
 import Homepage from './containers/homepage';
+import Login from './containers/login';
 import FDSManagers from './containers/fdsManagers';
 import Restaurants from './containers/restaurants';
 
@@ -140,6 +141,7 @@ const App = (props) => {
           <Switch>
             <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
+            <Route exact path='/login' component={Login}></Route>
             <Redirect from='/' to='fdsmanagers' />
           </Switch>
         </main>

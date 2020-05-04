@@ -73,33 +73,17 @@ const FDSManagers = (props) => {
     FDSManagersApis.getFDSManagers()
       .then((response) => {
         if (response.status !== 200) {
-          props.dispatch({ type: 'SET_ERRORMESSAGE', data: 'No FDS Managers available.' });
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error retrieving FDS managers. Please contact administrators for assistance',
+          });
         }
-        console.log(response.data);
         props.dispatch({ type: 'SET_FDSMANAGERS', data: response.data });
       })
       .catch((err) => {
         props.dispatch({
           type: 'SET_ERRORMESSAGE',
-          data: 'Error retrieving FDS Managers. Please contact administrators for assistance',
-        });
-      });
-  };
-
-  const createFDSManagers = async (newData) => {
-    FDSManagersApis.createFDSManagers(newData)
-      .then((response) => {
-        if (response.status !== 201) {
-          props.dispatch({ type: 'SET_ERRORMESSAGE', data: response.status });
-        }
-        getFDSManagers();
-        setNotification(response.data);
-        showNotification();
-      })
-      .catch((err) => {
-        props.dispatch({
-          type: 'SET_ERRORMESSAGE',
-          data: 'Error creating FDS Manager. Please contact administrators for assistance',
+          data: 'Error retrieving FDS managers. Please contact administrators for assistance',
         });
       });
   };
@@ -110,7 +94,10 @@ const FDSManagers = (props) => {
     FDSManagersApis.updateFDSManagers(updateData, managerid)
       .then((response) => {
         if (response.status !== 201) {
-          props.dispatch({ type: 'SET_ERRORMESSAGE', data: response.status });
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error updating FDS manager. Please contact administrators for assistance',
+          });
         }
         getFDSManagers();
         setNotification(response.data);
@@ -119,7 +106,7 @@ const FDSManagers = (props) => {
       .catch((err) => {
         props.dispatch({
           type: 'SET_ERRORMESSAGE',
-          data: 'Error updating FDS Manager. Please contact administrators for assistance',
+          data: 'Error updating FDS manager. Please contact administrators for assistance',
         });
       });
   };
@@ -129,7 +116,10 @@ const FDSManagers = (props) => {
     FDSManagersApis.deleteFDSManagers(managerid)
       .then((response) => {
         if (response.status !== 201) {
-          props.dispatch({ type: 'SET_ERRORMESSAGE', data: response.status });
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error deleting FDS manager. Please contact administrators for assistance',
+          });
         }
         getFDSManagers();
         setNotification(response.data);
@@ -162,13 +152,6 @@ const FDSManagers = (props) => {
                 columns={tableState.columns}
                 data={props.fdsManagers}
                 editable={{
-                  onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                      setTimeout(() => {
-                        resolve();
-                        createFDSManagers(newData);
-                      }, 600);
-                    }),
                   onRowUpdate: (newData, oldData) =>
                     new Promise((resolve) => {
                       setTimeout(() => {
