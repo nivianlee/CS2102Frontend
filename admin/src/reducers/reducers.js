@@ -7,6 +7,7 @@ export function reducer(
     selectedFDSManager: {},
     restaurants: [],
     selectedRestaurant: {},
+    completedOrders: [],
   },
   action
 ) {
@@ -45,6 +46,11 @@ export function reducer(
       return {
         ...state,
         selectedRestaurant: action.data,
+      };
+    case 'SET_COMPLETED_ORDERS':
+      return {
+        ...state,
+        completedOrders: action.data,
       };
     default:
       return state;

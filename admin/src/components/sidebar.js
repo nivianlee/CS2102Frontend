@@ -13,6 +13,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import HomeIcon from '@material-ui/icons/Home';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { ThemeProvider } from '@material-ui/styles';
 import { Redirect } from 'react-router-dom';
 const drawerWidth = 240;
@@ -78,11 +79,17 @@ const Sidebar = (props) => {
             </ListItem>
             <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
               <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Orders'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+              <ListItemIcon>
                 <RestaurantMenuIcon />
               </ListItemIcon>
               <ListItemText primary={'My Restaurant'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
               <ListItemIcon>
                 <RestaurantIcon />
               </ListItemIcon>
@@ -98,13 +105,13 @@ const Sidebar = (props) => {
               </ListItemIcon>
               <ListItemText primary={'Home'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
               <ListItemIcon>
                 <RestaurantIcon />
               </ListItemIcon>
               <ListItemText primary={'Restaurants'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>

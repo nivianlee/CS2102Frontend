@@ -12,6 +12,7 @@ import Login from './containers/login';
 import FDSManagers from './containers/fdsManagers';
 import Restaurants from './containers/restaurants';
 import Restaurant from './containers/restaurant';
+import Orders from './containers/orders';
 import Profile from './containers/profile';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
@@ -68,14 +69,17 @@ const App = (props) => {
     if (pathname === '/home') {
       setSelectedItem(0);
     }
-    if (pathname === '/my-restaurant') {
+    if (pathname === '/orders') {
       setSelectedItem(1);
     }
-    if (pathname === '/restaurants') {
+    if (pathname === '/my-restaurant') {
       setSelectedItem(2);
     }
-    if (pathname === '/fdsmanagers') {
+    if (pathname === '/restaurants') {
       setSelectedItem(3);
+    }
+    if (pathname === '/fdsmanagers') {
+      setSelectedItem(4);
     }
   }, [props.history.location.pathname]);
 
@@ -90,12 +94,15 @@ const App = (props) => {
       props.history.push('/home');
     }
     if (index === 1) {
-      props.history.push('/my-restaurant');
+      props.history.push('/orders');
     }
     if (index === 2) {
-      props.history.push('/restaurants');
+      props.history.push('/my-restaurant');
     }
     if (index === 3) {
+      props.history.push('/restaurants');
+    }
+    if (index === 4) {
       props.history.push('/fdsmanagers');
     }
   };
@@ -140,6 +147,7 @@ const App = (props) => {
           <Switch>
             <Route exact path='/my-restaurant' component={Restaurant}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
+            <Route exact path='/orders' component={Orders}></Route>
             <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
             <Route exact path='/profile' component={Profile}></Route>
             <Route exact path='/home' component={Home}></Route>
