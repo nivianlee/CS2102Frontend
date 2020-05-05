@@ -18,5 +18,5 @@ export function createRestaurantStaff(request) {
 
 export function updateRestaurantStaff(request, restaurantstaffId) {
   var link = Config.ipAddress + '/restaurantstaff/' + restaurantstaffId;
-  return axios.post(link, request);
+  return axios.put(link, request);
 }
