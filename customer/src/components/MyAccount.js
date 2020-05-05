@@ -5,7 +5,7 @@ import { Row, Col, Container, Image } from 'react-bootstrap';
 import Offers from './myaccount/Offers';
 import Orders from './myaccount/Orders';
 import Favourites from './myaccount/Favourites';
-import Payments from './myaccount/Payments';
+import CreditCards from './myaccount/CreditCards';
 import Addresses from './myaccount/Addresses';
 import EditProfileModal from './modals/EditProfileModal';
 
@@ -14,7 +14,7 @@ class MyAccount extends React.Component {
     super(props, context);
 
     this.state = {
-      showEditProfile: false
+      showEditProfile: false,
     };
   }
   hideEditProfile = () => this.setState({ showEditProfile: false });
@@ -71,8 +71,8 @@ class MyAccount extends React.Component {
                       </NavLink>
                     </li> */}
                     <li className="nav-item">
-                      <NavLink className="nav-link" activeClassName="active" exact to="/myaccount/payments">
-                        <i className="icofont-credit-card"></i> Payments
+                      <NavLink className="nav-link" activeClassName="active" exact to="/myaccount/creditcards">
+                        <i className="icofont-credit-card"></i> Credit Cards
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -88,7 +88,7 @@ class MyAccount extends React.Component {
                   <Route path="/myaccount/orders" exact component={Orders} />
                   <Route path="/myaccount/offers" exact component={Offers} />
                   {/* <Route path='/myaccount/favourites' exact component={Favourites} /> */}
-                  <Route path="/myaccount/payments" exact component={Payments} />
+                  <Route path="/myaccount/creditcards" exact component={CreditCards} />
                   <Route path="/myaccount/addresses" exact component={Addresses} />
                 </Switch>
               </Col>

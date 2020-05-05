@@ -6,12 +6,9 @@ import Swal from 'sweetalert2';
 class DeleteAddressModal extends React.Component {
   handleDelete = (event) => {
     setTimeout(
-      fetch(
-        SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/addresses/' + this.props.addressId,
-        {
-          method: 'DELETE',
-        }
-      )
+      fetch(SERVER_PREFIX + '/customers/addresses/' + localStorage.getItem('loggedInUserId') + this.props.addressId, {
+        method: 'DELETE',
+      })
         .then((response) => {
           // console.log("response.status: " + response.status);
           if (response.status === 200) {

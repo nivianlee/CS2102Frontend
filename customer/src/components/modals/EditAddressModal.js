@@ -37,7 +37,7 @@ class EditAddressModal extends React.Component {
     switch (fieldName) {
       case 'postalCode':
         postalCodeValid = value.match(/\b\d{6}\b/);
-        fieldValidationErrors.postalCode = postalCodeValid ? '' : ' must contains 6 digits.';
+        fieldValidationErrors.postalCode = postalCodeValid ? '' : 'Postal Code must contains 6 digits.';
         break;
       default:
         break;
@@ -67,7 +67,7 @@ class EditAddressModal extends React.Component {
     console.log('address: ', values.address);
     console.log('postalcode: ', values.postalcode);
 
-    fetch(SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/addresses', {
+    fetch(SERVER_PREFIX + '/customers/addresses/' + localStorage.getItem('loggedInUserId'), {
       method: 'PUT',
       body: JSON.stringify(values),
       headers: {

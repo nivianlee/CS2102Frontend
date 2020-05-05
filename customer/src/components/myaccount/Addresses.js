@@ -29,7 +29,7 @@ class Addresses extends React.Component {
 
   reloadData() {
     setTimeout(
-      fetch(SERVER_PREFIX + '/customers/' + localStorage.getItem('loggedInUserId') + '/addresses')
+      fetch(SERVER_PREFIX + '/customers/addresses/' + localStorage.getItem('loggedInUserId'))
         .then((res) => res.json())
         .then(
           (result) => {

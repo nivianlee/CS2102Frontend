@@ -10,17 +10,17 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isNavExpanded: false
+      isNavExpanded: false,
     };
   }
-  setIsNavExpanded = isNavExpanded => {
+  setIsNavExpanded = (isNavExpanded) => {
     this.setState({ isNavExpanded: isNavExpanded });
   };
   closeMenu = () => {
     this.setState({ isNavExpanded: false });
   };
 
-  handleClick = e => {
+  handleClick = (e) => {
     if (this.node.contains(e.target)) {
       // if clicked inside menu do something
     } else {
@@ -44,7 +44,7 @@ class Header extends React.Component {
 
   render() {
     return (
-      <div ref={node => (this.node = node)}>
+      <div ref={(node) => (this.node = node)}>
         <Navbar
           onToggle={this.setIsNavExpanded}
           expanded={this.state.isNavExpanded}
@@ -68,26 +68,9 @@ class Header extends React.Component {
                 <Nav.Link as={NavLink} activeclassname="active" to="/restaurants">
                   <Icofont /> Restaurants
                 </Nav.Link>
-                <NavDropdown title="Current Order" alignRight>
-                  <NavDropdown.Item eventKey={3.1} as={NavLink} activeclassname="active" to="/track-order">
-                    Track Order
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.2} as={NavLink} activeclassname="active" to="/invoice">
-                    Invoice
-                  </NavDropdown.Item>
-                  {/* <NavDropdown.Item eventKey={3.3} as={NavLink} activeclassname='active' to='/login'>
-                    Login
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.4} as={NavLink} activeclassname='active' to='/register'>
-                    Register
-                  </NavDropdown.Item> */}
-                  {/* <NavDropdown.Item eventKey={3.5} as={NavLink} activeclassname='active' to='/404'>
-                    404
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={3.6} as={NavLink} activeclassname='active' to='/extra'>
-                    Extra
-                  </NavDropdown.Item> */}
-                </NavDropdown>
+                <Nav.Link as={NavLink} activeclassname="active" to="/track-order">
+                  <Icofont /> Current Order
+                </Nav.Link>
                 <NavDropdown
                   alignRight
                   title={
@@ -109,7 +92,7 @@ class Header extends React.Component {
                   {/* <NavDropdown.Item eventKey={4.3} as={NavLink} activeclassname='active' to='/myaccount/favourites'>
                     <Icofont icon='heart' /> Favourites
                   </NavDropdown.Item> */}
-                  <NavDropdown.Item eventKey={4.4} as={NavLink} activeclassname="active" to="/myaccount/payments">
+                  <NavDropdown.Item eventKey={4.4} as={NavLink} activeclassname="active" to="/myaccount/creditcards">
                     <Icofont icon="credit-card" /> Credit Cards
                   </NavDropdown.Item>
                   <NavDropdown.Item eventKey={4.5} as={NavLink} activeclassname="active" to="/myaccount/addresses">

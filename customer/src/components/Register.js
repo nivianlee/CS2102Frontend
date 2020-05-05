@@ -52,19 +52,19 @@ class Register extends React.Component {
     switch (fieldName) {
       case 'email':
         emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-        fieldValidationErrors.email = emailValid ? '' : ' is in an invalid format.';
+        fieldValidationErrors.email = emailValid ? '' : 'Email is in an invalid format.';
         break;
       case 'password':
         passwordValid = value.length >= 7;
-        fieldValidationErrors.password = passwordValid ? '' : ' must be at least 7 characters long.';
+        fieldValidationErrors.password = passwordValid ? '' : 'Password must be at least 7 characters long.';
         break;
       case 'phone':
         phoneValid = value.match(/[0-9]{8}/g);
-        fieldValidationErrors.phone = phoneValid ? '' : ' must contains 8 digits.';
+        fieldValidationErrors.phone = phoneValid ? '' : 'Phone number must contains 8 digits.';
         break;
       case 'postalCode':
         postalCodeValid = value.match(/\b\d{6}\b/);
-        fieldValidationErrors.postalCode = postalCodeValid ? '' : ' must contains 6 digits.';
+        fieldValidationErrors.postalCode = postalCodeValid ? '' : 'Postal Code must contains 6 digits.';
         break;
       default:
         break;
