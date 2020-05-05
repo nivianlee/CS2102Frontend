@@ -91,13 +91,7 @@ class AddAddressModal extends React.Component {
             timer: 700,
           });
 
-          this.setState(this.props.onHide, this.props.reload, {
-            newAddress: '',
-            postalCode: '',
-            postalCodeValid: false,
-            formValid: false,
-            formErrors: { postalCode: '' },
-          });
+          this.setState(this.props.onHide, this.props.reload);
           // console.log('redirect: ' + this.state.redirect);
           return response.json();
         } else {
@@ -116,6 +110,13 @@ class AddAddressModal extends React.Component {
         // console.log('data: ', data);
       })
       .catch(console.log);
+    this.setState({
+      newAddress: '',
+      postalCode: '',
+      postalCodeValid: false,
+      formValid: false,
+      formErrors: { postalCode: '' },
+    });
     // console.log('handleSubmit is clicked! ');
     event.preventDefault();
   };
