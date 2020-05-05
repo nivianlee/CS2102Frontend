@@ -295,7 +295,7 @@ const Profile = (props) => {
 
   return (
     <Grid container direction='row' className={classes.card} spacing={2}>
-      <Grid item xs={12} sm={8} md={6} lg={4}>
+      <Grid item xs={12} sm={12} md={6} lg={4}>
         <Card>
           <CardContent>
             {sessionStorage.getItem('userType') === 'deliveryRider' && (
@@ -548,7 +548,7 @@ const Profile = (props) => {
         </Card>
       </Grid>
       {sessionStorage.getItem('userType') === 'restaurantStaff' && (
-        <Grid item xs={12} sm={8} md={6} lg={4}>
+        <Grid item xs={12} sm={12} md={6} lg={4}>
           <Card>
             <CardContent>
               <Typography variant='h5' component='p' align='left'>

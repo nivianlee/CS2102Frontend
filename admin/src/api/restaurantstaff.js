@@ -40,3 +40,23 @@ export function deleteFoodItem(restaurantStaffID, request) {
   var link = Config.ipAddress + '/restaurantstaff/' + restaurantStaffID + '/fooditems';
   return axios.delete(link, request);
 }
+
+export function getAllCompletedOrders(restaurantStaffID) {
+  var link = Config.ipAddress + '/restaurantstaff/orders/' + restaurantStaffID;
+  return axios.get(link);
+}
+
+export function getMonthlyCompletedOrders(year, month, restaurantStaffID) {
+  var link = Config.ipAddress + '/restaurantstaff/monthlyOrders/' + year + '/' + month + '/' + restaurantStaffID;
+  return axios.get(link);
+}
+
+export function getMonthlyCompletedOrdersStatistics(year, month, restaurantStaffID) {
+  var link = Config.ipAddress + '/restaurantstaff/monthlyStatistics/' + year + '/' + month + '/' + restaurantStaffID;
+  return axios.get(link);
+}
+
+export function getMonthlyFavouriteFoodItems(year, month, restaurantStaffID) {
+  var link = Config.ipAddress + '/restaurantstaff/monthlyFavourites/' + year + '/' + month + '/' + restaurantStaffID;
+  return axios.get(link);
+}

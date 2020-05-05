@@ -31,23 +31,11 @@ const useStyles = makeStyles((theme) => ({
 const Home = (props) => {
   const classes = useStyles();
 
-  const importAll = (r) => {
-    let images = {};
-    r.keys().map((item, index) => {
-      images[item.replace('./', '')] = r(item);
-    });
-    return images;
-  };
-
-  const images = importAll(require.context('../images', false, /\.(png|jpe?g|svg)$/));
-
   return (
     <Grid container className={classes.card}>
       <Grid item xs={12} sm={9} md={6} lg={3}>
         <Card>
-          <CardContent>
-            <img src={images[`FoodItemID_1.png`]} />
-          </CardContent>
+          <CardContent>{sessionStorage.getItem('userType')}</CardContent>
         </Card>
       </Grid>
     </Grid>
