@@ -26,7 +26,7 @@ export function createRestaurant(request) {
   return axios.post(link, request);
 }
 
-export function updateRestaurants(request, restaurantId) {
+export function updateRestaurant(request, restaurantId) {
   var link = Config.ipAddress + '/restaurants/' + restaurantId;
   return axios.post(link, request);
 }

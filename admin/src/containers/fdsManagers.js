@@ -91,7 +91,7 @@ const FDSManagers = (props) => {
   const updateFDSManagers = async (newData) => {
     const managerid = newData.managerid;
     const updateData = { managername: newData.managername };
-    FDSManagersApis.updateFDSManagers(updateData, managerid)
+    FDSManagersApis.updateFDSManager(updateData, managerid)
       .then((response) => {
         if (response.status !== 201) {
           props.dispatch({

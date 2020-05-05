@@ -6,7 +6,17 @@ export function getRiders() {
   return axios.get(link);
 }
 
+export function getRiderById(riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID;
+  return axios.get(link);
+}
+
 export function createRiders(request) {
   var link = Config.ipAddress + '/riders';
   return axios.post(link, request);
+}
+
+export function updateRider(request, riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID;
+  return axios.put(link, request);
 }

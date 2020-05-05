@@ -10,6 +10,7 @@ import { makeStyles, useTheme, createMuiTheme } from '@material-ui/core/styles';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import MessageIcon from '@material-ui/icons/Message';
 import PersonIcon from '@material-ui/icons/Person';
+import HomeIcon from '@material-ui/icons/Home';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import { ThemeProvider } from '@material-ui/styles';
 import { Redirect } from 'react-router-dom';
@@ -66,19 +67,44 @@ const Sidebar = (props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List component='nav' aria-labelledby='nested-list-subheader' className={classes.root}>
-        <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary={'FDS Managers'} />
-        </ListItem>
-
-        <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
-          <ListItemIcon>
-            <RestaurantIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Restaurants'} />
-        </ListItem>
+        {sessionStorage.getItem('userType') === 'restaurantStaff' && (
+          <>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Home'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Restaurants'} />
+            </ListItem>
+          </>
+        )}
+        {sessionStorage.getItem('userType') === 'fdsManager' && (
+          <>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Home'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Restaurants'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary={'FDS Managers'} />
+            </ListItem>
+          </>
+        )}
       </List>
     </div>
   );

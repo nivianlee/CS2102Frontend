@@ -94,7 +94,7 @@ const Login = (props) => {
   const [newRider, setNewRider] = useState({
     riderName: '',
     riderEmail: '',
-    contactNum: -1,
+    contactNum: '',
     isOccupied: false,
     isFullTime: false,
     baseSalary: 0,
@@ -268,18 +268,21 @@ const Login = (props) => {
         }
         if (response.data.length === 1) {
           sessionStorage.setItem('userType', props.loggedInUserType);
-          props.dispatch({ type: 'SET_LOGGEDIN_USER', data: response.data });
+          props.dispatch({ type: 'SET_LOGGEDIN_USER', data: response.data[0] });
           setRequestOTP(true);
           if (props.loggedInUserType === 'deliveryRider') {
-            sessionStorage.setItem('id', response.data.riderID);
-            sessionStorage.setItem('contactNum', response.data.contactNum);
+            sessionStorage.setItem('id', response.data[0].riderid);
+            sessionStorage.setItem('name', response.data[0].ridername);
+            sessionStorage.setItem('contactNum', response.data[0].contactnum);
           } else if (props.loggedInUserType === 'restaurantStaff') {
-            sessionStorage.setItem('id', response.data.restaurantStaffID);
-            sessionStorage.setItem('restaurantID', response.data.restaurantID);
-            sessionStorage.setItem('contactNum', response.data.contactNum);
+            sessionStorage.setItem('id', response.data[0].restaurantstaffid);
+            sessionStorage.setItem('name', response.data[0].restaurantstaffname);
+            sessionStorage.setItem('restaurantID', response.data[0].restaurantid);
+            sessionStorage.setItem('contactNum', response.data[0].contactnum);
           } else {
-            sessionStorage.setItem('id', response.data.managerID);
-            sessionStorage.setItem('contactNum', response.data.contactNum);
+            sessionStorage.setItem('id', response.data[0].managerid);
+            sessionStorage.setItem('name', response.data[0].managername);
+            sessionStorage.setItem('contactNum', response.data[0].contactnum);
           }
         } else {
           setNoUserFound(true);
@@ -330,23 +333,23 @@ const Login = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (counter === 0) {
-      setRequestOTP(false);
-      sessionStorage.setItem('userType', '');
-      props.dispatch({ type: 'SET_LOGGEDIN_USERTYPE', data: '' });
-      props.dispatch({ type: 'SET_LOGGEDIN_USER', data: {} });
-      setHasSelectedUserType(false);
-      setNoUserFound(false);
-      setContactNum('');
-      clearNewUsersObjects();
-    }
-    const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-    return () => clearInterval(timer);
-  }, [counter]);
+  //   useEffect(() => {
+  //     if (counter === 0) {
+  //       setRequestOTP(false);
+  //       sessionStorage.setItem('userType', '');
+  //       props.dispatch({ type: 'SET_LOGGEDIN_USERTYPE', data: '' });
+  //       props.dispatch({ type: 'SET_LOGGEDIN_USER', data: {} });
+  //       setHasSelectedUserType(false);
+  //       setNoUserFound(false);
+  //       setContactNum('');
+  //       clearNewUsersObjects();
+  //     }
+  //     const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+  //     return () => clearInterval(timer);
+  //   }, [counter]);
 
   return redirectHomepage ? (
-    <Redirect to='/home' />
+    <Redirect to='/' />
   ) : register ? (
     <Grid container className={classes.card}>
       <Grid item xs={12} sm={9} md={6} lg={3}>
@@ -573,7 +576,7 @@ const Login = (props) => {
                       fullWidth
                       label='Name'
                       multiline
-                      helperText='Omit plus sign, spaces, and dashes e.g. 84997406'
+                      helperText='Proper casing preferred i.e. John Doe'
                       value={newFDSManager.managerName}
                       onChange={(event) =>
                         setNewFDSManager({ ...newFDSManager, [event.target.name]: event.target.value })
@@ -686,16 +689,16 @@ const Login = (props) => {
                     </Button>
                   </Grid>
                 </Grid>
-                <Typography variant='body1' component='p' align='center' className={classes.counter}>
+                {/* <Typography variant='body1' component='p' align='center' className={classes.counter}>
                   OTP expries in {counter} seconds
-                </Typography>
+                </Typography> */}
                 <Grid container direction='column' spacing={2} className={classes.rerequestOTP}>
                   <Grid item>
                     <Button
                       variant='contained'
                       style={{ backgroundColor: '#ff3008', color: '#fff' }}
                       onClick={() => {
-                        setCounter(60);
+                        // setCounter(60)
                         setNotification('A new OTP hs been sent to your contact number');
                         showNotification();
                       }}
@@ -714,6 +717,7 @@ const Login = (props) => {
                         clearNewUsersObjects();
                         setErrorContactNumNotFound(false);
                         setErrorRestIDNotFound(false);
+                        sessionStorage.clear();
                       }}
                     >
                       Go back to Login
@@ -797,7 +801,7 @@ const Login = (props) => {
                         props.dispatch({ type: 'SET_LOGGEDIN_USERTYPE', data: 'fdsManager' });
                       }}
                     >
-                      KK Manager
+                      FDS Manager
                     </Button>
                   </Grid>
                 </Grid>

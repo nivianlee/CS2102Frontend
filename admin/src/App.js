@@ -7,11 +7,11 @@ import { Provider } from 'react-redux';
 
 import { BrowserRouter as Router, Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 
-import Homepage from './containers/homepage';
+import Home from './containers/home';
 import Login from './containers/login';
 import FDSManagers from './containers/fdsManagers';
 import Restaurants from './containers/restaurants';
-
+import Profile from './containers/profile';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
 
@@ -92,13 +92,13 @@ const App = (props) => {
     setSelectedItem(index);
 
     if (index === 0) {
-      props.history.push('/fdsmanagers');
+      props.history.push('/home');
     }
     if (index === 1) {
       props.history.push('/restaurants');
     }
     if (index === 2) {
-      props.history.push('/manage-students');
+      props.history.push('/fdsmanagers');
     }
     if (index === 3) {
       props.history.push('/message-logging');
@@ -112,7 +112,12 @@ const App = (props) => {
   };
 
   const handleLogout = () => {
-    props.history.push('/logout');
+    sessionStorage.clear();
+    props.history.push('/');
+  };
+
+  const handleProfile = () => {
+    props.history.push('/profile');
   };
 
   return (
@@ -122,7 +127,12 @@ const App = (props) => {
         {pathname === '/login' ? (
           ''
         ) : (
-          <Topbar handleDrawerToggle={handleDrawerToggle} handleLogout={handleLogout} pathname={pathname} />
+          <Topbar
+            handleDrawerToggle={handleDrawerToggle}
+            handleLogout={handleLogout}
+            handleProfile={handleProfile}
+            pathname={pathname}
+          />
         )}
         {pathname === '/login' || pathname === '/logout' ? (
           <></>
@@ -139,10 +149,12 @@ const App = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
+            <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
+            <Route exact path='/profile' component={Profile}></Route>
+            <Route exact path='/home' component={Home}></Route>
             <Route exact path='/login' component={Login}></Route>
-            <Redirect from='/' to='fdsmanagers' />
+            <Redirect from='/' to={sessionStorage.getItem('contactNum') ? 'home' : 'login'} />
           </Switch>
         </main>
       </div>

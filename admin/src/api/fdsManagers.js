@@ -6,12 +6,17 @@ export function getFDSManagers() {
   return axios.get(link);
 }
 
+export function getFDSManagerById(fdsManagerId) {
+  var link = Config.ipAddress + '/fdsManagers/' + fdsManagerId;
+  return axios.get(link);
+}
+
 export function createFDSManager(request) {
   var link = Config.ipAddress + '/fdsManagers';
   return axios.post(link, request);
 }
 
-export function updateFDSManagers(request, fdsManagerId) {
+export function updateFDSManager(request, fdsManagerId) {
   var link = Config.ipAddress + '/fdsManagers/' + fdsManagerId;
   return axios.post(link, request);
 }
