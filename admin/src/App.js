@@ -11,6 +11,7 @@ import Home from './containers/home';
 import Login from './containers/login';
 import FDSManagers from './containers/fdsManagers';
 import Restaurants from './containers/restaurants';
+import Restaurant from './containers/restaurant';
 import Profile from './containers/profile';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
@@ -64,23 +65,17 @@ const App = (props) => {
 
   useEffect(() => {
     setMobileOpen(false);
-    if (pathname === '/fdsmanagers') {
+    if (pathname === '/home') {
       setSelectedItem(0);
     }
-    if (pathname === '/restaurants') {
+    if (pathname === '/my-restaurant') {
       setSelectedItem(1);
     }
-    if (pathname === '/manage-students') {
+    if (pathname === '/restaurants') {
       setSelectedItem(2);
     }
-    if (pathname === '/message-logging') {
+    if (pathname === '/fdsmanagers') {
       setSelectedItem(3);
-    }
-    if (pathname === '/admin-logging') {
-      setSelectedItem(4);
-    }
-    if (pathname === '/manage-accounts') {
-      setSelectedItem(5);
     }
   }, [props.history.location.pathname]);
 
@@ -95,19 +90,13 @@ const App = (props) => {
       props.history.push('/home');
     }
     if (index === 1) {
-      props.history.push('/restaurants');
+      props.history.push('/my-restaurant');
     }
     if (index === 2) {
-      props.history.push('/fdsmanagers');
+      props.history.push('/restaurants');
     }
     if (index === 3) {
-      props.history.push('/message-logging');
-    }
-    if (index === 4) {
-      props.history.push('/admin-logging');
-    }
-    if (index === 5) {
-      props.history.push('/manage-accounts');
+      props.history.push('/fdsmanagers');
     }
   };
 
@@ -149,6 +138,7 @@ const App = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
+            <Route exact path='/my-restaurant' component={Restaurant}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
             <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
             <Route exact path='/profile' component={Profile}></Route>

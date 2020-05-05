@@ -19,7 +19,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import MotorcycleIcon from '@material-ui/icons/Motorcycle';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import AddAlert from '@material-ui/icons/AddAlert';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -31,11 +30,24 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = (props) => {
   const classes = useStyles();
+
+  const importAll = (r) => {
+    let images = {};
+    r.keys().map((item, index) => {
+      images[item.replace('./', '')] = r(item);
+    });
+    return images;
+  };
+
+  const images = importAll(require.context('../images', false, /\.(png|jpe?g|svg)$/));
+
   return (
     <Grid container className={classes.card}>
       <Grid item xs={12} sm={9} md={6} lg={3}>
         <Card>
-          <CardContent>{sessionStorage.getItem('userType')}</CardContent>
+          <CardContent>
+            <img src={images[`FoodItemID_1.png`]} />
+          </CardContent>
         </Card>
       </Grid>
     </Grid>

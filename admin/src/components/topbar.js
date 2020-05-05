@@ -45,7 +45,7 @@ const Topbar = (props) => {
         <Grid container style={{ display: 'flex', direction: 'row', justifyContent: 'space-between' }}>
           <Grid item>
             <Typography variant='h6' className={classes.header}>
-              Kinkao: Admin Management Portal
+              Admin Management Portal
             </Typography>
           </Grid>
           <Grid item style={{ display: 'flex', direction: 'row', justifyContent: 'space-between' }}>

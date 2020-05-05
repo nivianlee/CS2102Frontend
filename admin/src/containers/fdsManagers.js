@@ -90,7 +90,7 @@ const FDSManagers = (props) => {
 
   const updateFDSManagers = async (newData) => {
     const managerid = newData.managerid;
-    const updateData = { managername: newData.managername };
+    const updateData = { managerName: newData.managername, contactNum: newData.contactnum };
     FDSManagersApis.updateFDSManager(updateData, managerid)
       .then((response) => {
         if (response.status !== 201) {
