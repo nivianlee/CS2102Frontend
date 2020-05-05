@@ -35,3 +35,8 @@ export function deleteRestaurants(restaurantId) {
   var link = Config.ipAddress + '/restaurants/' + restaurantId;
   return axios.delete(link);
 }
+
+export function getFoodItemsByRestaurantId(restaurantID) {
+  var link = Config.ipAddress + '/fooditems/' + restaurantID;
+  return axios.get(link);
+}

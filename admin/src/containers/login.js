@@ -215,6 +215,8 @@ const Login = (props) => {
         showNotification();
 
         setIsNewRestaurant(false);
+        setErrorContactNumNotFound(false);
+        setErrorRestIDNotFound(false);
         setRestaurantID(response.data[0].restaurantid);
         setNewRestaurantStaff({ ...newRestaurantStaff, restaurantID: parseInt(response.data[0].restaurantid) });
       })
