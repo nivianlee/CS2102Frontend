@@ -229,7 +229,7 @@ class ResFoodItems extends React.Component {
                                     title={item.fooditemname}
                                     subTitle={item.category}
                                     imageAlt="Product"
-                                    image="img/list/1.png"
+                                    image={'img/foodItems/FoodItemID_' + item.fooditemid + '.png'}
                                     imageClass="img-fluid item-img"
                                     price={item.price}
                                     priceUnit="$"
@@ -239,6 +239,7 @@ class ResFoodItems extends React.Component {
                                     favIcoIconColor="text-danger"
                                     rating="3.1 (300+)"
                                     getValue={this.getQty}
+                                    maxValue={item.maxnumoforders}
                                   />
                                 </Col>
                               );
@@ -251,7 +252,7 @@ class ResFoodItems extends React.Component {
                           </div>
                         </Tab.Pane>
 
-                        <Tab.Pane eventKey="fourth">
+                        {/* <Tab.Pane eventKey="fourth">
                           <div
                             id="book-a-table"
                             className="bg-white rounded shadow-sm p-4 mb-5 rating-review-select-page"
@@ -294,7 +295,7 @@ class ResFoodItems extends React.Component {
                               </Form.Group>
                             </Form>
                           </div>
-                        </Tab.Pane>
+                        </Tab.Pane> */}
                         <Tab.Pane eventKey="fifth">
                           <div
                             id="ratings-and-reviews"

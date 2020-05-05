@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Media } from 'react-bootstrap';
+import Icofont from 'react-icofont';
 import PropTypes from 'prop-types';
-import * as Icon from 'react-bootstrap-icons';
 
 class ChooseAddressCard extends React.Component {
   render() {
@@ -11,8 +11,7 @@ class ChooseAddressCard extends React.Component {
         <div className="gold-members p-4">
           <Media>
             <div className="mr-3">
-              {/* <Icofont icon={this.props.icoIcon} className={this.props.iconclassName} /> */}
-              <Icon.GeoAlt size={30} />
+              <Icofont icon={this.props.icoIcon} className={this.props.iconclassName} />
             </div>
             <div className="media-body">
               <h6 className="mb-1 text-secondary">{this.props.title}</h6>
@@ -24,6 +23,7 @@ class ChooseAddressCard extends React.Component {
                       {' '}
                       DELIVER HERE{' '}
                     </Link>
+                    <span>30MIN</span>
                   </>
                 ) : (
                   <Link className="btn btn-sm btn-primary mr-2" to="#" onClick={this.props.onAddNewClick}>

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 class DeleteAddressModal extends React.Component {
   handleDelete = (event) => {
     setTimeout(
-      fetch(SERVER_PREFIX + '/customers/addresses/' + localStorage.getItem('loggedInUserId') + this.props.addressId, {
+      fetch(SERVER_PREFIX + '/customers/addresses/' + this.props.addressId, {
         method: 'DELETE',
       })
         .then((response) => {
