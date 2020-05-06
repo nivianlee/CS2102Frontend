@@ -123,12 +123,12 @@ h6 {
   min-height: 100vh;
 }
 .bg-image {
-  background-image: url("/img/login-bg.png");
+  background-image: url('/img/login-bg.png');
   background-size: cover;
   background-position: center;
 }
 .bg-signup {
-  background-image: url("/img/food-1050813-1280.jpg");
+  background-image: url('/img/food-1050813-1280.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -272,7 +272,7 @@ h6 {
 .owl-carousel {
   position: relative;
 }
-.owl-theme .owl-nav [class*="owl-"] {
+.owl-theme .owl-nav [class*='owl-'] {
   position: absolute;
   bottom: calc(50% - 20px);
   background: #fff none repeat scroll 0 0 !important;
@@ -289,7 +289,7 @@ h6 {
   align-items: center;
   justify-content: center;
 }
-.owl-theme .owl-nav [class*="owl-"] i {
+.owl-theme .owl-nav [class*='owl-'] i {
   font-size: 13px !important;
   font-weight: normal !important;
 }
@@ -353,10 +353,7 @@ small {
 .select2 span {
   width: 100% !important;
 }
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__arrow
-  b {
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
   left: 96%;
 }
 .select2-container--default .select2-selection--single {
@@ -607,21 +604,9 @@ iframe.position-absolute {
 .generator-bg {
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ff3008+1,fe792b+100 */
   background: #ff3008; /* Old browsers */
-  background: -moz-linear-gradient(
-    -45deg,
-    #ff3008 1%,
-    #fe792b 100%
-  ); /* FF3.6-15 */
-  background: -webkit-linear-gradient(
-    -45deg,
-    #ff3008 1%,
-    #fe792b 100%
-  ); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(
-    135deg,
-    #ff3008 1%,
-    #fe792b 100%
-  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background: -moz-linear-gradient(-45deg, #ff3008 1%, #fe792b 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #ff3008 1%, #fe792b 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #ff3008 1%, #fe792b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3008', endColorstr='#fe792b',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 .restaurant-detailed-banner {
@@ -629,6 +614,7 @@ iframe.position-absolute {
 }
 .restaurant-detailed-banner .img-fluid.cover {
   height: 424px;
+  width: 1359px;
   object-fit: cover;
 }
 .restaurant-detailed-header {
@@ -637,21 +623,9 @@ iframe.position-absolute {
   padding: 65px 0 17px;
   position: absolute;
   right: 0;
-  background: -moz-linear-gradient(
-    top,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.83) 100%
-  );
-  background: -webkit-linear-gradient(
-    top,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.83) 100%
-  );
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.83) 100%
-  );
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.83) 100%);
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.83) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.83) 100%);
   filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#d4000000', GradientType=0);
 }
 .homepage-great-deals-carousel .item img {
@@ -986,7 +960,7 @@ iframe.position-absolute {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-bottom: 4px solid #daceb7;
-  content: "";
+  content: '';
   left: 30px;
   position: absolute;
   bottom: 0;
@@ -995,7 +969,7 @@ iframe.position-absolute {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #daceb7;
-  content: "";
+  content: '';
   left: 30px;
   position: absolute;
   top: 0;
@@ -1551,4 +1525,9 @@ footer {
 }
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+}
+
+.fixed {
+  height: 170px;
+  width: 254px;
 }

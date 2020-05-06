@@ -25,6 +25,7 @@ class ResFoodItems extends React.Component {
       category: '',
       isLoaded: false,
       showAddressModal: false,
+      resID: '',
       users: [
         {
           name: 'Osahan Singh',
@@ -95,6 +96,7 @@ class ResFoodItems extends React.Component {
             resAddr: result[0].address,
             resPostalCode: result[0].postalcode,
             resContactNum: result[0].contactNum,
+            resID: result[0].restaurantid,
           });
         },
         // Note: it's important to handle errors here
@@ -110,11 +112,12 @@ class ResFoodItems extends React.Component {
   }
 
   render() {
-    for (var i = 0; i < this.state.foodItems.length; i++) {
-      var obj = this.state.foodItems[i];
+    // for (var i = 0; i < this.state.foodItems.length; i++) {
+    //   var obj = this.state.foodItems[i];
 
-      console.log('fooditemid: ' + obj.fooditemid);
-    }
+    //   console.log('fooditemid: ' + obj.fooditemid);
+    // }
+
     const { error, isLoaded, foodItems } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -134,7 +137,7 @@ class ResFoodItems extends React.Component {
         <>
           <section className="restaurant-detailed-banner">
             <div className="text-center">
-              <Image fluid className="cover" src="/img/mall-dedicated-banner.png" />
+              <Image fluid className="cover" src={'/img/restaurants/restaurant_' + this.state.resID + '.jpg'} />
             </div>
             <div className="restaurant-detailed-header">
               <Container>

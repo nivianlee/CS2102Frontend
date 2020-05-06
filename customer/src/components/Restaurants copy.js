@@ -65,6 +65,23 @@ class Restaurants extends React.Component {
           <PageTitle title="Offers Near You" subTitle="Best deals at your favourite restaurants" />
           <section className="section pt-5 pb-5 products-listing">
             <Container>
+              <Row className="d-none-m">
+                <Col md={12}>
+                  <Dropdown className="float-right">
+                    <Dropdown.Toggle variant="outline-info">
+                      Sort by: <span className="text-theme">Distance</span> &nbsp;&nbsp;
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown-menu-right shadow-sm border-0">
+                      <Dropdown.Item href="#/distance">Distance</Dropdown.Item>
+                      <Dropdown.Item href="#/no-of-coupons">No Of Offers</Dropdown.Item>
+                      <Dropdown.Item href="#/rating">Rating</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <h4 className="font-weight-bold mt-0 mb-3">
+                    OFFERS <small className="h6 mb-0 ml-2">299 restaurants</small>
+                  </h4>
+                </Col>
+              </Row>
               <Row>
                 <Col md={3}>
                   <div className="filters shadow-sm rounded bg-white mb-4">

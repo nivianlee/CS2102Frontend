@@ -42,6 +42,7 @@ class Checkout extends React.Component {
       specialReq: '',
       useCash: false,
       useCreditCard: false,
+      promotionId: '',
     };
   }
   componentDidMount() {
@@ -265,6 +266,25 @@ class Checkout extends React.Component {
                     </Row>
                   </Tab.Container>
                 </div>
+                <div className="pt-2"></div>
+                <div className="bg-white rounded shadow-sm p-4 mb-4">
+                  <Row>
+                    <Col md={8}>
+                      <h4 className="mb-1">Choose a promotion</h4>
+                      <br />
+                    </Col>
+                    <Col md={4}>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        className="text-center float-right justify-content-center"
+                        onClick={() => this.setState({ showAddressModal: true })}
+                      >
+                        Add New Address
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
               </div>
             </Col>
             <Col md={4}>
@@ -349,7 +369,7 @@ class Checkout extends React.Component {
                   <InputGroup className="input-group-sm mb-2">
                     <Form.Control type="text" placeholder="Enter promo code" />
                     <InputGroup.Append>
-                      <Button variant="primary" type="button" id="button-addon2">
+                      <Button variant="primary" type="button" id="button-addon2" onClick={() => this.setState()}>
                         <Icofont icon="sale-discount" /> APPLY
                       </Button>
                     </InputGroup.Append>
@@ -361,7 +381,8 @@ class Checkout extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                      as="textarea"
+                      type="textarea"
+                      name="specialReq"
                       placeholder="Any special request?..."
                       value={this.state.specialReq}
                       onChange={this.handleUserInput}
