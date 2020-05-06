@@ -15,6 +15,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
+import MaterialTable from 'material-table';
 
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import MotorcycleIcon from '@material-ui/icons/Motorcycle';
@@ -53,12 +54,23 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '4%',
     marginBottom: '5%',
   },
+  button: {
+    marginTop: '5%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 const Home = (props) => {
   const classes = useStyles();
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
+  const [tableState, setTableState] = useState({
+    columns: [
+      { title: 'Staff ID', field: 'restaurantstaffid', editable: 'never' },
+      { title: 'Staff Name', field: 'restaurantstaffname' },
+    ],
+  });
   const [isUpdateFoodItem, setIsUpdateFoodItem] = useState(false);
   const [selectedFoodItemID, setSelectedFoodItemID] = useState(-1);
   const [restaurant, setRestaurant] = useState({
@@ -79,11 +91,13 @@ const Home = (props) => {
     restaurantID: -1,
   });
   const [foodItems, setFoodItems] = useState([]);
+  const [restaurantStaff, setRestaurantStaff] = useState([]);
 
   useEffect(() => {
     if (sessionStorage.getItem('userType') === 'restaurantStaff') {
       getRestaurantById();
       getFoodItemsByRestaurantId();
+      getRestaurantStaffs();
     }
   }, []);
 
@@ -120,7 +134,7 @@ const Home = (props) => {
         if (response.status !== 200) {
           props.dispatch({
             type: 'SET_ERRORMESSAGE',
-            data: 'Error retrieving restaurant. Please contact administrators for assistance',
+            data: 'Error retrieving restaurant staff. Please contact administrators for assistance',
           });
         }
         setFoodItems(response.data);
@@ -128,7 +142,48 @@ const Home = (props) => {
       .catch((err) => {
         props.dispatch({
           type: 'SET_ERRORMESSAGE',
+          data: 'Error retrieving restaurant staff. Please contact administrators for assistance',
+        });
+      });
+  };
+
+  const getRestaurantStaffs = async () => {
+    RestaurantStaffApis.getRestaurantStaffs(sessionStorage.getItem('restaurantID'))
+      .then((response) => {
+        if (response.status !== 200) {
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error retrieving restaurant. Please contact administrators for assistance',
+          });
+        }
+        setRestaurantStaff(response.data);
+      })
+      .catch((err) => {
+        props.dispatch({
+          type: 'SET_ERRORMESSAGE',
           data: 'Error retrieving restaurants. Please contact administrators for assistance',
+        });
+      });
+  };
+
+  const updateRestaurant = async () => {
+    RestaurantsApis.updateRestaurant(restaurant, restaurant.restaurantID)
+      .then((response) => {
+        if (response.status !== 200) {
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error updating restaurant. Please contact administrators for assistance',
+          });
+        }
+        setNotification(response.data);
+        showNotification();
+
+        getRestaurantById();
+      })
+      .catch((err) => {
+        props.dispatch({
+          type: 'SET_ERRORMESSAGE',
+          data: 'Error updating restaurant. Please contact administrators for assistance',
         });
       });
   };
@@ -220,7 +275,7 @@ const Home = (props) => {
 
   return (
     <Grid container direction='row' className={classes.card} spacing={2}>
-      <Grid item xs={12} sm={12} md={6} lg={3}>
+      <Grid item xs={12} sm={12} md={6} lg={5}>
         <Card>
           <CardContent>
             <Typography variant='h5' component='p' align='left' className={classes.title}>
@@ -300,10 +355,40 @@ const Home = (props) => {
                 />
               </Grid>
             </Grid>
+            <Grid container direction='column' spacing={2} className={classes.button}>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  style={{ backgroundColor: '#ff3008', color: '#fff' }}
+                  onClick={() => {
+                    updateRestaurant();
+                  }}
+                >
+                  Update Restaurant
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  onClick={() => {
+                    getRestaurantById();
+                    setNotification('Restaurant details was not updated, retrieving original restaurant details');
+                    showNotification();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={9}>
+      <Grid item xs={12} sm={12} md={6} lg={7}>
+        <Card>
+          <MaterialTable title='Restaurant Staff' columns={tableState.columns} data={restaurantStaff} />
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={12}>
         <Card>
           <CardContent>
             <Typography variant='h5' component='p' align='left' className={classes.title2}>
