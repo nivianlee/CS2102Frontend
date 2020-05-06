@@ -142,55 +142,52 @@ const FDSManagers = (props) => {
 
   return (
     <ThemeProvider theme={chatTheme}>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Grid container>
-          <Grid item xs={12} sm={12} md={12}>
-            <Card>
-              <MaterialTable
-                title='FDS Managers'
-                columns={tableState.columns}
-                data={props.fdsManagers}
-                editable={{
-                  onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve) => {
-                      setTimeout(() => {
-                        resolve();
-                        if (oldData) {
-                          updateFDSManagers(newData, oldData);
-                        }
-                      }, 600);
-                    }),
-                  onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                      setTimeout(() => {
-                        resolve();
-                        deleteFDSManagers(oldData);
-                      }, 600);
-                    }),
-                }}
-              />
-            </Card>
-          </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={12}>
+          <Card>
+            <MaterialTable
+              title='FDS Managers'
+              columns={tableState.columns}
+              data={props.fdsManagers}
+              editable={{
+                onRowUpdate: (newData, oldData) =>
+                  new Promise((resolve) => {
+                    setTimeout(() => {
+                      resolve();
+                      if (oldData) {
+                        updateFDSManagers(newData, oldData);
+                      }
+                    }, 600);
+                  }),
+                onRowDelete: (oldData) =>
+                  new Promise((resolve) => {
+                    setTimeout(() => {
+                      resolve();
+                      deleteFDSManagers(oldData);
+                    }, 600);
+                  }),
+              }}
+            />
+          </Card>
         </Grid>
-        <Grid container justify={'center'}>
-          <Grid item xs={12} sm={12} md={10} lg={8}>
-            <Grid container>
-              <Grid item xs={12} sm={12} md={4}>
-                <Snackbar
-                  place='bc'
-                  color='info'
-                  icon={AddAlert}
-                  message={notification}
-                  open={bc}
-                  closeNotification={() => setBC(false)}
-                  close
-                />
-              </Grid>
+      </Grid>
+      <Grid container justify={'center'}>
+        <Grid item xs={12} sm={12} md={10} lg={8}>
+          <Grid container>
+            <Grid item xs={12} sm={12} md={4}>
+              <Snackbar
+                place='bc'
+                color='info'
+                icon={AddAlert}
+                message={notification}
+                open={bc}
+                closeNotification={() => setBC(false)}
+                close
+              />
             </Grid>
           </Grid>
         </Grid>
-      </main>
+      </Grid>
     </ThemeProvider>
   );
 };

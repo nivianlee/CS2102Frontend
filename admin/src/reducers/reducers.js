@@ -8,6 +8,9 @@ export function reducer(
     restaurants: [],
     selectedRestaurant: {},
     completedOrders: [],
+    summaryOne: [],
+    summaryTwo: [],
+    summaryThree: [],
   },
   action
 ) {
@@ -51,6 +54,26 @@ export function reducer(
       return {
         ...state,
         completedOrders: action.data,
+      };
+    case 'SET_SUMMARY_ONE':
+      return {
+        ...state,
+        summaryOne: action.data,
+      };
+    case 'SET_SUMMARY_TWO':
+      return {
+        ...state,
+        summaryTwo: action.data,
+      };
+    case 'SET_SUMMARY_THREE':
+      return {
+        ...state,
+        summaryThree: action.data,
+      };
+    case 'SET_SUMMARY_FOUR':
+      return {
+        ...state,
+        summaryFour: action.data,
       };
     default:
       return state;
