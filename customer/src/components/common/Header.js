@@ -86,9 +86,9 @@ class Header extends React.Component {
                   <NavDropdown.Item eventKey={4.1} as={NavLink} activeclassname="active" to="/myaccount/orders">
                     <Icofont icon="food-cart" /> Past Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item eventKey={4.2} as={NavLink} activeclassname="active" to="/myaccount/offers">
+                  {/* <NavDropdown.Item eventKey={4.2} as={NavLink} activeclassname="active" to="/myaccount/offers">
                     <Icofont icon="sale-discount" /> My Offers
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                   {/* <NavDropdown.Item eventKey={4.3} as={NavLink} activeclassname='active' to='/myaccount/favourites'>
                     <Icofont icon='heart' /> Favourites
                   </NavDropdown.Item> */}
@@ -114,7 +114,9 @@ class Header extends React.Component {
                       title="Cart"
                       badgeClass="ml-1"
                       badgeVariant="success"
-                      badgeValue={5}
+                      badgeValue={JSON.parse(
+                        localStorage.getItem('totalQty') === 0 ? '0' : JSON.parse(localStorage.getItem('totalQty'))
+                      )}
                     />
                   }
                 >

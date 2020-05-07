@@ -9,9 +9,6 @@ import {
   Button,
   Tab,
   Nav,
-  ButtonToolbar,
-  ToggleButton,
-  ToggleButtonGroup,
   Image,
   OverlayTrigger,
   Tooltip,
@@ -23,6 +20,7 @@ import AddAddressModal from './modals/AddAddressModal';
 import AddCreditCardModal from './modals/AddCreditCardModal';
 import Icofont from 'react-icofont';
 import SERVER_PREFIX from './ServerConfig';
+import CouponCard from './common/CouponCard';
 
 class Checkout extends React.Component {
   constructor(props, context) {
@@ -33,6 +31,7 @@ class Checkout extends React.Component {
       showAddCCModal: false,
       addresses: [],
       creditCards: [],
+      promotions: [],
       selectedAdd: '',
       selectedPostalCode: '',
       selectedCCNum: '',
@@ -43,11 +42,23 @@ class Checkout extends React.Component {
       useCash: false,
       useCreditCard: false,
       promotionId: '',
+      promoDescription: '',
+      promoDetails: '',
+      percentageAmount: '',
+      absoluteAmount: '',
+      deliveryAmount: '',
+      myCart: [],
+      totalCart: 0,
+      totalCartQty: 0,
+      deliveryId: '',
+      deliveryFee: '',
     };
   }
   componentDidMount() {
     this.reloadAddresses();
     this.reloadCreditCards();
+    this.loadPromotions();
+    this.calculateCart();
   }
 
   reloadAddresses() {
@@ -61,9 +72,6 @@ class Checkout extends React.Component {
               addresses: result,
             });
           },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
           (error) => {
             this.setState({
               isLoaded: true,
@@ -100,10 +108,90 @@ class Checkout extends React.Component {
     );
   }
 
-  getQty = ({ id, quantity }) => {
-    //console.log(id);
-    //console.log(quantity);
+  loadPromotions() {
+    setTimeout(
+      fetch(SERVER_PREFIX + '/promotions/customer')
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              promotions: result,
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error,
+            });
+          }
+        ),
+      1
+    );
+  }
+
+  getQty = ({ id, name, price, maxValue, quantity }) => {
+    let tempArr = [];
+    for (var i = 0; i < this.state.myCart.length; i++) {
+      tempArr[i] = this.state.myCart[i].fooditemid;
+    }
+    console.log('tempArr: ', tempArr);
+    console.log('id', id);
+    // Check for duplicate items
+    // console.log('this.state.myCart.length: ', this.state.myCart.length);
+    if (tempArr.includes(id)) {
+      let tempIndex = tempArr.indexOf(id);
+      if (quantity === 0) {
+        let tempArrTwo = [...this.state.myCart];
+        tempArrTwo.splice(tempIndex, 1);
+        this.setState({ myCart: tempArrTwo });
+      } else {
+        this.setState({
+          ...(this.state.myCart[tempIndex].quantity = quantity),
+          ...(this.state.myCart[tempIndex].subTotal = price * quantity),
+        });
+      }
+      console.log('come here?');
+      this.setState({ ...this.state.myCart });
+      this.calculateCart();
+    }
+
+    if (quantity === 0) {
+      console.log('quantity is 0 !!!');
+      this.forceUpdate();
+    }
+
+    localStorage.setItem('cart', JSON.stringify(this.state.myCart));
+    // console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
   };
+
+  calculateCart() {
+    let totalSum = 0;
+    let totalQty = 0;
+    for (let i = 0; i < this.state.myCart.length; i++) {
+      console.log('im here? i: ', i);
+      totalSum += this.state.myCart[i].subTotal;
+      totalQty += this.state.myCart[i].quantity;
+
+      console.log('componentDidMount totalSum: ', totalSum);
+      console.log('componentDidMount totalCartQty: ', totalQty);
+      this.setState({ totalCart: totalSum, totalCartQty: totalQty });
+      this.setState({ ...this.state.totalCart });
+      this.setState({ ...this.state.totalCartQty });
+    }
+
+    if (totalQty <= 10) {
+      this.setState({ deliveryId: 1, deliveryFee: 4 });
+    } else if (totalQty > 10 && totalQty <= 15) {
+      this.setState({ deliveryId: 2, deliveryFee: 10 });
+    } else {
+      this.setState({ deliveryId: 3, deliveryFee: 15 });
+    }
+  }
+
   hideCloseModal = () => this.setState({ showAddressModal: false, showAddCCModal: false });
 
   handleAddress = (item) => {
@@ -124,13 +212,35 @@ class Checkout extends React.Component {
     });
   };
 
+  handlePromo = (item) => {
+    this.setState({
+      promotionId: item.promotionid,
+      promoDescription: item.promodescription,
+      promoDetails: item.promotiondetails,
+      percentageAmount: item.percentageamount,
+      absoluteAmount: item.absoluteamount,
+      deliveryAmount: item.deliveryamount,
+    });
+  };
+
   handleUserInput = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
+  componentWillMount() {
+    // Initialize Cart
+    this.setState({ myCart: JSON.parse(localStorage.getItem('cart')) });
+
+    // console.log('Checkout: localStorage: ', JSON.parse(localStorage.getItem('cart')));
+    // console.log(JSON.parse(localStorage.getItem('cart')));
+  }
+
   render() {
+    localStorage.setItem('cart', JSON.stringify(this.state.myCart));
+    console.log('Checkout: localStorage: ', JSON.parse(localStorage.getItem('cart')));
+
     return (
       <section className="offer-dedicated-body mt-4 mb-4 pt-2 pb-2">
         <AddAddressModal
@@ -170,7 +280,7 @@ class Checkout extends React.Component {
                   <Row>
                     {this.state.addresses.map((item, key) => {
                       return (
-                        <Col md={6}>
+                        <Col md={6} key={key}>
                           <ChooseAddressCard
                             boxclassName="border border-success"
                             title="Recent Address"
@@ -238,7 +348,6 @@ class Checkout extends React.Component {
                               </Col>
                             </Row>
                           </Tab.Pane>
-
                           <Tab.Pane eventKey="second">
                             <h6 className="mb-3 mt-0 mb-3">Cash</h6>
                             <p>Please keep exact change handy to help us serve you better</p>
@@ -266,23 +375,37 @@ class Checkout extends React.Component {
                     </Row>
                   </Tab.Container>
                 </div>
-                <div className="pt-2"></div>
+                <div className="pt-4"></div>
                 <div className="bg-white rounded shadow-sm p-4 mb-4">
+                  <h4 className="mb-1">Choose a promotion</h4>
+                  <br />
                   <Row>
-                    <Col md={8}>
-                      <h4 className="mb-1">Choose a promotion</h4>
-                      <br />
-                    </Col>
-                    <Col md={4}>
-                      <Button
-                        type="button"
-                        variant="primary"
-                        className="text-center float-right justify-content-center"
-                        onClick={() => this.setState({ showAddressModal: true })}
-                      >
-                        Add New Address
-                      </Button>
-                    </Col>
+                    {this.state.promotions.map((item, index) => {
+                      return (
+                        <Col key={index} md={6}>
+                          <CouponCard
+                            title={item.promodescription}
+                            // logoImage="img/bank/1.png"
+                            subTitle="Please select one of the promotions."
+                            // copyBtnText=""
+                            couponCode={(() => {
+                              if (item.promotiondetails !== null) {
+                                return <div>{item.promotiondetails}</div>;
+                              } else if (item.absoluteamount !== null) {
+                                return <div>${item.absoluteamount} OFF!</div>;
+                              } else if (item.deliveryamount !== null) {
+                                return <div>${item.deliveryamount} OFF!</div>;
+                              } else {
+                                return <div>{item.percentageamount}% OFF!</div>;
+                              }
+                            })()}
+                            noBorder={false}
+                            selectButton={true}
+                            onPromoClick={() => this.handlePromo(item)}
+                          />
+                        </Col>
+                      );
+                    })}
                   </Row>
                 </div>
               </div>
@@ -298,82 +421,36 @@ class Checkout extends React.Component {
                     </p>
                   </div>
                 </div>
-                <div className="bg-white rounded shadow-sm mb-2">
-                  <CheckoutItem
-                    itemName="Chicken Tikka Sub"
-                    price={314}
-                    priceUnit="$"
-                    id={1}
-                    qty={2}
-                    show={true}
-                    minValue={0}
-                    maxValue={7}
-                    getValue={this.getQty}
-                  />
-                  <CheckoutItem
-                    itemName="Cheese corn Roll"
-                    price={260}
-                    priceUnit="$"
-                    id={1}
-                    qty={1}
-                    show={true}
-                    minValue={0}
-                    maxValue={7}
-                    getValue={this.getQty}
-                  />
-                  <CheckoutItem
-                    itemName="Mixed Veg"
-                    price={122}
-                    priceUnit="$"
-                    id={1}
-                    qty={1}
-                    show={true}
-                    minValue={0}
-                    maxValue={7}
-                    getValue={this.getQty}
-                  />
-                  <CheckoutItem
-                    itemName="Black Dal Makhani"
-                    price={652}
-                    priceUnit="$"
-                    id={1}
-                    qty={1}
-                    show={true}
-                    minValue={0}
-                    maxValue={7}
-                    getValue={this.getQty}
-                  />
-                  <CheckoutItem
-                    itemName="Mixed Veg"
-                    price={122}
-                    priceUnit="$"
-                    id={1}
-                    qty={1}
-                    show={true}
-                    minValue={0}
-                    maxValue={7}
-                    getValue={this.getQty}
-                  />
+                <div className="bg-white rounded shadow-sm p-2 mb-2 ">
+                  {this.state.myCart === null || this.state.myCart.length === 0 ? (
+                    <p className="text-danger">Please add items to cart!</p>
+                  ) : (
+                    this.state.myCart.map((item, key) => {
+                      return (
+                        <CheckoutItem
+                          key={key}
+                          itemName={item.name}
+                          price={parseFloat(item.price).toFixed(2)}
+                          priceUnit="$"
+                          id={item.fooditemid}
+                          qty={item.quantity}
+                          show={true}
+                          minValue={0}
+                          maxValue={item.maxValue}
+                          getValue={this.getQty}
+                        />
+                      );
+                    })
+                  )}
                 </div>
                 <div className="mb-2 bg-white rounded p-2 clearfix">
                   Deliver To: <p>{localStorage.getItem('loggedInUserName')}</p>
                   Selected Address:{' '}
                   {this.state.selectedPostalCode === '' ? (
-                    <p>Please select an address.</p>
+                    <p className="text-danger">Please select an address.</p>
                   ) : (
                     <p>{this.state.selectedAdd + ' (' + this.state.selectedPostalCode + ')'}</p>
                   )}
-                  <p></p>
-                </div>
-                <div className="mb-2 bg-white rounded p-2 clearfix">
-                  <InputGroup className="input-group-sm mb-2">
-                    <Form.Control type="text" placeholder="Enter promo code" />
-                    <InputGroup.Append>
-                      <Button variant="primary" type="button" id="button-addon2" onClick={() => this.setState()}>
-                        <Icofont icon="sale-discount" /> APPLY
-                      </Button>
-                    </InputGroup.Append>
-                  </InputGroup>
                   <InputGroup className="mb-0">
                     <InputGroup.Prepend>
                       <InputGroup.Text>
@@ -391,6 +468,14 @@ class Checkout extends React.Component {
                   </InputGroup>
                 </div>
                 <div className="mb-2 bg-white rounded p-2 clearfix">
+                  Selected Promotion:
+                  {this.state.promoDescription === '' ? (
+                    <p className="text-danger">Please select a promotion.</p>
+                  ) : (
+                    <p className="text-success">{this.state.promoDescription}</p>
+                  )}
+                </div>
+                <div className="mb-2 bg-white rounded p-2 clearfix">
                   Payment method:{' '}
                   {(() => {
                     if (this.state.useCash) {
@@ -405,17 +490,20 @@ class Checkout extends React.Component {
                         </div>
                       );
                     } else {
-                      return <p>Please select payment method.</p>;
+                      return <p className="text-danger">Please select payment method.</p>;
                     }
                   })()}
                 </div>
                 <div className="mb-2 bg-white rounded p-2 clearfix">
                   <p className="mb-1">
-                    Item Total <span className="float-right text-dark">$3140</span>
+                    Item Total{' '}
+                    <span className="float-right text-dark">
+                      ${this.state.myCart.length === 0 ? '0.00' : parseFloat(this.state.totalCart).toFixed(2)}
+                    </span>
                   </p>
-                  <p className="mb-1">
+                  {/* <p className="mb-1">
                     Restaurant Charges <span className="float-right text-dark">$62.8</span>
-                  </p>
+                  </p> */}
                   <p className="mb-1">
                     Delivery Fee
                     <OverlayTrigger
@@ -427,11 +515,11 @@ class Checkout extends React.Component {
                         <Icofont icon="info-circle" />
                       </span>
                     </OverlayTrigger>
-                    <span className="float-right text-dark">$10</span>
+                    <span className="float-right text-dark">${this.state.deliveryFee}</span>
                   </p>
-                  <p className="mb-1 text-success">
+                  <p className="mb-1">
                     Total Discount
-                    <span className="float-right text-success">$1884</span>
+                    <span className="float-right text-success">$0</span>
                   </p>
                   <hr />
                   <h6 className="font-weight-bold mb-0">

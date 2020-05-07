@@ -10,7 +10,7 @@ class BestSeller extends React.Component {
     this.state = {
       quantity: this.props.qty || 0,
       show: this.props.show || true,
-      max: this.props.maxValue || 5,
+      max: this.props.maxValue || 0,
       min: this.props.minValue || 0,
     };
   }
@@ -21,9 +21,16 @@ class BestSeller extends React.Component {
       this.setState({
         quantity: this.state.quantity + 1,
       });
-      this.props.getValue({ id: this.props.id, quantity: this.state.quantity + 1 });
+      this.props.getValue({
+        id: this.props.id,
+        name: this.props.title,
+        quantity: this.state.quantity + 1,
+        price: this.props.price,
+        maxValue: this.props.maxValue,
+      });
     }
   };
+
   DecreaseItem = () => {
     if (this.state.quantity <= this.state.min) {
     } else {

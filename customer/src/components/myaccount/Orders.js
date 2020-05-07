@@ -54,8 +54,8 @@ class Orders extends React.Component {
           {orders.map((item, index) => {
             return (
               <OrderCard
-                image="/img/3.jpg"
-                imageAlt=""
+                image={'/img/restaurants/restaurant_' + item.restaurantid + '.jpg'}
+                imageAlt="res"
                 orderNumber={item.orderid}
                 orderDate={item.orderplacedtimestamp}
                 deliveredDate={item.riderdeliverordertimestamp}

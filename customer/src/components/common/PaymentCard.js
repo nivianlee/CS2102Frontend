@@ -42,7 +42,7 @@ PaymentCard.propTypes = {
   subTitle: PropTypes.string,
   // imageAlt: PropTypes.string,
   // imageclassName: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  // onClick: PropTypes.func.isRequired,
   onEditClick: PropTypes.func.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
 };

@@ -59,7 +59,7 @@ class Invoice extends React.Component {
   render() {
     return (
       <>
-        <PageTitle title="Invoice" subTitle="Order #25102589748" />
+        <PageTitle title="Invoice" />
         <section className="section pt-5 pb-5">
           <Container>
             <Row>

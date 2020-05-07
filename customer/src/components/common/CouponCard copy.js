@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Image, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { Card, Media } from 'react-bootstrap';
 
 class CouponCard extends React.Component {
   render() {
@@ -27,16 +26,6 @@ class CouponCard extends React.Component {
             <Button variant="link" className="card-btn mr-3 p-0">
               {this.props.copyBtnText}
             </Button>
-          ) : (
-            ''
-          )}
-          {this.props.selectButton ? (
-            <p className="mb-0 text-black font-weight-bold">
-              <Link className="btn btn-sm btn-success mr-2" to="#" onClick={this.props.onPromoClick}>
-                {' '}
-                SELECT{' '}
-              </Link>
-            </p>
           ) : (
             ''
           )}

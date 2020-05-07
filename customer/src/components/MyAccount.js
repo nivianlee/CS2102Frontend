@@ -60,11 +60,11 @@ class MyAccount extends React.Component {
                         <i className="icofont-food-cart"></i> Orders
                       </NavLink>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <NavLink className="nav-link" activeClassName="active" exact to="/myaccount/offers">
                         <i className="icofont-sale-discount"></i> Offers
                       </NavLink>
-                    </li>
+                    </li> */}
                     {/* <li className='nav-item'>
                       <NavLink className='nav-link' activeClassName='active' exact to='/myaccount/favourites'>
                         <i className='icofont-heart'></i> Favourites

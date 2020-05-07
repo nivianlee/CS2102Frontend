@@ -12,20 +12,20 @@ class Login extends React.Component {
       email: '',
       password: '',
       redirect: false,
-      user: []
+      user: [],
     };
   }
 
-  handleUserInput = event => {
+  handleUserInput = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     let values = {
       customerEmail: this.state.email,
-      customerPassword: this.state.password
+      customerPassword: this.state.password,
     };
     console.log('values:', values);
 
@@ -33,10 +33,10 @@ class Login extends React.Component {
       method: 'POST',
       body: JSON.stringify(values),
       headers: new Headers({
-        'Content-Type': 'application/json'
-      })
+        'Content-Type': 'application/json',
+      }),
     })
-      .then(response => {
+      .then((response) => {
         console.log('response.status: ' + response.status);
 
         if (response.status === 200) {
@@ -47,7 +47,7 @@ class Login extends React.Component {
             title: 'Login Successful!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 500
+            timer: 500,
           });
 
           return response.json();
@@ -58,11 +58,11 @@ class Login extends React.Component {
             title: 'Login Failed!',
             timerProgressBar: true,
             showConfirmButton: false,
-            timer: 500
+            timer: 500,
           });
         }
       })
-      .then(data => {
+      .then((data) => {
         // Put UserId into Local Storage
         console.log();
         console.log(data[0].customerid);
@@ -78,6 +78,7 @@ class Login extends React.Component {
         console.log('getItem[loggedInUserPhone]: ' + localStorage.getItem('loggedInUserPhone'));
         console.log('getItem[loggedInUserRewardPt]: ' + localStorage.getItem('loggedInUserRewardPt'));
         console.log('getItem[loggedInUserPassword]: ' + localStorage.getItem('loggedInUserPassword'));
+        console.log('localStorage.getItem("cart"): ', localStorage.getItem('cart'));
 
         // Set loggedIn localStorage variable to True
         localStorage.setItem('isLoggedIn', JSON.stringify('true'));
@@ -96,7 +97,7 @@ class Login extends React.Component {
         <Redirect
           to={{
             pathname: '/landing-page',
-            isLoggedIn: true
+            isLoggedIn: true,
           }}
         />
       );
@@ -120,7 +121,6 @@ class Login extends React.Component {
                             name="email"
                             id="inputEmail"
                             placeholder="Email address"
-                            class="form-control"
                             onChange={this.handleUserInput}
                             required
                           />

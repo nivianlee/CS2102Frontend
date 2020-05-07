@@ -48,18 +48,87 @@ class ResFoodItems extends React.Component {
           url: '#',
         },
       ],
+      myCart: [],
+      totalCart: 0,
     };
   }
 
   hideAddressModal = () => this.setState({ showAddressModal: false });
-  getQty = ({ id, quantity }) => {
-    //console.log(id);
-    //console.log(quantity);
+
+  getQty = ({ id, name, price, maxValue, quantity }) => {
+    // console.log(id);
+    // console.log(quantity);
+    let tempArr = [];
+    for (var i = 0; i < this.state.myCart.length; i++) {
+      tempArr[i] = this.state.myCart[i].fooditemid;
+    }
+
+    if (this.state.myCart.length === 0) {
+      this.setState({
+        myCart: [
+          {
+            fooditemid: id,
+            name: name,
+            price: price,
+            maxValue: maxValue,
+            quantity: quantity,
+            subTotal: price * quantity,
+          },
+        ],
+      });
+    } else {
+      // Check for duplicate items
+      // console.log('this.state.myCart.length: ', this.state.myCart.length);
+      if (tempArr.includes(id)) {
+        let tempIndex = tempArr.indexOf(id);
+
+        if (quantity === 0) {
+          let tempArrTwo = [...this.state.myCart];
+          tempArrTwo.splice(tempIndex, 1);
+          this.setState({ myCart: tempArrTwo });
+        } else {
+          this.setState({
+            ...(this.state.myCart[tempIndex].quantity = quantity),
+            ...(this.state.myCart[tempIndex].subTotal = price * quantity),
+          });
+        }
+      } else {
+        this.setState({
+          myCart: [
+            ...this.state.myCart,
+            {
+              fooditemid: id,
+              name: name,
+              price: price,
+              maxValue: maxValue,
+              quantity: quantity,
+              subTotal: price * quantity,
+            },
+          ],
+        });
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(this.state.myCart));
+    console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
   };
+
   getStarValue = ({ value }) => {
     console.log(value);
     //console.log(quantity);
   };
+
+  componentWillMount() {
+    // Initialize Cart
+    if (localStorage.getItem('cart') === null || typeof localStorage.getItem('cart') === undefined) {
+      var myCart = {};
+      localStorage.setItem('cart', JSON.stringify(myCart));
+    } else {
+      this.setState({ myCart: JSON.parse(localStorage.getItem('cart')) });
+    }
+
+    console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
+    // console.log(JSON.parse(localStorage.getItem('cart')));
+  }
 
   componentDidMount() {
     const { resID } = this.props.match.params;
@@ -111,12 +180,33 @@ class ResFoodItems extends React.Component {
       );
   }
 
+  handleQty = (foodItemId) => {
+    var obj = JSON.parse(localStorage.getItem('cart'));
+
+    let tempArr = [];
+    for (var i = 0; i < obj.length; i++) {
+      tempArr[i] = obj[i].fooditemid;
+    }
+
+    if (tempArr.includes(foodItemId)) {
+      let tempIndex = tempArr.indexOf(foodItemId);
+      let qty = obj[tempIndex].quantity;
+      return qty;
+    } else return 0;
+  };
+
   render() {
     // for (var i = 0; i < this.state.foodItems.length; i++) {
     //   var obj = this.state.foodItems[i];
 
     //   console.log('fooditemid: ' + obj.fooditemid);
     // }
+
+    // console.log('ResFoodItemsNoCart: Cart contains:');
+    // console.log(this.state.myCart);
+    localStorage.setItem('cart', JSON.stringify(this.state.myCart));
+    // console.log('Cart Contains: localStorage: ', JSON.parse(localStorage.getItem('cart')));
+    // console.log(JSON.parse(localStorage.getItem('cart')));
 
     const { error, isLoaded, foodItems } = this.state;
     if (error) {
@@ -184,9 +274,9 @@ class ResFoodItems extends React.Component {
                       <Nav.Item>
                         <Nav.Link eventKey="first">Order Online</Nav.Link>
                       </Nav.Item>
-                      {/* <Nav.Item>
-                        <Nav.Link eventKey="third">Restaurant Info</Nav.Link>
-                      </Nav.Item> */}
+                      <Nav.Item>
+                        <Nav.Link eventKey="third">Restaurant Offers</Nav.Link>
+                      </Nav.Item>
                       <Nav.Item>
                         <Nav.Link eventKey="fifth">Ratings & Reviews</Nav.Link>
                       </Nav.Item>
@@ -226,15 +316,15 @@ class ResFoodItems extends React.Component {
                             <h5 className="mb-4 mt-3 col-md-12">Best Sellers</h5>
                             {foodItems.map((item, index) => {
                               return (
-                                <Col md={4} sm={6} className="mb-4">
+                                <Col key={index} md={4} sm={6} className="mb-4">
                                   <BestSeller
-                                    id={1}
+                                    id={item.fooditemid}
                                     title={item.fooditemname}
                                     subTitle={item.category}
                                     imageAlt="Product"
                                     image={'img/foodItems/FoodItemID_' + item.fooditemid + '.png'}
                                     imageClass="img-fluid item-img"
-                                    price={item.price}
+                                    price={parseFloat(item.price)}
                                     priceUnit="$"
                                     isNew={false}
                                     showPromoted={false}
@@ -243,6 +333,7 @@ class ResFoodItems extends React.Component {
                                     rating="3.1 (300+)"
                                     getValue={this.getQty}
                                     maxValue={item.maxnumoforders}
+                                    qty={this.handleQty(item.fooditemid)}
                                   />
                                 </Col>
                               );
