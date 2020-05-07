@@ -90,6 +90,16 @@ const Home = (props) => {
     availabilityStatus: false,
     restaurantID: -1,
   });
+  const [isNewFoodItem, setIsNewFoodItem] = useState(false);
+  const [newFoodItem, setNewFoodItem] = useState({
+    foodItemID: -1,
+    foodItemName: '',
+    category: '',
+    maxNumOfOrders: -1,
+    price: -1,
+    availabilityStatus: false,
+    restaurantID: -1,
+  });
   const [foodItems, setFoodItems] = useState([]);
   const [restaurantStaff, setRestaurantStaff] = useState([]);
 
@@ -388,6 +398,103 @@ const Home = (props) => {
           <MaterialTable title='Restaurant Staff' columns={tableState.columns} data={restaurantStaff} />
         </Card>
       </Grid>
+      <Grid container direction='row' className={classes.card} style={{ padding: '7px' }}>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+            <CardContent>
+              <Grid container direction='row' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {isNewFoodItem ? (
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ backgroundColor: '#ff3008', color: '#fff', marginRight: '5px' }}
+                      onClick={() => {
+                        //postPromotion();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant='contained'
+                      onClick={() => {
+                        setIsNewFoodItem(false);
+                        getFoodItemsByRestaurantId();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                ) : (
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ backgroundColor: '#ff3008', color: '#fff' }}
+                      onClick={() => {
+                        setIsNewFoodItem(true);
+                      }}
+                    >
+                      Add new Food Item
+                    </Button>
+                  </Grid>
+                )}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      {isNewFoodItem && (
+        <Grid item xs={12} sm={12} md={12} lg={4}>
+          <Card>
+            <Grid container direction='column' className={classes.foodItemText}>
+              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='foodItemName'
+                  fullWidth
+                  label='Food Item Name'
+                  helperText='Proper casing preferred e.g. Fried Rice'
+                  value={newFoodItem.foodItemName}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='category'
+                  fullWidth
+                  label='Category'
+                  helperText='Proper casing preferred e.g. Chinese'
+                  value={newFoodItem.category}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='maxNumOfOrders'
+                  fullWidth
+                  label='Max No. Of Orders'
+                  helperText='Proper casing preferred e.g. Chinese'
+                  value={newFoodItem.maxNumOfOrders}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='price'
+                  fullWidth
+                  label='Price'
+                  helperText='e.g. 15'
+                  value={newFoodItem.price}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      )}
+
       <Grid item xs={12} sm={12} md={12} lg={12}>
         <Card>
           <CardContent>

@@ -762,7 +762,7 @@ const Login = (props) => {
             {!hasSelectedUserType ? (
               <>
                 <Typography variant='h5' component='p' align='center'>
-                  Admin Managment Portal
+                  Admin Management Portal
                 </Typography>
                 <Typography variant='body1' component='p' align='center'>
                   A one-stop system for your delivery needs
