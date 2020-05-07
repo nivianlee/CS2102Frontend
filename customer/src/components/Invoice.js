@@ -130,7 +130,7 @@ class Invoice extends React.Component {
                             <td className="text-right" colSpan="3">
                               Item Total:
                             </td>
-                            <td className="text-right"> ${this.state.totalCost}</td>
+                            <td className="text-right"> ${parseFloat(this.state.totalCost).toFixed(2)}</td>
                           </tr>
 
                           <tr>
@@ -150,7 +150,9 @@ class Invoice extends React.Component {
                               <h6 className="text-success">Grand Total:</h6>
                             </td>
                             <td className="text-right">
-                              <h6 className="text-success"> $96</h6>
+                              <h6 className="text-success">
+                                ${parseFloat(this.state.totalCost) + parseFloat(this.state.deliveryFee)}
+                              </h6>
                             </td>
                           </tr>
                         </tbody>

@@ -94,56 +94,30 @@ class Restaurants extends React.Component {
                                 type="checkbox"
                                 defaultChecked={true}
                                 id="custom-cb1"
-                                label={
-                                  <React.Fragment>
-                                    Ludhiana Junction <small className="text-black-50">230</small>
-                                  </React.Fragment>
-                                }
+                                label={<React.Fragment>East</React.Fragment>}
                               />
 
                               <Form.Check
                                 custom
                                 type="checkbox"
                                 id="custom-cb2"
-                                label={
-                                  <React.Fragment>
-                                    Model Town <small className="text-black-50">95</small>
-                                  </React.Fragment>
-                                }
+                                label={<React.Fragment>West</React.Fragment>}
                               />
 
                               <Form.Check
                                 custom
                                 type="checkbox"
                                 id="custom-cb3"
-                                label={
-                                  <React.Fragment>
-                                    Civil Lines <small className="text-black-50">35</small>
-                                  </React.Fragment>
-                                }
+                                label={<React.Fragment>North</React.Fragment>}
                               />
 
                               <Form.Check
                                 custom
                                 type="checkbox"
                                 id="custom-cb4"
-                                label={
-                                  <React.Fragment>
-                                    Dugri <small className="text-black-50">46</small>
-                                  </React.Fragment>
-                                }
+                                label={<React.Fragment>South</React.Fragment>}
                               />
 
-                              <Form.Check
-                                custom
-                                type="checkbox"
-                                id="custom-cb5"
-                                label={
-                                  <React.Fragment>
-                                    PAU <small className="text-black-50">20</small>
-                                  </React.Fragment>
-                                }
-                              />
                               <div className="mt-2">
                                 <Link to="#" className="link">
                                   See all
@@ -428,33 +402,8 @@ class Restaurants extends React.Component {
                       </Accordion>
                     </div>
                   </div>
-                  <div className="filters pt-2">
-                    <div className="filters-body rounded shadow-sm bg-white">
-                      <div className="filters-card p-4">
-                        <div>
-                          <div className="filters-card-body card-shop-filters pt-0">
-                            <Form.Check
-                              custom
-                              type="radio"
-                              name="partner"
-                              defaultChecked={true}
-                              id="custom-cb26"
-                              label="Gold Partner"
-                            />
-                            <Form.Check custom type="radio" name="partner" id="custom-cb27" label="Order Food Online" />
-                            <Form.Check custom type="radio" name="partner" id="custom-cb28" label="Osahan Eat" />
-                            <hr />
-                            <small className="text-success">
-                              Use code OSAHAN50 to get 50% OFF (up to $30) on first 5 orders. T&Cs apply.
-                            </small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </Col>
                 <Col md={9}>
-                  <CategoriesCarousel />
                   <Row>
                     {restaurants.map((item, index) => {
                       return (

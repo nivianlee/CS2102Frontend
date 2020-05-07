@@ -71,6 +71,9 @@ class Header extends React.Component {
                 <Nav.Link as={NavLink} activeclassname="active" to="/track-order">
                   <Icofont /> Current Order
                 </Nav.Link>
+                <Nav.Link as={NavLink} activeclassname="active" to="/checkout">
+                  <Icofont /> Cart
+                </Nav.Link>
                 <NavDropdown
                   alignRight
                   title={
@@ -101,85 +104,6 @@ class Header extends React.Component {
                   <NavDropdown.Item as={NavLink} onClick={this.handleLogout} to="/login">
                     <Icofont icon="logout" /> Logout
                   </NavDropdown.Item>
-                </NavDropdown>
-                <NavDropdown
-                  activeclassname="active"
-                  alignRight
-                  className="dropdown-cart"
-                  title={
-                    <DropDownTitle
-                      className="d-inline-block"
-                      faIcon="shopping-basket"
-                      iconClass="mr-1"
-                      title="Cart"
-                      badgeClass="ml-1"
-                      badgeVariant="success"
-                      badgeValue={JSON.parse(
-                        localStorage.getItem('totalQty') === 0 ? '0' : JSON.parse(localStorage.getItem('totalQty'))
-                      )}
-                    />
-                  }
-                >
-                  <div className="dropdown-cart-top shadow-sm">
-                    {
-                      <CartDropdownHeader
-                        className="dropdown-cart-top-header p-4"
-                        title="Gus's World Famous Chicken"
-                        subTitle="310 S Front St, Memphis, USA"
-                        image="img/cart.jpg"
-                        imageClass="img-fluid mr-3"
-                        imageAlt="osahan"
-                        NavLinkUrl="#"
-                        NavLinkText="View Full Menu"
-                      />
-                    }
-                    <div className="dropdown-cart-top-body border-top p-4">
-                      <CartDropdownItem
-                        icoIcon="ui-press"
-                        iconClass="text-success food-item"
-                        title="Corn & Peas Salad x 1"
-                        price="$209"
-                      />
-
-                      <CartDropdownItem
-                        icoIcon="ui-press"
-                        iconClass="text-success food-item"
-                        title='Veg Seekh Sub 6" (15 cm) x 1'
-                        price="$133"
-                      />
-
-                      <CartDropdownItem
-                        icoIcon="ui-press"
-                        iconClass="text-danger food-item"
-                        title='Chicken Tikka Sub 12" (30 cm) x 1'
-                        price="$314"
-                      />
-
-                      <CartDropdownItem
-                        icoIcon="ui-press"
-                        iconClass="text-success food-item"
-                        title="Corn & Peas Salad x 1 "
-                        price="$209"
-                      />
-                    </div>
-                    <div className="dropdown-cart-top-footer border-top p-4">
-                      <p className="mb-0 font-weight-bold text-secondary">
-                        Sub Total <span className="float-right text-dark">$499</span>
-                      </p>
-                      <small className="text-info">Extra charges may apply</small>
-                    </div>
-                    <div className="dropdown-cart-top-footer border-top p-2">
-                      <NavDropdown.Item
-                        eventKey={5.1}
-                        as={Link}
-                        className="btn btn-success btn-block py-3 text-white text-center dropdown-item"
-                        to="/checkout"
-                      >
-                        {' '}
-                        Checkout
-                      </NavDropdown.Item>
-                    </div>
-                  </div>
                 </NavDropdown>
               </Nav>
             </Navbar.Collapse>

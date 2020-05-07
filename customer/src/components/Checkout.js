@@ -55,6 +55,7 @@ class Checkout extends React.Component {
       deliveryFee: '',
       discount: '',
       redirect: false,
+      redeemPoints: '',
     };
     this.handleAddress = this.handleAddress.bind(this);
     this.handleCreditCard = this.handleCreditCard.bind(this);
@@ -260,8 +261,8 @@ class Checkout extends React.Component {
       creditcardnumber: this.state.selectedCCNum,
       usecash: this.state.useCash,
       usecreditcard: this.state.useCreditCard,
-      userewardpoints: false,
-      rewardpoints: 0,
+      userewardpoints: this.state.redeemPoints === '' ? false : true,
+      rewardpoints: this.state.redeemPoints,
       specialrequest: this.state.specialReq === null ? 'N/A' : this.state.specialReq,
       promotionid: this.state.promotionId,
       fooditems: this.state.myCart.map((item) => ({
@@ -281,6 +282,7 @@ class Checkout extends React.Component {
       .then((response) => {
         if (response.status === 201) {
           // console.log('SUCCESSS');
+          this.setState({ redirect: true, myCart: [] });
           Swal.fire({
             icon: 'success',
             title: 'New order has been added successfully',
@@ -320,7 +322,11 @@ class Checkout extends React.Component {
   render() {
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
     console.log('Checkout: localStorage: ', JSON.parse(localStorage.getItem('cart')));
-
+    if (this.state.redirect) {
+      this.props.history.push({
+        pathname: '/track-order',
+      });
+    }
     return (
       <section className="offer-dedicated-body mt-4 mb-4 pt-2 pb-2">
         <AddAddressModal
@@ -493,17 +499,22 @@ class Checkout extends React.Component {
             <Col md={4}>
               <div className="my-background rounded shadow-sm mb-4 p-4 osahan-cart-item">
                 <div className="d-flex mb-4 osahan-cart-item-profile">
-                  <Image
-                    fluid
-                    className="mr-3 rounded-pill"
-                    alt="osahan"
-                    src={'/img/restaurants/restaurant_' + localStorage.getItem('resId') + '.jpg'}
-                  />
+                  {localStorage.getItem('resId') === null || localStorage.getItem('resId') === undefined ? (
+                    ''
+                  ) : (
+                    <Image
+                      fluid
+                      className="mr-3 rounded-pill"
+                      alt="osahan"
+                      src={'/img/restaurants/restaurant_' + localStorage.getItem('resId') + '.jpg'}
+                    />
+                  )}
+
                   <div className="d-flex flex-column">
-                    <h6 className="mb-1 text-white">Spice Hut Indian Restaurant</h6>
-                    <p className="mb-0 text-white">
+                    <h6 className="mb-1 text-white">Welcome to Kin Kao!</h6>
+                    {/* <p className="mb-0 text-white">
                       <Icofont icon="location-pin" /> 2036 2ND AVE, NEW YORK, NY 10029
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 <div className="bg-white rounded shadow-sm p-2 mb-2 ">
@@ -536,7 +547,7 @@ class Checkout extends React.Component {
                   ) : (
                     <p>{this.state.selectedAdd + ' (' + this.state.selectedPostalCode + ')'}</p>
                   )}
-                  <InputGroup className="mb-0">
+                  <InputGroup className="mb-1">
                     <InputGroup.Prepend>
                       <InputGroup.Text>
                         <Icofont icon="comment" />
@@ -551,6 +562,21 @@ class Checkout extends React.Component {
                       aria-label="With textarea"
                     />
                   </InputGroup>
+                  Your current reward points:
+                  <p>{localStorage.getItem('loggedInUserRewardPt')} </p>
+                  {this.state.promotionId !== '' ? (
+                    ''
+                  ) : (
+                    <InputGroup className="mb-1">
+                      <Form.Control
+                        type="text"
+                        name="redeemPoints"
+                        placeholder="Please enter points to redeem!"
+                        value={this.state.redeemPoints}
+                        onChange={this.handleUserInput}
+                      />
+                    </InputGroup>
+                  )}
                 </div>
                 <div className="mb-2 bg-white rounded p-2 clearfix">
                   Selected Promotion:
@@ -600,7 +626,9 @@ class Checkout extends React.Component {
                         <Icofont icon="info-circle" />
                       </span>
                     </OverlayTrigger>
-                    <span className="float-right text-dark">${this.state.deliveryFee}</span>
+                    <span className="float-right text-dark">
+                      ${this.state.myCart.length === 0 ? '0' : this.state.deliveryFee}
+                    </span>
                   </p>
                   <p className="mb-1">
                     Total Discount
@@ -634,20 +662,20 @@ class Checkout extends React.Component {
                     <span className="float-right">
                       $
                       {(() => {
-                        if (this.state.promoDetails !== null) {
+                        if (this.state.promoDetails !== null && this.state.myCart.length !== 0) {
                           let value = this.state.promoDetails.charAt(0);
                           return parseFloat(this.state.totalCart + this.state.deliveryFee - value).toFixed(2);
-                        } else if (this.state.percentageAmount !== null) {
+                        } else if (this.state.percentageAmount !== null && this.state.myCart.length !== 0) {
                           return parseFloat(
                             this.state.totalCart +
                               this.state.deliveryFee -
                               this.state.totalCart * (this.state.percentageAmount / 100)
                           ).toFixed(2);
-                        } else if (this.state.absoluteAmount !== null) {
+                        } else if (this.state.absoluteAmount !== null && this.state.myCart.length !== 0) {
                           return parseFloat(
                             this.state.totalCart + this.state.deliveryFee - this.state.absoluteAmount
                           ).toFixed(2);
-                        } else if (this.state.deliveryAmount !== null) {
+                        } else if (this.state.deliveryAmount !== null && this.state.myCart.length !== 0) {
                           return parseFloat(
                             this.state.totalCart + this.state.deliveryFee - this.state.deliveryAmount
                           ).toFixed(2);
@@ -661,20 +689,20 @@ class Checkout extends React.Component {
                 <Button type="button" onClick={this.handleSubmit} className="btn btn-success btn-block btn-lg">
                   PAY ${' '}
                   {(() => {
-                    if (this.state.promoDetails !== null) {
+                    if (this.state.promoDetails !== null && this.state.myCart.length !== 0) {
                       let value = this.state.promoDetails.charAt(0);
                       return parseFloat(this.state.totalCart + this.state.deliveryFee - value).toFixed(2);
-                    } else if (this.state.percentageAmount !== null) {
+                    } else if (this.state.percentageAmount !== null && this.state.myCart.length !== 0) {
                       return parseFloat(
                         this.state.totalCart +
                           this.state.deliveryFee -
                           this.state.totalCart * (this.state.percentageAmount / 100)
                       ).toFixed(2);
-                    } else if (this.state.absoluteAmount !== null) {
+                    } else if (this.state.absoluteAmount !== null && this.state.myCart.length !== 0) {
                       return parseFloat(
                         this.state.totalCart + this.state.deliveryFee - this.state.absoluteAmount
                       ).toFixed(2);
-                    } else if (this.state.deliveryAmount !== null) {
+                    } else if (this.state.deliveryAmount !== null && this.state.myCart.length !== 0) {
                       return parseFloat(
                         this.state.totalCart + this.state.deliveryFee - this.state.deliveryAmount
                       ).toFixed(2);

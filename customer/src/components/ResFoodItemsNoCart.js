@@ -9,6 +9,7 @@ import RatingBar from './common/RatingBar';
 import Review from './common/Review';
 import Icofont from 'react-icofont';
 import SERVER_PREFIX from './ServerConfig';
+import CouponCard from './common/CouponCard';
 
 class ResFoodItems extends React.Component {
   constructor(props, context) {
@@ -48,6 +49,7 @@ class ResFoodItems extends React.Component {
       ],
       myCart: [],
       totalCart: 0,
+      promotions: [],
     };
   }
 
@@ -179,6 +181,25 @@ class ResFoodItems extends React.Component {
           });
         }
       );
+
+    fetch(SERVER_PREFIX + '/promotions/restaurant/' + resID)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            promotions: result,
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error,
+          });
+        }
+      );
   }
 
   handleQty = (foodItemId) => {
@@ -293,26 +314,6 @@ class ResFoodItems extends React.Component {
                     <div className="offer-dedicated-body-left">
                       <Tab.Content className="h-100">
                         <Tab.Pane eventKey="first">
-                          {/* <h5 className='mb-4'>Recommended</h5>
-                          <Form className='explore-outlets-search mb-4'>
-                            <InputGroup>
-                              <Form.Control type='text' placeholder='Search for dishes...' />
-                              <InputGroup.Append>
-                                <Button type='button' variant='link'>
-                                  <Icofont icon='search' />
-                                </Button>
-                              </InputGroup.Append>
-                            </InputGroup>
-                          </Form> */}
-                          <h5 className="mb-3">
-                            Discount Foods{' '}
-                            <Badge variant="success">
-                              {' '}
-                              <Icofont icon="tags" /> 15% Off All Items{' '}
-                            </Badge>
-                          </h5>
-                          <ItemsCarousel />
-
                           <Row>
                             <h5 className="mb-4 mt-3 col-md-12">Best Sellers</h5>
                             {foodItems.map((item, index) => {
@@ -347,50 +348,49 @@ class ResFoodItems extends React.Component {
                           </div>
                         </Tab.Pane>
 
-                        {/* <Tab.Pane eventKey="fourth">
-                          <div
-                            id="book-a-table"
-                            className="bg-white rounded shadow-sm p-4 mb-5 rating-review-select-page"
-                          >
-                            <h5 className="mb-4">Book A Table</h5>
-                            <Form>
+                        <Tab.Pane eventKey="third">
+                          <section className="section pt-5 pb-5">
+                            <Container>
                               <Row>
-                                <Col sm={6}>
-                                  <Form.Group>
-                                    <Form.Label>Full Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Full Name" />
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={6}>
-                                  <Form.Group>
-                                    <Form.Label>Email Address</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Email address" />
-                                  </Form.Group>
+                                <Col md={12}>
+                                  <h5>Available Coupons</h5>
                                 </Col>
                               </Row>
+                              <br />
                               <Row>
-                                <Col sm={6}>
-                                  <Form.Group>
-                                    <Form.Label>Mobile number</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Mobile number" />
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={6}>
-                                  <Form.Group>
-                                    <Form.Label>Date And Time</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Date And Time" />
-                                  </Form.Group>
+                                <Col md={12}>
+                                  {this.state.promotions.length === 0 ? (
+                                    <p className="text-danger">There is no offers</p>
+                                  ) : (
+                                    this.state.promotions.map((item, index) => {
+                                      return (
+                                        <Col key={index} md={4}>
+                                          <CouponCard
+                                            title={item.promodescription}
+                                            // logoImage="img/bank/1.png"
+                                            subTitle="Please remember to redeem during check out."
+                                            // copyBtnText=""
+                                            couponCode={(() => {
+                                              if (item.promotiondetails !== null) {
+                                                return <div>{item.promotiondetails}</div>;
+                                              } else if (item.absoluteamount !== null) {
+                                                return <div>${item.absoluteamount} OFF!</div>;
+                                              } else if (item.deliveryamount !== null) {
+                                                return <div>${item.deliveryamount} OFF!</div>;
+                                              } else {
+                                                return <div>{item.percentageamount}% OFF!</div>;
+                                              }
+                                            })()}
+                                          />
+                                        </Col>
+                                      );
+                                    })
+                                  )}
                                 </Col>
                               </Row>
-                              <Form.Group className="text-right">
-                                <Button variant="primary" type="button">
-                                  {' '}
-                                  Submit{' '}
-                                </Button>
-                              </Form.Group>
-                            </Form>
-                          </div>
-                        </Tab.Pane> */}
+                            </Container>
+                          </section>
+                        </Tab.Pane>
                         <Tab.Pane eventKey="fifth">
                           <div
                             id="ratings-and-reviews"
