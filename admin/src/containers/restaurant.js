@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
 import MaterialTable from 'material-table';
+import { DropzoneDialog } from 'material-ui-dropzone';
 
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import MotorcycleIcon from '@material-ui/icons/Motorcycle';
@@ -102,6 +103,7 @@ const Home = (props) => {
   });
   const [foodItems, setFoodItems] = useState([]);
   const [restaurantStaff, setRestaurantStaff] = useState([]);
+  const [isUploadImage, setIsUploadImage] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem('userType') === 'restaurantStaff') {
@@ -205,6 +207,7 @@ const Home = (props) => {
       category: foodItem.category,
       maxNumOfOrders: foodItem.maxnumoforders,
       price: foodItem.price,
+      image: 'FoodItemID_31',
       availabilityStatus: !foodItem.availabilitystatus,
       restaurantID: foodItem.restaurantid,
     };
@@ -244,6 +247,37 @@ const Home = (props) => {
         setSelectedFoodItemID(-1);
 
         setIsUpdateFoodItem(false);
+      })
+      .catch((err) => {
+        props.dispatch({
+          type: 'SET_ERRORMESSAGE',
+          data: 'Error updating food items. Please contact administrators for assistance',
+        });
+      });
+  };
+
+  const createFoodItem = async () => {
+    const data = {
+      foodItemName: newFoodItem.foodItemName,
+      category: newFoodItem.category,
+      maxNumOfOrders: newFoodItem.maxNumOfOrders,
+      price: newFoodItem.price,
+      availabilityStatus: true,
+      restaurantID: sessionStorage.getItem('restaurantID'),
+    };
+
+    RestaurantStaffApis.createFoodItem(sessionStorage.getItem('id'), data)
+      .then((response) => {
+        if (response.status !== 200) {
+          props.dispatch({
+            type: 'SET_ERRORMESSAGE',
+            data: 'Error updating food item. Please contact administrators for assistance',
+          });
+        }
+        setNotification('Food Item created successfully!');
+        showNotification();
+        getFoodItemsByRestaurantId();
+        setIsNewFoodItem(false);
       })
       .catch((err) => {
         props.dispatch({
@@ -398,103 +432,6 @@ const Home = (props) => {
           <MaterialTable title='Restaurant Staff' columns={tableState.columns} data={restaurantStaff} />
         </Card>
       </Grid>
-      <Grid container direction='row' className={classes.card} style={{ padding: '7px' }}>
-        <Grid item xs={12} sm={12} md={4}>
-          <Card>
-            <CardContent>
-              <Grid container direction='row' style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {isNewFoodItem ? (
-                  <Grid item>
-                    <Button
-                      variant='contained'
-                      style={{ backgroundColor: '#ff3008', color: '#fff', marginRight: '5px' }}
-                      onClick={() => {
-                        //postPromotion();
-                      }}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      variant='contained'
-                      onClick={() => {
-                        setIsNewFoodItem(false);
-                        getFoodItemsByRestaurantId();
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                ) : (
-                  <Grid item>
-                    <Button
-                      variant='contained'
-                      style={{ backgroundColor: '#ff3008', color: '#fff' }}
-                      onClick={() => {
-                        setIsNewFoodItem(true);
-                      }}
-                    >
-                      Add new Food Item
-                    </Button>
-                  </Grid>
-                )}
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      {isNewFoodItem && (
-        <Grid item xs={12} sm={12} md={12} lg={4}>
-          <Card>
-            <Grid container direction='column' className={classes.foodItemText}>
-              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
-                <TextField
-                  id='standard-full-width'
-                  name='foodItemName'
-                  fullWidth
-                  label='Food Item Name'
-                  helperText='Proper casing preferred e.g. Fried Rice'
-                  value={newFoodItem.foodItemName}
-                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
-                />
-              </Grid>
-              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
-                <TextField
-                  id='standard-full-width'
-                  name='category'
-                  fullWidth
-                  label='Category'
-                  helperText='Proper casing preferred e.g. Chinese'
-                  value={newFoodItem.category}
-                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
-                />
-              </Grid>
-              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
-                <TextField
-                  id='standard-full-width'
-                  name='maxNumOfOrders'
-                  fullWidth
-                  label='Max No. Of Orders'
-                  helperText='Proper casing preferred e.g. Chinese'
-                  value={newFoodItem.maxNumOfOrders}
-                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
-                />
-              </Grid>
-              <Grid item xs={11} sm={11} md={11} lg={11} className={classes.foodItemTextInput}>
-                <TextField
-                  id='standard-full-width'
-                  name='price'
-                  fullWidth
-                  label='Price'
-                  helperText='e.g. 15'
-                  value={newFoodItem.price}
-                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
-                />
-              </Grid>
-            </Grid>
-          </Card>
-        </Grid>
-      )}
-
       <Grid item xs={12} sm={12} md={12} lg={12}>
         <Card>
           <CardContent>
@@ -659,6 +596,119 @@ const Home = (props) => {
           </CardContent>
         </Card>
       </Grid>
+      <Grid container direction='row' className={classes.card} style={{ padding: '7px' }}>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+            <CardContent>
+              <Grid container direction='row' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {isNewFoodItem ? (
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ backgroundColor: '#ff3008', color: '#fff', marginRight: '5px' }}
+                      onClick={() => {
+                        createFoodItem();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant='contained'
+                      onClick={() => {
+                        setIsNewFoodItem(false);
+                        getFoodItemsByRestaurantId();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                ) : (
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ backgroundColor: '#ff3008', color: '#fff' }}
+                      onClick={() => {
+                        setIsNewFoodItem(true);
+                      }}
+                    >
+                      Add new Food Item
+                    </Button>
+                  </Grid>
+                )}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      {isNewFoodItem && (
+        <Grid item xs={12} sm={12} md={12} lg={4}>
+          <Card>
+            <Grid container direction='column' className={classes.foodItemText}>
+              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+                <Button variant='contained' onClick={() => setIsUploadImage(true)}>
+                  Add Image
+                </Button>
+                <DropzoneDialog
+                  open={isUploadImage}
+                  onSave={() => {
+                    setIsUploadImage(false);
+                    setNotification('Image has been uploaded!');
+                    showNotification();
+                  }}
+                  acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                  showPreviews={true}
+                  maxFileSize={5000000}
+                  onClose={() => setIsUploadImage(false)}
+                />
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='foodItemName'
+                  fullWidth
+                  label='Food Item Name'
+                  helperText='Proper casing preferred e.g. Fried Rice'
+                  value={newFoodItem.foodItemName}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='category'
+                  fullWidth
+                  label='Category'
+                  helperText='Proper casing preferred e.g. Chinese'
+                  value={newFoodItem.category}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='maxNumOfOrders'
+                  fullWidth
+                  label='Max No. Of Orders'
+                  helperText='Proper casing preferred e.g. Chinese'
+                  value={newFoodItem.maxNumOfOrders}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+                <TextField
+                  id='standard-full-width'
+                  name='price'
+                  fullWidth
+                  label='Price'
+                  helperText='e.g. 15'
+                  value={newFoodItem.price}
+                  onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
+                />
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      )}
       <Grid container justify={'center'}>
         <Grid item xs={12} sm={12} md={10} lg={8}>
           <Grid container>
