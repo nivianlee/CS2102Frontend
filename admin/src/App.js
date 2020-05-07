@@ -3,7 +3,6 @@ import './App.css';
 
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-
 import { BrowserRouter as Router, Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 
 import Home from './containers/home';
@@ -11,13 +10,15 @@ import Login from './containers/login';
 import FDSManagers from './containers/fdsManagers';
 import Restaurants from './containers/restaurants';
 import Restaurant from './containers/restaurant';
+import Riders from './containers/riders';
+import Schedule from './containers/schedule';
 import Orders from './containers/orders';
+import Promotion from './containers/promotion';
 import Profile from './containers/profile';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
 
 import * as Reducer from './reducers/reducers.js';
-
 //for the appbar and drawer
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -71,14 +72,23 @@ const App = (props) => {
     if (pathname === '/orders') {
       setSelectedItem(1);
     }
-    if (pathname === '/my-restaurant') {
+    if (pathname === '/my-promotion') {
       setSelectedItem(2);
     }
-    if (pathname === '/restaurants') {
+    if (pathname === '/my-restaurant') {
       setSelectedItem(3);
     }
-    if (pathname === '/fdsmanagers') {
+    if (pathname === '/restaurants') {
       setSelectedItem(4);
+    }
+    if (pathname === '/my-schedule') {
+      setSelectedItem(5);
+    }
+    if (pathname === '/riders') {
+      setSelectedItem(6);
+    }
+    if (pathname === '/fdsmanagers') {
+      setSelectedItem(7);
     }
   }, [props.history.location.pathname]);
 
@@ -96,12 +106,21 @@ const App = (props) => {
       props.history.push('/orders');
     }
     if (index === 2) {
-      props.history.push('/my-restaurant');
+      props.history.push('/my-promotion');
     }
     if (index === 3) {
-      props.history.push('/restaurants');
+      props.history.push('/my-restaurant');
     }
     if (index === 4) {
+      props.history.push('/restaurants');
+    }
+    if (index === 5) {
+      props.history.push('/my-schedule');
+    }
+    if (index === 6) {
+      props.history.push('/riders');
+    }
+    if (index === 7) {
       props.history.push('/fdsmanagers');
     }
   };
@@ -144,14 +163,17 @@ const App = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
+            <Route exact path='/my-promotion' component={Promotion}></Route>
             <Route exact path='/my-restaurant' component={Restaurant}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
             <Route exact path='/orders' component={Orders}></Route>
+            <Route exact path='/my-schedule' component={Schedule}></Route>
+            <Route exact path='/riders' component={Riders}></Route>
             <Route exact path='/fdsmanagers' component={FDSManagers}></Route>
             <Route exact path='/profile' component={Profile}></Route>
             <Route exact path='/home' component={Home}></Route>
             <Route exact path='/login' component={Login}></Route>
-            <Redirect from='/' to={sessionStorage.getItem('contactNum') ? 'home' : 'login'} />
+            <Redirect from='/' to={sessionStorage.getItem('id') ? 'home' : 'login'} />
           </Switch>
         </main>
       </div>

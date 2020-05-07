@@ -11,6 +11,10 @@ export function reducer(
     summaryOne: [],
     summaryTwo: [],
     summaryThree: [],
+    summaryFour: [],
+    shiftsTable: [],
+    fullTimeRiders: [],
+    partTimeRiders: [],
   },
   action
 ) {
@@ -74,6 +78,21 @@ export function reducer(
       return {
         ...state,
         summaryFour: action.data,
+      };
+    case 'SET_SHIFTS_TABLE':
+      return {
+        ...state,
+        shiftsTable: action.data,
+      };
+    case 'SET_FULLTIME_RIDERS':
+      return {
+        ...state,
+        fullTimeRiders: action.data,
+      };
+    case 'SET_PARTTIME_RIDERS':
+      return {
+        ...state,
+        partTimeRiders: action.data,
       };
     default:
       return state;

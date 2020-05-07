@@ -31,25 +31,6 @@ import { connect } from 'react-redux';
 import * as RestaurantStaffApis from '../api/restaurantstaff';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: 500,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: 240,
-      flexShrink: 0,
-    },
-  },
-  toolbar: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-  },
   formControl: {
     width: '120px',
   },
