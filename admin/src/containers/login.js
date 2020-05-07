@@ -276,6 +276,7 @@ const Login = (props) => {
             sessionStorage.setItem('id', response.data[0].riderid);
             sessionStorage.setItem('name', response.data[0].ridername);
             sessionStorage.setItem('contactNum', response.data[0].contactnum);
+            sessionStorage.setItem('isFullTime', response.data[0].isfulltime ? 1 : 0);
           } else if (props.loggedInUserType === 'restaurantStaff') {
             sessionStorage.setItem('id', response.data[0].restaurantstaffid);
             sessionStorage.setItem('name', response.data[0].restaurantstaffname);
