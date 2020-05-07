@@ -52,6 +52,7 @@ class Checkout extends React.Component {
       totalCartQty: 0,
       deliveryId: '',
       deliveryFee: '',
+      discount: '',
     };
   }
   componentDidMount() {
@@ -519,11 +520,36 @@ class Checkout extends React.Component {
                   </p>
                   <p className="mb-1">
                     Total Discount
-                    <span className="float-right text-success">$0</span>
+                    <span className="float-right text-success">
+                      {this.state.promotionId === '' ? (
+                        <p>$0</p>
+                      ) : (
+                        <p className="text-success">
+                          $
+                          {(() => {
+                            if (this.state.promoDetails !== null) {
+                              let value = this.state.promoDetails.charAt(0);
+                              return value;
+                            } else if (this.state.percentageAmount !== null) {
+                              return this.state.percentageAmount;
+                            } else if (this.state.absoluteAmount !== null) {
+                              return this.state.absoluteAmount;
+                            } else if (this.state.deliveryAmount !== null) {
+                              return this.state.deliveryAmount;
+                            } else {
+                              return '0';
+                            }
+                          })()}
+                        </p>
+                      )}
+                    </span>
                   </p>
                   <hr />
                   <h6 className="font-weight-bold mb-0">
-                    TO PAY <span className="float-right">$1329</span>
+                    TO PAY{' '}
+                    <span className="float-right">
+                      ${this.state.totalCart + this.state.deliveryFee - this.state.discount}
+                    </span>
                   </h6>
                 </div>
                 <Link to="/thanks" className="btn btn-success btn-block btn-lg">
