@@ -70,6 +70,7 @@ const Promotion = (props) => {
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
   const [promotions, setPromotions] = useState([]);
+  const [promotionStatistics, setPromotionStatistics] = useState([]);
   const [isNewPromotion, setIsNewPromotion] = useState(false);
   const [dates, setDates] = useState({
     startDate: moment(),
@@ -83,12 +84,7 @@ const Promotion = (props) => {
     promotiontype: 'Amount',
     promotiontypeinfo: '',
   });
-
-  useEffect(() => {
-    getPromotionsByRestaurantID();
-  }, []);
-
-  const [tableState, setTableState] = useState({
+  const [tableStatePromotions, setTableStatePromotions] = useState({
     columns: [
       { title: 'Promotion Id', field: 'promotionid' },
       {
@@ -116,6 +112,30 @@ const Promotion = (props) => {
       { title: 'Description', field: 'promodescription' },
     ],
   });
+  const [tableStatePromoStats, setTableStatePromoStats] = useState({
+    columns: [
+      { title: 'Promotion Id', field: 'promotionid' },
+      { title: 'No. of Orders', field: 'numoforders' },
+      { title: 'Orders Per Day', field: 'ordersperday' },
+      {
+        title: 'Duration',
+        render: (rowData) => (
+          <>
+            <Tooltip title='YYYY-MM-DD' placement='bottom-start'>
+              <Typography variant='body2'>
+                {rowData.duration.hours} hrs {rowData.duration.minutes} mins
+              </Typography>
+            </Tooltip>
+          </>
+        ),
+      },
+    ],
+  });
+
+  useEffect(() => {
+    getPromotionsByRestaurantID();
+    getPromotionalCampaignsStatistics();
+  }, []);
 
   const postPromotion = async () => {
     const startDateTime = moment(dates.startDate).format('MM/DD/YYYY') + ' ' + dates.startTime;
@@ -144,6 +164,16 @@ const Promotion = (props) => {
         if (response.status !== 200) {
         }
         setPromotions(response.data);
+      })
+      .catch((err) => {});
+  };
+
+  const getPromotionalCampaignsStatistics = async () => {
+    PromotionsApis.getPromotionalCampaignsStatistics(sessionStorage.getItem('id'))
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setPromotionStatistics(response.data);
       })
       .catch((err) => {});
   };
@@ -329,7 +359,18 @@ const Promotion = (props) => {
         <Grid container direction='row' style={{ marginTop: '10px' }}>
           <Grid item xs={12} sm={12} md={12}>
             <Card>
-              <MaterialTable title='My Promotions' columns={tableState.columns} data={promotions} />
+              <MaterialTable title='My Promotions' columns={tableStatePromotions.columns} data={promotions} />
+            </Card>
+          </Grid>
+        </Grid>
+        <Grid container direction='row' style={{ marginTop: '10px' }}>
+          <Grid item xs={12} sm={12} md={12}>
+            <Card>
+              <MaterialTable
+                title='Promo Statistics'
+                columns={tableStatePromoStats.columns}
+                data={promotionStatistics}
+              />
             </Card>
           </Grid>
         </Grid>

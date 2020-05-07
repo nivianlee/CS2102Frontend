@@ -20,3 +20,8 @@ export function postPromotion(restaurantStaffID, request) {
   var link = Config.ipAddress + '/restaurantstaff/' + restaurantStaffID + '/promotion';
   return axios.post(link, request);
 }
+
+export function getPromotionalCampaignsStatistics(restaurantStaffID) {
+  var link = Config.ipAddress + '/restaurantstaff/promotionStatistics/' + restaurantStaffID;
+  return axios.get(link);
+}

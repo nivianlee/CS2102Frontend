@@ -20,3 +20,8 @@ export function updateRider(request, riderID) {
   var link = Config.ipAddress + '/riders/' + riderID;
   return axios.put(link, request);
 }
+
+export function getRiderSummaryById(riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID + '/getRiderSummaryById';
+  return axios.get(link);
+}

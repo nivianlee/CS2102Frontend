@@ -20,6 +20,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import AddAlert from '@material-ui/icons/AddAlert';
 
 import * as MWSApis from '../api/mws';
+import * as RidersApis from '../api/riders';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -97,6 +98,15 @@ const Schedule = (props) => {
       },
     ],
   });
+  const [riderSummary, setRiderSummary] = useState([]);
+  const [tableStateRiderSummary, setTableStateRiderSummary] = useState({
+    columns: [
+      { title: 'Month', field: 'month' },
+      { title: 'Hours Worked', field: 'hoursworked' },
+      { title: 'Orders Per Month', field: 'orderspermonth' },
+      { title: 'Total Salary Earned', field: 'totalsalaryearned' },
+    ],
+  });
 
   useEffect(() => {
     if (sessionStorage.getItem('isFullTime')) {
@@ -104,7 +114,18 @@ const Schedule = (props) => {
     } else {
       getWwsPartTimeRiderById();
     }
+    getRiderSummaryById();
   }, []);
+
+  const getRiderSummaryById = async () => {
+    RidersApis.getRiderSummaryById(sessionStorage.getItem('id'))
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setRiderSummary(response.data);
+      })
+      .catch((err) => {});
+  };
 
   const getMwsFullTimeRiderById = async () => {
     MWSApis.getMwsFullTimeRiderById(sessionStorage.getItem('id'))
@@ -271,7 +292,7 @@ const Schedule = (props) => {
   };
 
   return (
-    <Grid container direction='row' className={classes.card} spacing={2}>
+    <Grid container direction='row' className={classes.card}>
       <Grid item xs={12} sm={12} md={12} lg={12}>
         <Card>
           <CardContent>
@@ -319,7 +340,7 @@ const Schedule = (props) => {
         </Card>
       </Grid>
       {isNewSchedule && (
-        <Grid item xs={12} sm={12} md={4} lg={4}>
+        <Grid item xs={12} sm={12} md={4} lg={4} style={{ marginTop: '10px', marginRight: '10px' }}>
           <Card>
             <CardContent>
               <Typography variant='h6' component='p' align='left' className={classes.scheduleTextInput}>
@@ -383,7 +404,7 @@ const Schedule = (props) => {
       {sessionStorage.getItem('isFullTime') ? (
         <>
           {mws.map((eachMWS) => (
-            <Grid item xs={12} sm={12} md={4} lg={4} key={eachMWS.month}>
+            <Grid item xs={12} sm={12} md={4} lg={4} key={eachMWS.month} style={{ marginTop: '10px' }}>
               <Card>
                 <CardContent>
                   <Typography variant='h6' component='p' align='left' className={classes.scheduleTextInput}>
@@ -474,12 +495,19 @@ const Schedule = (props) => {
           ))}
         </>
       ) : (
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} style={{ marginTop: '10px' }}>
           <Card>
             <MaterialTable title='My Schedule' columns={tableStateWWS.columns} data={wws} />
           </Card>
         </Grid>
       )}
+      <Grid container direction='row' spacing={2} style={{ marginTop: '10px' }}>
+        <Grid item xs={12} sm={12} md={12}>
+          <Card>
+            <MaterialTable title='Summary' columns={tableStateRiderSummary.columns} data={riderSummary} />
+          </Card>
+        </Grid>
+      </Grid>
       <Grid container justify={'center'}>
         <Grid item xs={12} sm={12} md={10} lg={8}>
           <Grid container>
