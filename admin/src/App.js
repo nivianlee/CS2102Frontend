@@ -12,8 +12,9 @@ import Restaurants from './containers/restaurants';
 import Restaurant from './containers/restaurant';
 import Riders from './containers/riders';
 import Schedule from './containers/schedule';
-import Orders from './containers/orders';
+import Order from './containers/order';
 import Promotion from './containers/promotion';
+import Promotions from './containers/promotions';
 import Profile from './containers/profile';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
@@ -69,26 +70,29 @@ const App = (props) => {
     if (pathname === '/home') {
       setSelectedItem(0);
     }
-    if (pathname === '/orders') {
+    if (pathname === '/order') {
       setSelectedItem(1);
     }
-    if (pathname === '/my-promotion') {
+    if (pathname === '/promotions') {
       setSelectedItem(2);
     }
-    if (pathname === '/my-restaurant') {
+    if (pathname === '/my-promotion') {
       setSelectedItem(3);
     }
-    if (pathname === '/restaurants') {
+    if (pathname === '/my-restaurant') {
       setSelectedItem(4);
     }
-    if (pathname === '/my-schedule') {
+    if (pathname === '/restaurants') {
       setSelectedItem(5);
     }
-    if (pathname === '/riders') {
+    if (pathname === '/my-schedule') {
       setSelectedItem(6);
     }
-    if (pathname === '/fdsmanagers') {
+    if (pathname === '/riders') {
       setSelectedItem(7);
+    }
+    if (pathname === '/fdsmanagers') {
+      setSelectedItem(8);
     }
   }, [props.history.location.pathname]);
 
@@ -103,24 +107,27 @@ const App = (props) => {
       props.history.push('/home');
     }
     if (index === 1) {
-      props.history.push('/orders');
+      props.history.push('/order');
     }
     if (index === 2) {
-      props.history.push('/my-promotion');
+      props.history.push('/promotions');
     }
     if (index === 3) {
-      props.history.push('/my-restaurant');
+      props.history.push('/my-promotion');
     }
     if (index === 4) {
-      props.history.push('/restaurants');
+      props.history.push('/my-restaurant');
     }
     if (index === 5) {
-      props.history.push('/my-schedule');
+      props.history.push('/restaurants');
     }
     if (index === 6) {
-      props.history.push('/riders');
+      props.history.push('/my-schedule');
     }
     if (index === 7) {
+      props.history.push('/riders');
+    }
+    if (index === 8) {
       props.history.push('/fdsmanagers');
     }
   };
@@ -163,10 +170,11 @@ const App = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
+            <Route exact path='/promotions' component={Promotions}></Route>
             <Route exact path='/my-promotion' component={Promotion}></Route>
             <Route exact path='/my-restaurant' component={Restaurant}></Route>
             <Route exact path='/restaurants' component={Restaurants}></Route>
-            <Route exact path='/orders' component={Orders}></Route>
+            <Route exact path='/order' component={Order}></Route>
             <Route exact path='/my-schedule' component={Schedule}></Route>
             <Route exact path='/riders' component={Riders}></Route>
             <Route exact path='/fdsmanagers' component={FDSManagers}></Route>

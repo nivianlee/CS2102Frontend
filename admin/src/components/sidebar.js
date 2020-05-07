@@ -79,13 +79,13 @@ const Sidebar = (props) => {
               </ListItemIcon>
               <ListItemText primary={'Home'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
               <ListItemIcon>
                 <RestaurantIcon />
               </ListItemIcon>
               <ListItemText primary={'Restaurants'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 6)} selected={selectedItem === 6}>
               <ListItemIcon>
                 <MotorcycleIcon />
               </ListItemIcon>
@@ -105,21 +105,21 @@ const Sidebar = (props) => {
               <ListItemIcon>
                 <ShoppingCartIcon />
               </ListItemIcon>
-              <ListItemText primary={'Orders'} />
+              <ListItemText primary={'Order'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
               <ListItemIcon>
                 <ConfirmationNumberIcon />
               </ListItemIcon>
               <ListItemText primary={'My Promotions'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
               <ListItemIcon>
                 <RestaurantMenuIcon />
               </ListItemIcon>
               <ListItemText primary={'My Restaurant'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
               <ListItemIcon>
                 <RestaurantIcon />
               </ListItemIcon>
@@ -135,19 +135,25 @@ const Sidebar = (props) => {
               </ListItemIcon>
               <ListItemText primary={'Home'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+              <ListItemIcon>
+                <ConfirmationNumberIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Promotions'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
               <ListItemIcon>
                 <RestaurantIcon />
               </ListItemIcon>
               <ListItemText primary={'Restaurants'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 6)} selected={selectedItem === 6}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 7)} selected={selectedItem === 7}>
               <ListItemIcon>
                 <MotorcycleIcon />
               </ListItemIcon>
               <ListItemText primary={'Riders'} />
             </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 7)} selected={selectedItem === 7}>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 8)} selected={selectedItem === 8}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>

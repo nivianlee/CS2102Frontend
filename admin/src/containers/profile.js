@@ -21,6 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import MaterialTable from 'material-table';
 
 import * as FDSManagersApis from '../api/fdsManagers';
 import * as RestaurantStaffApis from '../api/restaurantstaff';
@@ -82,10 +83,20 @@ const Profile = (props) => {
     address: '',
     postalCode: '',
   });
+  const [riderSummary, setRiderSummary] = useState([]);
+  const [tableStateRiderSummary, setTableStateRiderSummary] = useState({
+    columns: [
+      { title: 'Month', field: 'month' },
+      { title: 'Hours Worked', field: 'hoursworked' },
+      { title: 'Orders Per Month', field: 'orderspermonth' },
+      { title: 'Total Salary Earned', field: 'totalsalaryearned' },
+    ],
+  });
 
   useEffect(() => {
     if (sessionStorage.getItem('userType') === 'deliveryRider') {
       getRiderById();
+      getRiderSummaryById();
     } else if (sessionStorage.getItem('userType') === 'restaurantStaff') {
       getRestaurantStaffById();
       getRestaurantById();
@@ -93,6 +104,16 @@ const Profile = (props) => {
       getFDSManagerById();
     }
   }, []);
+
+  const getRiderSummaryById = async () => {
+    RidersApis.getRiderSummaryById(sessionStorage.getItem('id'))
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setRiderSummary(response.data);
+      })
+      .catch((err) => {});
+  };
 
   const getRiderById = async () => {
     RidersApis.getRiderById(sessionStorage.getItem('id'))
@@ -547,6 +568,21 @@ const Profile = (props) => {
           </CardContent>
         </Card>
       </Grid>
+      {sessionStorage.getItem('userType') === 'deliveryRider' && (
+        <Grid item xs={12} sm={12} md={6} lg={8}>
+          <Card>
+            <CardContent>
+              <Grid container direction='row' spacing={2} style={{ marginTop: '10px' }}>
+                <Grid item xs={12} sm={12} md={12}>
+                  <Card>
+                    <MaterialTable title='Summary' columns={tableStateRiderSummary.columns} data={riderSummary} />
+                  </Card>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
       {sessionStorage.getItem('userType') === 'restaurantStaff' && (
         <Grid item xs={12} sm={12} md={6} lg={4}>
           <Card>

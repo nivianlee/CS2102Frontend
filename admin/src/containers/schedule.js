@@ -98,15 +98,6 @@ const Schedule = (props) => {
       },
     ],
   });
-  const [riderSummary, setRiderSummary] = useState([]);
-  const [tableStateRiderSummary, setTableStateRiderSummary] = useState({
-    columns: [
-      { title: 'Month', field: 'month' },
-      { title: 'Hours Worked', field: 'hoursworked' },
-      { title: 'Orders Per Month', field: 'orderspermonth' },
-      { title: 'Total Salary Earned', field: 'totalsalaryearned' },
-    ],
-  });
 
   useEffect(() => {
     if (sessionStorage.getItem('isFullTime')) {
@@ -114,18 +105,7 @@ const Schedule = (props) => {
     } else {
       getWwsPartTimeRiderById();
     }
-    getRiderSummaryById();
   }, []);
-
-  const getRiderSummaryById = async () => {
-    RidersApis.getRiderSummaryById(sessionStorage.getItem('id'))
-      .then((response) => {
-        if (response.status !== 200) {
-        }
-        setRiderSummary(response.data);
-      })
-      .catch((err) => {});
-  };
 
   const getMwsFullTimeRiderById = async () => {
     MWSApis.getMwsFullTimeRiderById(sessionStorage.getItem('id'))
@@ -501,13 +481,6 @@ const Schedule = (props) => {
           </Card>
         </Grid>
       )}
-      <Grid container direction='row' spacing={2} style={{ marginTop: '10px' }}>
-        <Grid item xs={12} sm={12} md={12}>
-          <Card>
-            <MaterialTable title='Summary' columns={tableStateRiderSummary.columns} data={riderSummary} />
-          </Card>
-        </Grid>
-      </Grid>
       <Grid container justify={'center'}>
         <Grid item xs={12} sm={12} md={10} lg={8}>
           <Grid container>

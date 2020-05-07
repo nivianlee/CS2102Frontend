@@ -25,3 +25,8 @@ export function getRiderSummaryById(riderID) {
   var link = Config.ipAddress + '/riders/' + riderID + '/getRiderSummaryById';
   return axios.get(link);
 }
+
+export function getOrdersByRiderId(riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID + '/getOrdersByRiderId';
+  return axios.get(link);
+}
