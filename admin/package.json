@@ -11,6 +11,10 @@
     "axios": "^0.19.2",
     "canvasjs": "^1.8.3",
     "material-table": "^1.57.2",
+<<<<<<< HEAD
+    "material-ui-dropzone": "^3.0.0",
+=======
+>>>>>>> 24954588facbfd1c5e1948ede2e3264fd99571e9
     "moment": "^2.25.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

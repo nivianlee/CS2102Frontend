@@ -18,6 +18,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import MaterialTable from 'material-table';
 import * as FDSManagersApis from '../api/fdsManagers';
+import * as RidersApi from '../api/riders';
+import moment from 'moment';
 
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import MotorcycleIcon from '@material-ui/icons/Motorcycle';
@@ -30,10 +32,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'left',
     justifyContent: 'left',
   },
+  cardMargin: {
+    marginTop: '10px',
+  },
 }));
 
 const Home = (props) => {
   const classes = useStyles();
+  const [notification, setNotification] = useState('');
+  const [bc, setBC] = useState(false);
+  // fdsmanagers
   const [dataCustomerOrders, setDataCustomerOrders] = useState([]);
   const [dataTotalOrderSum, setDataTotalOrderSum] = useState([]);
   const [summaryTwo, setSummaryTwo] = useState([]);
@@ -69,13 +77,19 @@ const Home = (props) => {
     ],
   });
 
+  // riders
+  const [myOrders, setMyOrders] = useState([]);
+  const [selectedOrderID, setSelectedOrderID] = useState(-1);
+
   useEffect(() => {
     getFDSManagerSummaryOne();
     getFDSManagerSummaryTwo();
     getFDSManagerSummaryThree();
     getFDSManagerSummaryFour();
+    getOrdersByRiderId();
   }, []);
 
+  // fdsmanagers
   const getFDSManagerSummaryOne = () => {
     FDSManagersApis.getFDSManagerSummaryOne()
       .then((response) => {
@@ -129,88 +143,287 @@ const Home = (props) => {
       .catch((err) => {});
   };
 
+  // riders
+  const getOrdersByRiderId = async () => {
+    RidersApi.getOrdersByRiderId(sessionStorage.getItem('id'))
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setMyOrders(response.data);
+      })
+      .catch((err) => {});
+  };
+
+  const toggleUpdateRiderOrderTimestamp = (orderid) => {
+    const data = {
+      orderid: orderid,
+    };
+    RidersApi.toggleUpdateRiderOrderTimestamp(data)
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setNotification(response.data.message);
+        showNotification();
+        getOrdersByRiderId();
+      })
+      .catch((err) => {});
+  };
+
+  const toggleButtonString = (order) => {
+    if (!order.riderdepartforrestimestamp) {
+      return 'Departed for Restaurant';
+    } else {
+      if (!order.riderarriveatrestimestamp) {
+        return 'Arrived at Retaurant';
+      } else {
+        if (!order.ridercollectordertimestamp) {
+          return 'Collected Order';
+        } else {
+          if (!order.riderdeliverordertimestamp) {
+            return 'Delivered Order';
+          }
+        }
+      }
+    }
+  };
+
+  const showNotification = () => {
+    setBC(true);
+    setTimeout(function () {
+      setBC(false);
+    }, 6000);
+  };
+
   return (
-    sessionStorage.getItem('userType') === 'fdsManager' && (
-      <Grid container direction='row' className={classes.card} spacing={1}>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Card>
-            <CardContent align='center'>
-              <>
-                <Typography variant='overline' display='block' component='p' align='center'>
-                  Number of new customers and orders per month
+    <>
+      {sessionStorage.getItem('userType') === 'restaurantStaff' && (
+        <Grid container direction='row'>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Card>
+              <CardContent>
+                <Typography variant='body1' component='p' align='left'>
+                  Please use sidebar to navigate
                 </Typography>
-                <LineChart
-                  width={500}
-                  height={280}
-                  data={dataCustomerOrders}
-                  margin={{
-                    top: 10,
-                    bottom: 10,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <XAxis dataKey='month' />
-                  <YAxis domain={[6, 30]} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type='monotone' dataKey='numcustcreated' stroke='#8884d8' activeDot={{ r: 8 }} />
-                  <Line type='monotone' dataKey='totalorders' stroke='#82ca9d' />
-                </LineChart>
-              </>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Card>
-            <CardContent align='center'>
-              <>
-                <Typography variant='overline' display='block' component='p' align='center'>
-                  Total order sum per month
-                </Typography>
-                <LineChart
-                  width={500}
-                  height={280}
-                  data={dataTotalOrderSum}
-                  margin={{
-                    top: 10,
-                    bottom: 10,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <XAxis dataKey='month' />
-                  <YAxis domain={[300, 1500]} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type='monotone' dataKey='totalorderssum' stroke='#8884d8' activeDot={{ r: 8 }} />
-                </LineChart>
-              </>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Card>
-            <MaterialTable
-              title='No. of Orders and Total Cost by Customers'
-              columns={tableStateTwo.columns}
-              data={summaryTwo}
-            />
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Card>
-            <MaterialTable
-              title='No. of Orders sent to an Address at an hour'
-              columns={tableStateThree.columns}
-              data={summaryThree}
-            />
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Card>
-            <MaterialTable title='Riders Statistical Data' columns={tableStateFour.columns} data={summaryFour} />
-          </Card>
-        </Grid>
-        {/* <Grid item xs={12} sm={12} md={6} lg={6}>
+      )}
+      {sessionStorage.getItem('userType') === 'deliveryRider' && (
+        <>
+          <Grid container direction='row'>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant='h5' component='p' align='left'>
+                    Current Orders
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+          <Grid container direction='row' className={classes.card} style={{ marginTop: '10px' }} spacing={2}>
+            {myOrders.map((order) => (
+              <Grid item xs={12} sm={12} md={12} lg={12} key={order.orderid}>
+                <Card>
+                  <CardContent>
+                    <Grid container direction='column'>
+                      <Grid item>
+                        <Typography variant='overline' display='block' align='right'>
+                          Delivery ID: {order.deliveryid}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant='h6' component='p' align='left'>
+                          Order ID: {order.orderid}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          Delivery Address: {order.deliveryaddress}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          Special Request: {order.specialrequest ? order.specialrequest : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin} style={{ marginBottom: '10px' }}>
+                        <Typography variant='body2' component='p' align='left'>
+                          Order Completed: {order.status ? 'Yes' : 'No'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='overline' display='block' align='left'>
+                          Order Placed At
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          {order.orderplacedtimestamp
+                            ? moment(order.orderplacedtimestamp).format('MMMM Do YYYY, h:mm:ss a')
+                            : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='overline' display='block' align='left'>
+                          Rider Depart for Restaurant
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          {order.riderdepartforrestimestamp
+                            ? moment(order.riderdepartforrestimestamp).format('MMMM Do YYYY, h:mm:ss a')
+                            : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='overline' display='block' align='left'>
+                          Rider Arrive At Restaurant
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          {order.riderarriveatrestimestamp
+                            ? moment(order.riderarriveatrestimestamp).format('MMMM Do YYYY, h:mm:ss a')
+                            : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='overline' display='block' align='left'>
+                          Rider Collect Order
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='body2' component='p' align='left'>
+                          {order.ridercollectordertimestamp
+                            ? moment(order.ridercollectordertimestamp).format('MMMM Do YYYY, h:mm:ss a')
+                            : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin}>
+                        <Typography variant='overline' display='block' align='left'>
+                          Rider Deliver Order
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.cardMargin} style={{ marginBottom: '20px' }}>
+                        <Typography variant='body2' component='p' align='left'>
+                          {order.riderdeliverordertimestamp
+                            ? moment(order.riderdeliverordertimestamp).format('MMMM Do YYYY, h:mm:ss a')
+                            : 'NIL'}
+                        </Typography>
+                      </Grid>
+                      {!order.status && (
+                        <Grid item>
+                          <Button
+                            variant='contained'
+                            style={{ backgroundColor: '#ff3008', color: '#fff' }}
+                            onClick={() => {
+                              toggleUpdateRiderOrderTimestamp(order.orderid);
+                            }}
+                          >
+                            {toggleButtonString(order)}
+                          </Button>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+          <Grid container justify={'center'}>
+            <Grid item xs={12} sm={12} md={10} lg={8}>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={4}>
+                  <Snackbar place='bc' color='info' message={notification} open={bc} onClose={() => setBC(false)} />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </>
+      )}
+      {sessionStorage.getItem('userType') === 'fdsManager' && (
+        <Grid container direction='row' className={classes.card} spacing={1}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card>
+              <CardContent align='center'>
+                <>
+                  <Typography variant='overline' display='block' component='p' align='center'>
+                    Number of new customers and orders per month
+                  </Typography>
+                  <LineChart
+                    width={500}
+                    height={280}
+                    data={dataCustomerOrders}
+                    margin={{
+                      top: 10,
+                      bottom: 10,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray='3 3' />
+                    <XAxis dataKey='month' />
+                    <YAxis domain={[6, 30]} />
+                    <Tooltip />
+                    <Legend />
+                    <Line type='monotone' dataKey='numcustcreated' stroke='#8884d8' activeDot={{ r: 8 }} />
+                    <Line type='monotone' dataKey='totalorders' stroke='#82ca9d' />
+                  </LineChart>
+                </>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card>
+              <CardContent align='center'>
+                <>
+                  <Typography variant='overline' display='block' component='p' align='center'>
+                    Total order sum per month
+                  </Typography>
+                  <LineChart
+                    width={500}
+                    height={280}
+                    data={dataTotalOrderSum}
+                    margin={{
+                      top: 10,
+                      bottom: 10,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray='3 3' />
+                    <XAxis dataKey='month' />
+                    <YAxis domain={[300, 1500]} />
+                    <Tooltip />
+                    <Legend />
+                    <Line type='monotone' dataKey='totalorderssum' stroke='#8884d8' activeDot={{ r: 8 }} />
+                  </LineChart>
+                </>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card>
+              <MaterialTable
+                title='No. of Orders and Total Cost by Customers'
+                columns={tableStateTwo.columns}
+                data={summaryTwo}
+              />
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card>
+              <MaterialTable
+                title='No. of Orders sent to an Address at an hour'
+                columns={tableStateThree.columns}
+                data={summaryThree}
+              />
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Card>
+              <MaterialTable title='Riders Statistical Data' columns={tableStateFour.columns} data={summaryFour} />
+            </Card>
+          </Grid>
+          {/* <Grid item xs={12} sm={12} md={6} lg={6}>
           <Card>
             <CardContent>
               <>
@@ -239,8 +452,9 @@ const Home = (props) => {
             </CardContent>
           </Card>
         </Grid> */}
-      </Grid>
-    )
+        </Grid>
+      )}
+    </>
   );
 };
 

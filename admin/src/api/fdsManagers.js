@@ -45,3 +45,8 @@ export function getFDSManagerSummaryFour() {
   var link = Config.ipAddress + '/fdsManagers/summaryFour';
   return axios.get(link);
 }
+
+export function postPromotion(fdsManagerId, request) {
+  var link = Config.ipAddress + '/fdsManagers/' + fdsManagerId + '/promotion';
+  return axios.post(link, request);
+}

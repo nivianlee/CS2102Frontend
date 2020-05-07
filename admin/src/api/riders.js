@@ -20,3 +20,23 @@ export function updateRider(request, riderID) {
   var link = Config.ipAddress + '/riders/' + riderID;
   return axios.put(link, request);
 }
+
+export function getAllRidersSummary() {
+  var link = Config.ipAddress + '/riders/1/getAllRidersSummary';
+  return axios.get(link);
+}
+
+export function getRiderSummaryById(riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID + '/getRiderSummaryById';
+  return axios.get(link);
+}
+
+export function getOrdersByRiderId(riderID) {
+  var link = Config.ipAddress + '/riders/' + riderID + '/getOrdersByRiderId';
+  return axios.get(link);
+}
+
+export function toggleUpdateRiderOrderTimestamp(request) {
+  var link = Config.ipAddress + '/riders/toggleOrderTimestamp';
+  return axios.post(link, request);
+}

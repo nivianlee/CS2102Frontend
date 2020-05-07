@@ -33,6 +33,7 @@ import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from 
 
 import { connect } from 'react-redux';
 import * as PromotionsApis from '../api/promotions';
+import * as FDSManagersApis from '../api/fdsManagers';
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   },
   radioTextInput: {
     marginBottom: '4px',
+  },
+  radioTextInputInfo: {
+    marginBottom: '20px',
   },
   title2: {
     marginBottom: '4px',
@@ -65,12 +69,11 @@ const promotionTheme = createMuiTheme({
   },
 });
 
-const Promotion = (props) => {
+const Promotions = (props) => {
   const classes = useStyles();
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
   const [promotions, setPromotions] = useState([]);
-  const [promotionStatistics, setPromotionStatistics] = useState([]);
   const [isNewPromotion, setIsNewPromotion] = useState(false);
   const [dates, setDates] = useState({
     startDate: moment(),
@@ -113,29 +116,9 @@ const Promotion = (props) => {
       { title: 'Description', field: 'promodescription' },
     ],
   });
-  const [tableStatePromoStats, setTableStatePromoStats] = useState({
-    columns: [
-      { title: 'Promotion Id', field: 'promotionid' },
-      { title: 'No. of Orders', field: 'numoforders' },
-      { title: 'Orders Per Day', field: 'ordersperday' },
-      {
-        title: 'Duration',
-        render: (rowData) => (
-          <>
-            <Tooltip title='YYYY-MM-DD' placement='bottom-start'>
-              <Typography variant='body2'>
-                {rowData.duration.hours} hrs {rowData.duration.minutes} mins
-              </Typography>
-            </Tooltip>
-          </>
-        ),
-      },
-    ],
-  });
 
   useEffect(() => {
-    getPromotionsByRestaurantID();
-    getPromotionalCampaignsStatistics();
+    getPromotions();
   }, []);
 
   const postPromotion = async () => {
@@ -146,12 +129,13 @@ const Promotion = (props) => {
       promotionendtimestamp: endDateTime,
       promotiontype: newPromotion.promotiontype,
       promotiontypeinfo: newPromotion.promotiontypeinfo,
+      promodescription: newPromotion.promodescription,
     };
-    PromotionsApis.postPromotion(sessionStorage.getItem('id'), data)
+    FDSManagersApis.postPromotion(sessionStorage.getItem('id'), data)
       .then((response) => {
         if (response.status !== 200) {
         }
-        getPromotionsByRestaurantID();
+        getPromotions();
         setIsNewPromotion(false);
         setNotification('Promotion has been successfully created!');
         showNotification();
@@ -159,22 +143,12 @@ const Promotion = (props) => {
       .catch((err) => {});
   };
 
-  const getPromotionsByRestaurantID = async () => {
-    PromotionsApis.getPromotionsByRestaurantID(sessionStorage.getItem('restaurantID'))
+  const getPromotions = async () => {
+    PromotionsApis.getPromotions()
       .then((response) => {
         if (response.status !== 200) {
         }
         setPromotions(response.data);
-      })
-      .catch((err) => {});
-  };
-
-  const getPromotionalCampaignsStatistics = async () => {
-    PromotionsApis.getPromotionalCampaignsStatistics(sessionStorage.getItem('id'))
-      .then((response) => {
-        if (response.status !== 200) {
-        }
-        setPromotionStatistics(response.data);
       })
       .catch((err) => {});
   };
@@ -214,7 +188,7 @@ const Promotion = (props) => {
                         variant='contained'
                         onClick={() => {
                           setIsNewPromotion(false);
-                          getPromotionsByRestaurantID();
+                          getPromotions();
                         }}
                       >
                         Cancel
@@ -259,12 +233,13 @@ const Promotion = (props) => {
                       }
                     />
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12} lg={12} className={classes.radioTextInput}>
+                  <Grid item xs={12} sm={12} md={12} lg={12} className={classes.radioTextInputInfo}>
                     <TextField
                       id='standard-full-width'
                       name='promotiontypeinfo'
                       fullWidth
                       label='Info'
+                      helperText={'E.g. Flash Deals all at $5'}
                       value={newPromotion.promotiontypeinfo}
                       onChange={(event) =>
                         setNewPromotion({ ...newPromotion, [event.target.name]: event.target.value })
@@ -377,17 +352,6 @@ const Promotion = (props) => {
             </Card>
           </Grid>
         </Grid>
-        <Grid container direction='row' style={{ marginTop: '10px' }}>
-          <Grid item xs={12} sm={12} md={12}>
-            <Card>
-              <MaterialTable
-                title='Promo Statistics'
-                columns={tableStatePromoStats.columns}
-                data={promotionStatistics}
-              />
-            </Card>
-          </Grid>
-        </Grid>
       </Grid>
       <Grid container justify={'center'}>
         <Grid item xs={12} sm={12} md={10} lg={8}>
@@ -410,4 +374,4 @@ const Promotion = (props) => {
 };
 
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps)(Promotion);
+export default connect(mapStateToProps)(Promotions);

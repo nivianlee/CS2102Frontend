@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ordersTheme = createMuiTheme({
+const orderTheme = createMuiTheme({
   overrides: {
     MuiTableCell: {
       root: {
@@ -56,7 +56,7 @@ const ordersTheme = createMuiTheme({
   },
 });
 
-const Orders = (props) => {
+const Order = (props) => {
   const classes = useStyles();
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
@@ -200,7 +200,7 @@ const Orders = (props) => {
   };
 
   return (
-    <ThemeProvider theme={ordersTheme}>
+    <ThemeProvider theme={orderTheme}>
       <Grid container direction='column'>
         <Grid container direction='row' spacing={2}>
           <Grid item xs={12} sm={12} md={4}>
@@ -335,4 +335,4 @@ const Orders = (props) => {
 const mapStateToProps = (state) => ({
   completedOrders: state.reducer.completedOrders,
 });
-export default connect(mapStateToProps)(Orders);
+export default connect(mapStateToProps)(Order);

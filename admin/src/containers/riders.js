@@ -9,24 +9,9 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Snackbar from '@material-ui/core/Snackbar';
 import MaterialTable from 'material-table';
-
-import RestaurantIcon from '@material-ui/icons/Restaurant';
-import MotorcycleIcon from '@material-ui/icons/Motorcycle';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import AddAlert from '@material-ui/icons/AddAlert';
-
-import * as FDSManagersApis from '../api/fdsManagers';
-import * as RestaurantStaffApis from '../api/restaurantstaff';
-import * as RestaurantsApis from '../api/restaurants';
-import * as RidersApis from '../api/riders';
 import * as MWSApis from '../api/mws';
+import * as RidersApi from '../api/riders';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -106,12 +91,33 @@ const Riders = (props) => {
       },
     ],
   });
+  const [ridersSummary, setRidersSummary] = useState([]);
+  const [tableStateRidersSummary, setTableStateRidersSummary] = useState({
+    columns: [
+      { title: 'Rider ID', field: 'riderid' },
+      { title: 'Month', field: 'month' },
+      { title: 'Hours Worked', field: 'hoursworked' },
+      { title: 'Orders Per Month', field: 'orderspermonth' },
+      { title: 'Total Salary Earned', field: 'totalsalaryearned' },
+    ],
+  });
 
   useEffect(() => {
     getShiftsTable();
     getMwsFullTimeRiders();
     getWwsPartTimeRiders();
+    getAllRidersSummary();
   }, []);
+
+  const getAllRidersSummary = async () => {
+    RidersApi.getAllRidersSummary()
+      .then((response) => {
+        if (response.status !== 200) {
+        }
+        setRidersSummary(response.data);
+      })
+      .catch((err) => {});
+  };
 
   const getShiftsTable = async () => {
     MWSApis.getShiftsTable()
@@ -169,6 +175,19 @@ const Riders = (props) => {
 
   return (
     <Grid container direction='row' className={classes.card} spacing={2}>
+      <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Card>
+          <CardContent>
+            <Grid container direction='row' spacing={2}>
+              <Grid item xs={12} sm={12} md={12}>
+                <Card>
+                  <MaterialTable title='Summary' columns={tableStateRidersSummary.columns} data={ridersSummary} />
+                </Card>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12}>
         <Card>
           <MaterialTable title='Full Time Riders' columns={tableStateMWS.columns} data={props.fullTimeRiders} />
