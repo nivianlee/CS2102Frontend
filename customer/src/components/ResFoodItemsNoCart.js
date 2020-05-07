@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Container, Form, InputGroup, Button, Tab, Nav, Image, Badge, Spinner } from 'react-bootstrap';
+import { Row, Col, Container, Button, Tab, Nav, Image, Badge, Spinner } from 'react-bootstrap';
 import ItemsCarousel from './common/ItemsCarousel';
 import GalleryCarousel from './common/GalleryCarousel';
-import CheckoutItem from './common/CheckoutItem';
 import BestSeller from './common/BestSeller';
-import QuickBite from './common/QuickBite';
 import StarRating from './common/StarRating';
 import RatingBar from './common/RatingBar';
 import Review from './common/Review';
@@ -133,6 +131,9 @@ class ResFoodItems extends React.Component {
   componentDidMount() {
     const { resID } = this.props.match.params;
     console.log('resID: ' + resID);
+
+    localStorage.setItem('resId', resID);
+    // console.log('resId: ' + localStorage.getItem('resId'));
 
     fetch(SERVER_PREFIX + '/fooditems/' + resID)
       .then((res) => res.json())

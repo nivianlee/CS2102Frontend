@@ -21,6 +21,7 @@ import AddCreditCardModal from './modals/AddCreditCardModal';
 import Icofont from 'react-icofont';
 import SERVER_PREFIX from './ServerConfig';
 import CouponCard from './common/CouponCard';
+import Swal from 'sweetalert2';
 
 class Checkout extends React.Component {
   constructor(props, context) {
@@ -53,13 +54,29 @@ class Checkout extends React.Component {
       deliveryId: '',
       deliveryFee: '',
       discount: '',
+      redirect: false,
     };
+    this.handleAddress = this.handleAddress.bind(this);
+    this.handleCreditCard = this.handleCreditCard.bind(this);
+    this.handlePromo = this.handlePromo.bind(this);
   }
+
+  componentWillMount() {
+    // Initialize Cart
+    if (localStorage.getItem('cart') === null || typeof localStorage.getItem('cart') === undefined) {
+      var myCart = {};
+      localStorage.setItem('cart', JSON.stringify(myCart));
+    } else {
+      this.setState({ myCart: JSON.parse(localStorage.getItem('cart')) });
+    }
+  }
+
   componentDidMount() {
     this.reloadAddresses();
     this.reloadCreditCards();
     this.loadPromotions();
     this.calculateCart();
+    console.log('resId localstorae:', localStorage.getItem('resId'));
   }
 
   reloadAddresses() {
@@ -134,7 +151,7 @@ class Checkout extends React.Component {
     );
   }
 
-  getQty = ({ id, name, price, maxValue, quantity }) => {
+  getQty = ({ id, name, price, maxValue, resName, quantity }) => {
     let tempArr = [];
     for (var i = 0; i < this.state.myCart.length; i++) {
       tempArr[i] = this.state.myCart[i].fooditemid;
@@ -203,14 +220,17 @@ class Checkout extends React.Component {
   };
 
   handleCreditCard = (item) => {
-    this.setState({
-      useCash: false,
-      useCreditCard: true,
-      selectedCCNum: item.creditcardnumber,
-      selectedCCName: item.creditcardname,
-      selectedCCExpMM: item.expirymonth,
-      selectedCCExpYYYY: item.expiryyear,
-    });
+    setTimeout(
+      this.setState({
+        useCash: false,
+        useCreditCard: true,
+        selectedCCNum: item.creditcardnumber,
+        selectedCCName: item.creditcardname,
+        selectedCCExpMM: item.expirymonth,
+        selectedCCExpYYYY: item.expiryyear,
+      }),
+      1
+    );
   };
 
   handlePromo = (item) => {
@@ -230,13 +250,72 @@ class Checkout extends React.Component {
     });
   };
 
-  componentWillMount() {
-    // Initialize Cart
-    this.setState({ myCart: JSON.parse(localStorage.getItem('cart')) });
+  handleSubmit = (event) => {
+    console.log('handleSubmit clicked!');
+    console.log('loggedInUserId: ', localStorage.getItem('loggedInUserId'));
 
-    // console.log('Checkout: localStorage: ', JSON.parse(localStorage.getItem('cart')));
-    // console.log(JSON.parse(localStorage.getItem('cart')));
-  }
+    let newOrder = {
+      customerid: localStorage.getItem('loggedInUserId'),
+      deliveryaddress: this.state.selectedAdd + ' ' + this.state.selectedPostalCode,
+      creditcardnumber: this.state.selectedCCNum,
+      usecash: this.state.useCash,
+      usecreditcard: this.state.useCreditCard,
+      userewardpoints: false,
+      rewardpoints: 0,
+      specialrequest: this.state.specialReq === null ? 'N/A' : this.state.specialReq,
+      promotionid: this.state.promotionId,
+      fooditems: this.state.myCart.map((item) => ({
+        fooditemid: item.fooditemid,
+        quantity: item.quantity,
+      })),
+    };
+    console.log('newOrder:', newOrder);
+
+    fetch(SERVER_PREFIX + '/customers/orders', {
+      method: 'POST',
+      body: JSON.stringify(newOrder),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          // console.log('SUCCESSS');
+          Swal.fire({
+            icon: 'success',
+            title: 'New order has been added successfully',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            timer: 700,
+          });
+
+          console.log('redirect: ' + this.state.redirect);
+          return response.json();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'Please try again!',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      })
+      .then((data) => {
+        console.log('data: ', data);
+      })
+      .catch(console.log);
+    // this.setState({
+    //   newAddress: '',
+    //   postalCode: '',
+    //   postalCodeValid: false,
+    //   formValid: false,
+    //   formErrors: { postalCode: '' },
+    // });
+    // console.log('handleSubmit is clicked! ');
+    event.preventDefault();
+  };
 
   render() {
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
@@ -412,9 +491,14 @@ class Checkout extends React.Component {
               </div>
             </Col>
             <Col md={4}>
-              <div className="generator-bg rounded shadow-sm mb-4 p-4 osahan-cart-item">
+              <div className="my-background rounded shadow-sm mb-4 p-4 osahan-cart-item">
                 <div className="d-flex mb-4 osahan-cart-item-profile">
-                  <Image fluid className="mr-3 rounded-pill" alt="osahan" src="/img/2.jpg" />
+                  <Image
+                    fluid
+                    className="mr-3 rounded-pill"
+                    alt="osahan"
+                    src={'/img/restaurants/restaurant_' + localStorage.getItem('resId') + '.jpg'}
+                  />
                   <div className="d-flex flex-column">
                     <h6 className="mb-1 text-white">Spice Hut Indian Restaurant</h6>
                     <p className="mb-0 text-white">
@@ -499,7 +583,7 @@ class Checkout extends React.Component {
                   <p className="mb-1">
                     Item Total{' '}
                     <span className="float-right text-dark">
-                      ${this.state.myCart.length === 0 ? '0.00' : parseFloat(this.state.totalCart).toFixed(2)}
+                      ${this.state.myCart === null ? '0.00' : parseFloat(this.state.totalCart).toFixed(2)}
                     </span>
                   </p>
                   {/* <p className="mb-1">
@@ -531,11 +615,11 @@ class Checkout extends React.Component {
                               let value = this.state.promoDetails.charAt(0);
                               return value;
                             } else if (this.state.percentageAmount !== null) {
-                              return this.state.percentageAmount;
+                              return parseFloat(this.state.totalCart * (this.state.percentageAmount / 100)).toFixed(2);
                             } else if (this.state.absoluteAmount !== null) {
-                              return this.state.absoluteAmount;
+                              return parseFloat(this.state.absoluteAmount);
                             } else if (this.state.deliveryAmount !== null) {
-                              return this.state.deliveryAmount;
+                              return parseFloat(this.state.deliveryAmount);
                             } else {
                               return '0';
                             }
@@ -548,14 +632,58 @@ class Checkout extends React.Component {
                   <h6 className="font-weight-bold mb-0">
                     TO PAY{' '}
                     <span className="float-right">
-                      ${this.state.totalCart + this.state.deliveryFee - this.state.discount}
+                      $
+                      {(() => {
+                        if (this.state.promoDetails !== null) {
+                          let value = this.state.promoDetails.charAt(0);
+                          return parseFloat(this.state.totalCart + this.state.deliveryFee - value).toFixed(2);
+                        } else if (this.state.percentageAmount !== null) {
+                          return parseFloat(
+                            this.state.totalCart +
+                              this.state.deliveryFee -
+                              this.state.totalCart * (this.state.percentageAmount / 100)
+                          ).toFixed(2);
+                        } else if (this.state.absoluteAmount !== null) {
+                          return parseFloat(
+                            this.state.totalCart + this.state.deliveryFee - this.state.absoluteAmount
+                          ).toFixed(2);
+                        } else if (this.state.deliveryAmount !== null) {
+                          return parseFloat(
+                            this.state.totalCart + this.state.deliveryFee - this.state.deliveryAmount
+                          ).toFixed(2);
+                        } else {
+                          return '0';
+                        }
+                      })()}
                     </span>
                   </h6>
                 </div>
-                <Link to="/thanks" className="btn btn-success btn-block btn-lg">
-                  PAY $1329
+                <Button type="button" onClick={this.handleSubmit} className="btn btn-success btn-block btn-lg">
+                  PAY ${' '}
+                  {(() => {
+                    if (this.state.promoDetails !== null) {
+                      let value = this.state.promoDetails.charAt(0);
+                      return parseFloat(this.state.totalCart + this.state.deliveryFee - value).toFixed(2);
+                    } else if (this.state.percentageAmount !== null) {
+                      return parseFloat(
+                        this.state.totalCart +
+                          this.state.deliveryFee -
+                          this.state.totalCart * (this.state.percentageAmount / 100)
+                      ).toFixed(2);
+                    } else if (this.state.absoluteAmount !== null) {
+                      return parseFloat(
+                        this.state.totalCart + this.state.deliveryFee - this.state.absoluteAmount
+                      ).toFixed(2);
+                    } else if (this.state.deliveryAmount !== null) {
+                      return parseFloat(
+                        this.state.totalCart + this.state.deliveryFee - this.state.deliveryAmount
+                      ).toFixed(2);
+                    } else {
+                      return '0';
+                    }
+                  })()}
                   <Icofont icon="long-arrow-right" />
-                </Link>
+                </Button>
               </div>
               {/* <div className="pt-2"></div>
               <div className="alert alert-success" role="alert">
