@@ -42,7 +42,7 @@ class Orders extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, orders, ordersLength } = this.state;
+    const { orders, ordersLength } = this.state;
 
     console.log('ordersLength: ' + ordersLength);
 
@@ -67,7 +67,6 @@ class Orders extends React.Component {
                 deliveryFee={item.deliveryfeeamount}
                 detailLink={'/restaurants/foods/'}
                 helpLink="#"
-                detailLink={''}
               />
             );
           })}

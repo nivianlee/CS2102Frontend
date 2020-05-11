@@ -252,9 +252,9 @@ class Checkout extends React.Component {
       this.setState({ ...this.state.totalCartQty });
     }
 
-    if (totalQty <= 10) {
+    if (totalQty < 10) {
       this.setState({ deliveryId: 1, deliveryFee: 4 });
-    } else if (totalQty > 10 && totalQty <= 15) {
+    } else if (totalQty >= 10 && totalQty <= 15) {
       this.setState({ deliveryId: 2, deliveryFee: 10 });
     } else {
       this.setState({ deliveryId: 3, deliveryFee: 15 });
