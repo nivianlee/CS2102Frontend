@@ -25,6 +25,8 @@ class TrackOrder extends React.Component {
       riderArr: '',
       order: [],
       foodItems: [],
+      riderName: '',
+      riderContact: '',
     };
   }
 
@@ -54,6 +56,8 @@ class TrackOrder extends React.Component {
                 deliveryFee: result[0].deliveryfeeamount,
                 riderPickUpDT: result[0].ridercollectordertimestamp,
                 riderArr: result[0].riderarriveatrestimestamp,
+                riderName: result[0].ridername,
+                riderContact: result[0].contactnum,
                 order: result,
               });
             } else {
@@ -188,6 +192,12 @@ class TrackOrder extends React.Component {
                   </div>
                 </div>
                 <div className="bg-white p-4 shadow-lg mt-2">
+                  <div className="osahan-track-order-detail po">
+                    <h5 className="mt-0 mb-3">Delivery Details</h5>
+                    <p>Rider's Name: {this.state.riderName}</p>
+                    <p>Rider's Contact Number: {this.state.riderContact}</p>
+                  </div>
+                  <br />
                   <Row className="text-center">
                     <Col>
                       <Icofont icon="tasks" className="icofont-3x text-info" />
