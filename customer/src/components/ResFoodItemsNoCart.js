@@ -110,6 +110,10 @@ class ResFoodItems extends React.Component {
     }
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
     console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
+
+    const { resID } = this.props.match.params;
+    localStorage.setItem('resId', resID);
+    console.log('resId after adding cart: ' + localStorage.getItem('resId'));
   };
 
   getStarValue = ({ value }) => {
@@ -133,9 +137,6 @@ class ResFoodItems extends React.Component {
   componentDidMount() {
     const { resID } = this.props.match.params;
     console.log('resID: ' + resID);
-
-    localStorage.setItem('resId', resID);
-    // console.log('resId: ' + localStorage.getItem('resId'));
 
     fetch(SERVER_PREFIX + '/fooditems/' + resID)
       .then((res) => res.json())
@@ -224,7 +225,6 @@ class ResFoodItems extends React.Component {
     //   console.log('fooditemid: ' + obj.fooditemid);
     // }
 
-    // console.log('ResFoodItemsNoCart: Cart contains:');
     // console.log(this.state.myCart);
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
     // console.log('Cart Contains: localStorage: ', JSON.parse(localStorage.getItem('cart')));

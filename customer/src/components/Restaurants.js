@@ -17,7 +17,7 @@ class Restaurants extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     fetch(SERVER_PREFIX + '/restaurants')
       .then((res) => res.json())
       .then(

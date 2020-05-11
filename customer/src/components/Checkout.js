@@ -56,6 +56,7 @@ class Checkout extends React.Component {
       discount: '',
       redirect: false,
       redeemPoints: '',
+      restaurant: [],
     };
     this.handleAddress = this.handleAddress.bind(this);
     this.handleCreditCard = this.handleCreditCard.bind(this);
@@ -70,6 +71,7 @@ class Checkout extends React.Component {
     } else {
       this.setState({ myCart: JSON.parse(localStorage.getItem('cart')) });
     }
+    this.reloadRestaurant();
   }
 
   componentDidMount() {
@@ -152,6 +154,37 @@ class Checkout extends React.Component {
     );
   }
 
+  reloadRestaurant() {
+    console.log('come here?');
+    // console.log("localStorage.getItem('resId'): ", localStorage.getItem('resId'));
+    if (localStorage.getItem('resId') === null || localStorage.getItem('resId') === undefined) {
+      console.log('IT IS NULL OR UNDEFINED!');
+    } else {
+      console.log('IT IS NOT NULL OR NOT UNDEFINED!');
+      fetch(SERVER_PREFIX + '/restaurants/' + parseInt(localStorage.getItem('resId')))
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              restaurant: result,
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error,
+            });
+          }
+        );
+    }
+
+    console.log('this.state.restaurant:', this.state.restaurant);
+  }
+
   getQty = ({ id, name, price, maxValue, resName, quantity }) => {
     let tempArr = [];
     for (var i = 0; i < this.state.myCart.length; i++) {
@@ -178,10 +211,10 @@ class Checkout extends React.Component {
       this.calculateCart();
     }
 
-    if (quantity === 0) {
-      console.log('quantity is 0 !!!');
-      this.forceUpdate();
-    }
+    // if (quantity === 0) {
+    //   console.log('quantity is 0 !!!');
+    //   this.forceUpdate();
+    // }
 
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
     // console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
@@ -321,10 +354,14 @@ class Checkout extends React.Component {
 
   render() {
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
+    console.log('this.state.restaurant:', this.state.restaurant);
     console.log('Checkout: localStorage: ', JSON.parse(localStorage.getItem('cart')));
     if (this.state.redirect) {
       this.props.history.push({
         pathname: '/track-order',
+        // state: {
+        //   fromNotifications: true,
+        // },
       });
     }
     return (
@@ -498,25 +535,36 @@ class Checkout extends React.Component {
             </Col>
             <Col md={4}>
               <div className="my-background rounded shadow-sm mb-4 p-4 osahan-cart-item">
-                <div className="d-flex mb-4 osahan-cart-item-profile">
-                  {localStorage.getItem('resId') === null || localStorage.getItem('resId') === undefined ? (
-                    ''
-                  ) : (
-                    <Image
-                      fluid
-                      className="mr-3 rounded-pill"
-                      alt="osahan"
-                      src={'/img/restaurants/restaurant_' + localStorage.getItem('resId') + '.jpg'}
-                    />
-                  )}
-
-                  <div className="d-flex flex-column">
-                    <h6 className="mb-1 text-white">Welcome to Kin Kao!</h6>
-                    {/* <p className="mb-0 text-white">
-                      <Icofont icon="location-pin" /> 2036 2ND AVE, NEW YORK, NY 10029
-                    </p> */}
+                {localStorage.getItem('resId') === null ||
+                localStorage.getItem('resId') === undefined ||
+                localStorage.getItem('cart') === null ||
+                typeof localStorage.getItem('cart') === undefined ? (
+                  <div className="d-flex mb-4 ">
+                    <div className="d-flex flex-column">
+                      <h6 className="mb-1 text-white">Welcome to KinKao!</h6>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  this.state.restaurant.map((item) => {
+                    return (
+                      <div className="d-flex mb-4 osahan-cart-item-profile">
+                        <Image
+                          fluid
+                          className="mr-3 rounded-pill"
+                          alt="osahan"
+                          src={'img/restaurants/restaurant_' + item.restaurantid + '.jpg'}
+                        />
+                        <div className="d-flex flex-column">
+                          <h6 className="mb-1 text-white">{item.restaurantname}</h6>
+                          <p className="mb-0 text-white">
+                            <Icofont icon="location-pin" /> {item.address + ' ' + item.postalcode}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+
                 <div className="bg-white rounded shadow-sm p-2 mb-2 ">
                   {this.state.myCart === null || this.state.myCart.length === 0 ? (
                     <p className="text-danger">Please add items to cart!</p>
