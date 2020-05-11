@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Container, Image, Table } from 'react-bootstrap';
+import { Row, Col, Container, Image, Table, Button, Badge } from 'react-bootstrap';
 import Icofont from 'react-icofont';
 import HeadingValue from './common/HeadingValue';
 import PageTitle from './common/PageTitle';
@@ -104,6 +104,9 @@ class Invoice extends React.Component {
                               Item Name
                             </th>
                             <th className="text-right text-black font-weight-bold" scope="col">
+                              Review
+                            </th>
+                            <th className="text-right text-black font-weight-bold" scope="col">
                               Quantity
                             </th>
                             <th className="text-right text-black font-weight-bold" scope="col">
@@ -119,6 +122,9 @@ class Invoice extends React.Component {
                             return (
                               <tr>
                                 <td>{item.fooditemname}</td>
+                                <td className="text-right">
+                                  <Link onClick={() => this.setState({ showAddressModal: true })}>Review</Link>
+                                </td>
                                 <td className="text-right">{item.quantity}</td>
                                 <td className="text-right">${item.price}</td>
                                 <td className="text-right">${item.quantity * item.price}</td>

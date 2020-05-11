@@ -66,6 +66,8 @@ class Orders extends React.Component {
                 resAddr={item.address}
                 deliveryFee={item.deliveryfeeamount}
                 detailLink={'/restaurants/foods/'}
+                helpLink="#"
+                detailLink={''}
               />
             );
           })}

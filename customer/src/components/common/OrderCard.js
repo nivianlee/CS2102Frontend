@@ -44,9 +44,9 @@ class OrderCard extends React.Component {
               <p className="text-dark">{this.props.orderProducts}</p>
               <hr />
               <div className="float-right">
-                {/* <Link className="btn btn-sm btn-outline-primary mr-1" to={this.props.helpLink}>
-                  <Icofont icon="headphone-alt" /> HELP
-                </Link> */}
+                <Link className="btn btn-sm btn-outline-primary mr-1" to={this.props.helpLink}>
+                  <Icofont icon="ui-rate-blank" /> Rate Rider
+                </Link>
                 <Link
                   className="btn btn-sm btn-primary"
                   to={{

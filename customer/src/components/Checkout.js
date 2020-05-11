@@ -206,9 +206,11 @@ class Checkout extends React.Component {
           ...(this.state.myCart[tempIndex].subTotal = price * quantity),
         });
       }
+
       console.log('come here?');
       this.setState({ ...this.state.myCart });
       this.calculateCart();
+      this.checkEmptyCart();
     }
 
     // if (quantity === 0) {
@@ -219,6 +221,21 @@ class Checkout extends React.Component {
     localStorage.setItem('cart', JSON.stringify(this.state.myCart));
     // console.log('Handle Add to Cart: localStorage: ', JSON.parse(localStorage.getItem('cart')));
   };
+
+  checkEmptyCart() {
+    console.log('checkEmptyCart!!');
+    console.log(
+      "JSON.parse(localStorage.getItem('myCart')).length: ",
+      JSON.parse(localStorage.getItem('myCart')).length
+    );
+    setTimeout(() => {
+      if (JSON.stringify(localStorage.getItem('myCart')).length === 0) {
+        this.setState({
+          restaurant: [],
+        });
+      }
+    }, 1);
+  }
 
   calculateCart() {
     let totalSum = 0;
