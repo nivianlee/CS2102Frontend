@@ -115,12 +115,6 @@ const Sidebar = (props) => {
             </ListItem>
             <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
               <ListItemIcon>
-                <ConfirmationNumberIcon />
-              </ListItemIcon>
-              <ListItemText primary={'My Promotions'} />
-            </ListItem>
-            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
-              <ListItemIcon>
                 <RestaurantMenuIcon />
               </ListItemIcon>
               <ListItemText primary={'My Restaurant'} />

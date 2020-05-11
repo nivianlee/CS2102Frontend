@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = (props) => {
+const Restaurant = (props) => {
   const classes = useStyles();
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
@@ -729,4 +729,4 @@ const Home = (props) => {
 const mapStateToProps = (state) => ({
   loggedInUserType: state.reducer.loggedInUserType,
 });
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Restaurant);
