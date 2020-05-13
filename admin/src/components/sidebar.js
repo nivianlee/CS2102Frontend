@@ -10,7 +10,12 @@ import { makeStyles, useTheme, createMuiTheme } from '@material-ui/core/styles';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import MessageIcon from '@material-ui/icons/Message';
 import PersonIcon from '@material-ui/icons/Person';
+import HomeIcon from '@material-ui/icons/Home';
+import MotorcycleIcon from '@material-ui/icons/Motorcycle';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
+import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import { ThemeProvider } from '@material-ui/styles';
 import { Redirect } from 'react-router-dom';
 const drawerWidth = 240;
@@ -66,19 +71,96 @@ const Sidebar = (props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List component='nav' aria-labelledby='nested-list-subheader' className={classes.root}>
-        <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary={'FDS Managers'} />
-        </ListItem>
-
-        <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
-          <ListItemIcon>
-            <RestaurantIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Restaurants'} />
-        </ListItem>
+        {sessionStorage.getItem('userType') === 'deliveryRider' && (
+          <>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Home'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Restaurants'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 6)} selected={selectedItem === 6}>
+              <ListItemIcon>
+                <MotorcycleIcon />
+              </ListItemIcon>
+              <ListItemText primary={'My Schedule'} />
+            </ListItem>
+          </>
+        )}
+        {sessionStorage.getItem('userType') === 'restaurantStaff' && (
+          <>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Home'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 1)} selected={selectedItem === 1}>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Order'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 3)} selected={selectedItem === 3}>
+              <ListItemIcon>
+                <ConfirmationNumberIcon />
+              </ListItemIcon>
+              <ListItemText primary={'My Promotions'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 4)} selected={selectedItem === 4}>
+              <ListItemIcon>
+                <RestaurantMenuIcon />
+              </ListItemIcon>
+              <ListItemText primary={'My Restaurant'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Restaurants'} />
+            </ListItem>
+          </>
+        )}
+        {sessionStorage.getItem('userType') === 'fdsManager' && (
+          <>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 0)} selected={selectedItem === 0}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Home'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 2)} selected={selectedItem === 2}>
+              <ListItemIcon>
+                <ConfirmationNumberIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Promotions'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 5)} selected={selectedItem === 5}>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Restaurants'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 7)} selected={selectedItem === 7}>
+              <ListItemIcon>
+                <MotorcycleIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Riders'} />
+            </ListItem>
+            <ListItem button onClick={(event) => handleSelectedItem(event, 8)} selected={selectedItem === 8}>
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary={'FDS Managers'} />
+            </ListItem>
+          </>
+        )}
       </List>
     </div>
   );
