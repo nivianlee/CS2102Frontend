@@ -60,13 +60,3 @@ export function postPromotion(fdsManagerId, request) {
   var link = Config.ipAddress + '/fdsManagers/' + fdsManagerId + '/promotion';
   return axios.post(link, request);
 }
-
-export function getCustomersIDs() {
-  var link = Config.ipAddress + '/fdsManagers/customers';
-  return axios.get(link);
-}
-
-export function getRidersIDs() {
-  var link = Config.ipAddress + '/fdsManagers/riders';
-  return axios.get(link);
-}
