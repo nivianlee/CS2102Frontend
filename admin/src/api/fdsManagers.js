@@ -36,6 +36,11 @@ export function getFDSManagerSummaryTwo() {
   return axios.get(link);
 }
 
+export function getFDSManagerSummaryTwoByCustomerId(customerID) {
+  var link = Config.ipAddress + '/fdsManagers/summaryTwoByCustomerId/' + customerID;
+  return axios.get(link);
+}
+
 export function getFDSManagerSummaryThree() {
   var link = Config.ipAddress + '/fdsManagers/summaryThree';
   return axios.get(link);
@@ -46,7 +51,22 @@ export function getFDSManagerSummaryFour() {
   return axios.get(link);
 }
 
+export function getFDSManagerSummaryFourByRiderId(riderID) {
+  var link = Config.ipAddress + '/fdsManagers/summaryFourByRiderId/' + riderID;
+  return axios.get(link);
+}
+
 export function postPromotion(fdsManagerId, request) {
   var link = Config.ipAddress + '/fdsManagers/' + fdsManagerId + '/promotion';
   return axios.post(link, request);
+}
+
+export function getCustomersIDs() {
+  var link = Config.ipAddress + '/fdsManagers/customers';
+  return axios.get(link);
+}
+
+export function getRidersIDs() {
+  var link = Config.ipAddress + '/fdsManagers/riders';
+  return axios.get(link);
 }

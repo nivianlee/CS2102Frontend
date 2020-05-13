@@ -94,6 +94,9 @@ const App = (props) => {
     if (pathname === '/fdsmanagers') {
       setSelectedItem(8);
     }
+    if (pathname === '/profile') {
+      setSelectedItem(9);
+    }
   }, [props.history.location.pathname]);
 
   const handleDrawerToggle = () => {

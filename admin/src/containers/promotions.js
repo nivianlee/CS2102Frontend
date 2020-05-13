@@ -113,7 +113,7 @@ const Promotions = (props) => {
           </>
         ),
       },
-      { title: 'Description', field: 'promodescription' },
+      { title: 'Description', render: (rowData) => <>{rowData.promodescription ? rowData.promodescription : 'NIL'}</> },
     ],
   });
 
