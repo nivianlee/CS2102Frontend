@@ -20,11 +20,8 @@ export function postPromotion(restaurantStaffID, request) {
   var link = Config.ipAddress + '/restaurantstaff/' + restaurantStaffID + '/promotion';
   return axios.post(link, request);
 }
-<<<<<<< HEAD
 
 export function getPromotionalCampaignsStatistics(restaurantStaffID) {
   var link = Config.ipAddress + '/restaurantstaff/promotionStatistics/' + restaurantStaffID;
   return axios.get(link);
 }
-=======
->>>>>>> 24954588facbfd1c5e1948ede2e3264fd99571e9

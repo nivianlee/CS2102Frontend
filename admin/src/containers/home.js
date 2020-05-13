@@ -15,10 +15,15 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import MaterialTable from 'material-table';
 import * as FDSManagersApis from '../api/fdsManagers';
 import * as RidersApi from '../api/riders';
+import * as CustomersApi from '../api/customers';
 import moment from 'moment';
 
 import RestaurantIcon from '@material-ui/icons/Restaurant';
@@ -35,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   cardMargin: {
     marginTop: '10px',
   },
+  formControl: {
+    width: '120px',
+  },
 }));
 
 const Home = (props) => {
@@ -44,6 +52,11 @@ const Home = (props) => {
   // fdsmanagers
   const [dataCustomerOrders, setDataCustomerOrders] = useState([]);
   const [dataTotalOrderSum, setDataTotalOrderSum] = useState([]);
+  const [summaryTwoSwitch, setSummaryTwoSwitch] = useState(false);
+  const [summaryTwoCusIDOne, setSummaryTwoCusIDOne] = useState([]);
+  const [summaryTwoCusIDTwo, setSummaryTwoCusIDTwo] = useState([]);
+  const [selectedCusID, setSelectedCusID] = useState(1);
+  const [selectedRiderID, setSelectedRiderID] = useState(1);
   const [summaryTwo, setSummaryTwo] = useState([]);
   const [summaryThree, setSummaryThree] = useState([]);
   const [summaryFour, setSummaryFour] = useState([]);
@@ -71,7 +84,14 @@ const Home = (props) => {
       { title: 'Delivery Address', field: 'totalnumberordersdelivered' },
       { title: 'Total Hours Worked', field: 'totalhoursworked' },
       { title: 'Total Salary Earned', field: 'totalsalaryearned' },
-      { title: 'Average Delivery Time', field: 'averagedeliverytime' },
+      {
+        title: 'Average Delivery Time',
+        render: (rowData) => (
+          <>
+            <Typography variant='body2'>{rowData.averagedeliverytime.toFixed(2)}</Typography>
+          </>
+        ),
+      },
       { title: 'No. Ratings', field: 'numratings' },
       { title: 'Average Rating', field: 'averagerating' },
     ],
@@ -79,11 +99,12 @@ const Home = (props) => {
 
   // riders
   const [myOrders, setMyOrders] = useState([]);
-  const [selectedOrderID, setSelectedOrderID] = useState(-1);
+  const [selectedOrderID, setSelectedOrderID] = useState(0);
 
   useEffect(() => {
     getFDSManagerSummaryOne();
     getFDSManagerSummaryTwo();
+    getFDSManagerSummaryTwoByCustomerId();
     getFDSManagerSummaryThree();
     getFDSManagerSummaryFour();
     getOrdersByRiderId();
@@ -108,6 +129,30 @@ const Home = (props) => {
           };
           setDataCustomerOrders((dataCustomerOrders) => [...dataCustomerOrders, data1]);
           setDataTotalOrderSum((dataTotalOrderSum) => [...dataTotalOrderSum, data2]);
+        });
+      })
+      .catch((err) => {});
+  };
+
+  const getFDSManagerSummaryTwoByCustomerId = () => {
+    FDSManagersApis.getFDSManagerSummaryTwoByCustomerId(selectedCusID)
+      .then((response) => {
+        if (response.status !== 201) {
+        }
+        setSummaryTwoCusIDOne([]);
+        setSummaryTwoCusIDTwo([]);
+        let datas = response.data;
+        datas.forEach(function (data, index) {
+          let data1 = {
+            month: data.year + '-' + data.month,
+            totalnumordersbycust: data.totalnumordersbycust,
+          };
+          let data2 = {
+            month: data.year + '-' + data.month,
+            totalcostbycust: data.totalcostbycust,
+          };
+          setSummaryTwoCusIDOne((summaryTwoCusIDOne) => [...summaryTwoCusIDOne, data1]);
+          setSummaryTwoCusIDTwo((summaryTwoCusIDTwo) => [...summaryTwoCusIDTwo, data2]);
         });
       })
       .catch((err) => {});
@@ -348,42 +393,103 @@ const Home = (props) => {
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Card>
               <CardContent align='center'>
-                <>
-                  <Typography variant='overline' display='block' component='p' align='center'>
-                    Number of new customers and orders per month
-                  </Typography>
-                  <LineChart
-                    width={500}
-                    height={280}
-                    data={dataCustomerOrders}
-                    margin={{
-                      top: 10,
-                      bottom: 10,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray='3 3' />
-                    <XAxis dataKey='month' />
-                    <YAxis domain={[6, 30]} />
-                    <Tooltip />
-                    <Legend />
-                    <Line type='monotone' dataKey='numcustcreated' stroke='#8884d8' activeDot={{ r: 8 }} />
-                    <Line type='monotone' dataKey='totalorders' stroke='#82ca9d' />
-                  </LineChart>
-                </>
+                <Typography variant='overline' display='block' component='p' align='center'>
+                  Number of new customers and orders per month
+                </Typography>
+                <LineChart
+                  width={500}
+                  height={280}
+                  data={dataCustomerOrders}
+                  margin={{
+                    top: 10,
+                    bottom: 10,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='month' />
+                  <YAxis domain={[0, 250]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type='monotone' dataKey='numcustcreated' stroke='#8884d8' activeDot={{ r: 8 }} />
+                  <Line type='monotone' dataKey='totalorders' stroke='#82ca9d' />
+                </LineChart>
               </CardContent>
             </Card>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Card>
               <CardContent align='center'>
-                <>
-                  <Typography variant='overline' display='block' component='p' align='center'>
-                    Total order sum per month
-                  </Typography>
+                <Typography variant='overline' display='block' component='p' align='center'>
+                  Total order sum per month
+                </Typography>
+                <LineChart
+                  width={500}
+                  height={280}
+                  data={dataTotalOrderSum}
+                  margin={{
+                    top: 10,
+                    bottom: 10,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='month' />
+                  <YAxis domain={[200, 11000]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type='monotone' dataKey='totalorderssum' stroke='#8884d8' activeDot={{ r: 8 }} />
+                </LineChart>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card>
+              <CardContent>
+                <Grid
+                  container
+                  direction='row'
+                  spacing={1}
+                  style={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}
+                >
+                  <Grid item>
+                    <TextField
+                      type='number'
+                      id='standard-full-width'
+                      name='selectedCusID'
+                      fullWidth
+                      label='Customer ID'
+                      multiline
+                      value={selectedCusID}
+                      helperText='Customer unique ID E.g. 43'
+                      onChange={(event) => setSelectedCusID(event.target.value)}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ backgroundColor: '#ff3008', color: '#fff', marginTop: '10px' }}
+                      onClick={() => getFDSManagerSummaryTwoByCustomerId()}
+                    >
+                      {'Search'}
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      style={{ marginTop: '10px' }}
+                      onClick={() => setSummaryTwoSwitch(!summaryTwoSwitch)}
+                    >
+                      {'toggle Graph'}
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Typography variant='overline' display='block' component='p' align='center'>
+                  {summaryTwoSwitch ? 'Total cost per customer' : 'Total number of orders per customer'}
+                </Typography>
+                <Grid container justify={'center'}>
                   <LineChart
                     width={500}
                     height={280}
-                    data={dataTotalOrderSum}
+                    data={summaryTwoSwitch ? summaryTwoCusIDTwo : summaryTwoCusIDOne}
                     margin={{
                       top: 10,
                       bottom: 10,
@@ -391,12 +497,17 @@ const Home = (props) => {
                   >
                     <CartesianGrid strokeDasharray='3 3' />
                     <XAxis dataKey='month' />
-                    <YAxis domain={[300, 1500]} />
+                    <YAxis domain={summaryTwoSwitch ? [0, 400] : [0, 10]} />
                     <Tooltip />
                     <Legend />
-                    <Line type='monotone' dataKey='totalorderssum' stroke='#8884d8' activeDot={{ r: 8 }} />
+                    <Line
+                      type='monotone'
+                      dataKey={summaryTwoSwitch ? 'totalcostbycust' : 'totalnumordersbycust'}
+                      stroke='#8884d8'
+                      activeDot={{ r: 8 }}
+                    />
                   </LineChart>
-                </>
+                </Grid>
               </CardContent>
             </Card>
           </Grid>

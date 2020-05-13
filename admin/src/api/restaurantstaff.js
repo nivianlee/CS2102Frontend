@@ -28,7 +28,7 @@ export function deleteRestaurantStaff(restaurantStaffID) {
 
 export function createFoodItem(restaurantStaffID, request) {
   var link = Config.ipAddress + '/restaurantstaff/' + restaurantStaffID + '/fooditems';
-  return axios.create(link, request);
+  return axios.post(link, request);
 }
 
 export function updateFoodItem(restaurantStaffID, request) {

@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = (props) => {
+const Restaurant = (props) => {
   const classes = useStyles();
   const [notification, setNotification] = useState('');
   const [bc, setBC] = useState(false);
@@ -93,8 +93,8 @@ const Home = (props) => {
     foodItemID: -1,
     foodItemName: '',
     category: '',
-    maxNumOfOrders: -1,
-    price: -1,
+    maxNumOfOrders: 0,
+    price: 0,
     availabilityStatus: false,
     restaurantID: -1,
   });
@@ -641,7 +641,7 @@ const Home = (props) => {
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <Card>
             <Grid container direction='column' className={classes.foodItemText}>
-              <Grid item xs={10} sm={10} md={10} lg={10} className={classes.foodItemTextInput}>
+              <Grid item xs={12} sm={12} md={12} lg={12} className={classes.foodItemTextInput}>
                 <Button variant='contained' onClick={() => setIsUploadImage(true)}>
                   Add Image
                 </Button>
@@ -686,7 +686,7 @@ const Home = (props) => {
                   name='maxNumOfOrders'
                   fullWidth
                   label='Max No. Of Orders'
-                  helperText='Proper casing preferred e.g. Chinese'
+                  helperText='E.g. 20'
                   value={newFoodItem.maxNumOfOrders}
                   onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
                 />
@@ -697,7 +697,7 @@ const Home = (props) => {
                   name='price'
                   fullWidth
                   label='Price'
-                  helperText='e.g. 15'
+                  helperText='E.g. 15'
                   value={newFoodItem.price}
                   onChange={(event) => setNewFoodItem({ ...newFoodItem, [event.target.name]: event.target.value })}
                 />
@@ -729,4 +729,4 @@ const Home = (props) => {
 const mapStateToProps = (state) => ({
   loggedInUserType: state.reducer.loggedInUserType,
 });
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Restaurant);

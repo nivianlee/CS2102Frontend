@@ -71,6 +71,7 @@ const Schedule = (props) => {
     range: [],
   });
   const [mws, setMWS] = useState([]);
+  const [temp, setTemp] = useState([]);
   const [currMWS, setCurrMWS] = useState({
     rangeid: -1,
     shiftid: -1,
@@ -100,7 +101,7 @@ const Schedule = (props) => {
   });
 
   useEffect(() => {
-    if (sessionStorage.getItem('isFullTime')) {
+    if (sessionStorage.getItem('isFullTime') === true) {
       getMwsFullTimeRiderById();
     } else {
       getWwsPartTimeRiderById();
@@ -381,7 +382,7 @@ const Schedule = (props) => {
           </Card>
         </Grid>
       )}
-      {sessionStorage.getItem('isFullTime') ? (
+      {sessionStorage.getItem('isFullTime') === true ? (
         <>
           {mws.map((eachMWS) => (
             <Grid item xs={12} sm={12} md={4} lg={4} key={eachMWS.month} style={{ marginTop: '10px' }}>
@@ -479,6 +480,51 @@ const Schedule = (props) => {
           <Card>
             <MaterialTable title='My Schedule' columns={tableStateWWS.columns} data={wws} />
           </Card>
+          <Grid container direction='row' spacing={2}>
+            {wws.map((eachWWS) => (
+              <Grid item xs={12} sm={12} md={4} lg={4} key={eachWWS.week} style={{ marginTop: '10px' }}>
+                <Card>
+                  <CardContent>
+                    <Typography variant='h6' component='p' align='left' className={classes.scheduleTextInput}>
+                      Week: {eachWWS.week}
+                    </Typography>
+                    <Typography variant='body1' component='p' align='left' className={classes.scheduleTextInput}>
+                      Day: {eachWWS.day}
+                    </Typography>
+                    <Typography variant='body1' component='p' align='left' className={classes.scheduleTextInput}>
+                      Time: {eachWWS.starttime} - {eachWWS.endtime}
+                    </Typography>
+                    <Grid container direction='column' spacing={2} className={classes.button}>
+                      <Grid item>
+                        <Button
+                          variant='contained'
+                          style={{ backgroundColor: '#ff3008', color: '#fff' }}
+                          onClick={() => {
+                            updateMwsFullTimeRider(eachWWS.month);
+                          }}
+                        >
+                          Update Schedule
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant='contained'
+                          onClick={() => {
+                            getMwsFullTimeRiderById();
+                            setNotification('MWS was not updated, retrieving original MWS');
+                            showNotification();
+                            setCurrMonth(-1);
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       )}
       <Grid container justify={'center'}>
