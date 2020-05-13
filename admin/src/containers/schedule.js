@@ -321,66 +321,76 @@ const Schedule = (props) => {
         </Card>
       </Grid>
       {isNewSchedule && (
-        <Grid item xs={12} sm={12} md={4} lg={4} style={{ marginTop: '10px', marginRight: '10px' }}>
-          <Card>
-            <CardContent>
-              <Typography variant='h6' component='p' align='left' className={classes.scheduleTextInput}>
-                Month: {convertMonthToString(5)}
-              </Typography>
-              <Grid item xs={12} sm={12} md={12} lg={12} className={classes.scheduleTextInput}>
-                <FormControl component='fieldset'>
-                  <FormLabel component='legend'>Shift</FormLabel>
-                  <RadioGroup
-                    aria-label='shift'
-                    name='shiftid'
-                    value={newMWS.shiftid}
-                    onChange={(event) => setNewMWS({ ...newMWS, [event.target.name]: parseInt(event.target.value) })}
-                  >
-                    <FormControlLabel
-                      value={1}
-                      control={<Radio />}
-                      label='1 | Shift 1: 10:00 - 14:00 | Shift 2: 15:00 - 19:00'
-                    />
-                    <FormControlLabel
-                      value={2}
-                      control={<Radio />}
-                      label='2 | Shift 1: 11:00 - 15:00 | Shift 2: 16:00 - 20:00'
-                    />
-                    <FormControlLabel
-                      value={3}
-                      control={<Radio />}
-                      label='3 | Shift 1: 12:00 - 16:00 | Shift 2: 17:00 - 21:00'
-                    />
-                    <FormControlLabel
-                      value={4}
-                      control={<Radio />}
-                      label='4 | Shift 1: 13:00 - 17:00 | Shift 2: 18:00 - 22:00'
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12} className={classes.scheduleTextInput}>
-                <FormControl component='fieldset'>
-                  <FormLabel component='legend'>Range</FormLabel>
-                  <RadioGroup
-                    aria-label='range'
-                    name='rangeid'
-                    value={newMWS.rangeid}
-                    onChange={(event) => setNewMWS({ ...newMWS, [event.target.name]: parseInt(event.target.value) })}
-                  >
-                    <FormControlLabel value={1} control={<Radio />} label='1 | Mon | Tue | Wed | Thu | Fri' />
-                    <FormControlLabel value={2} control={<Radio />} label='2 | Tue | Wed | Thu | Fri | Sat' />
-                    <FormControlLabel value={3} control={<Radio />} label='3 | Wed | Thu | Fri | Sat | Sun' />
-                    <FormControlLabel value={4} control={<Radio />} label='4 | Thu | Fri | Sat | Sun | Mon' />
-                    <FormControlLabel value={5} control={<Radio />} label='5 | Fri | Sat | Sun | Mon | Tue' />
-                    <FormControlLabel value={6} control={<Radio />} label='6 | Sat | Sun | Mon | Tue | Wed' />
-                    <FormControlLabel value={7} control={<Radio />} label='7 | Sun | Mon | Tue | Wed | Thu' />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
+        <>
+          {sessionStorage.getItem('isFullTime') === true ? (
+            <Grid item xs={12} sm={12} md={4} lg={4} style={{ marginTop: '10px', marginRight: '10px' }}>
+              <Card>
+                <CardContent>
+                  <Typography variant='h6' component='p' align='left' className={classes.scheduleTextInput}>
+                    Month: {convertMonthToString(5)}
+                  </Typography>
+                  <Grid item xs={12} sm={12} md={12} lg={12} className={classes.scheduleTextInput}>
+                    <FormControl component='fieldset'>
+                      <FormLabel component='legend'>Shift</FormLabel>
+                      <RadioGroup
+                        aria-label='shift'
+                        name='shiftid'
+                        value={newMWS.shiftid}
+                        onChange={(event) =>
+                          setNewMWS({ ...newMWS, [event.target.name]: parseInt(event.target.value) })
+                        }
+                      >
+                        <FormControlLabel
+                          value={1}
+                          control={<Radio />}
+                          label='1 | Shift 1: 10:00 - 14:00 | Shift 2: 15:00 - 19:00'
+                        />
+                        <FormControlLabel
+                          value={2}
+                          control={<Radio />}
+                          label='2 | Shift 1: 11:00 - 15:00 | Shift 2: 16:00 - 20:00'
+                        />
+                        <FormControlLabel
+                          value={3}
+                          control={<Radio />}
+                          label='3 | Shift 1: 12:00 - 16:00 | Shift 2: 17:00 - 21:00'
+                        />
+                        <FormControlLabel
+                          value={4}
+                          control={<Radio />}
+                          label='4 | Shift 1: 13:00 - 17:00 | Shift 2: 18:00 - 22:00'
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12} className={classes.scheduleTextInput}>
+                    <FormControl component='fieldset'>
+                      <FormLabel component='legend'>Range</FormLabel>
+                      <RadioGroup
+                        aria-label='range'
+                        name='rangeid'
+                        value={newMWS.rangeid}
+                        onChange={(event) =>
+                          setNewMWS({ ...newMWS, [event.target.name]: parseInt(event.target.value) })
+                        }
+                      >
+                        <FormControlLabel value={1} control={<Radio />} label='1 | Mon | Tue | Wed | Thu | Fri' />
+                        <FormControlLabel value={2} control={<Radio />} label='2 | Tue | Wed | Thu | Fri | Sat' />
+                        <FormControlLabel value={3} control={<Radio />} label='3 | Wed | Thu | Fri | Sat | Sun' />
+                        <FormControlLabel value={4} control={<Radio />} label='4 | Thu | Fri | Sat | Sun | Mon' />
+                        <FormControlLabel value={5} control={<Radio />} label='5 | Fri | Sat | Sun | Mon | Tue' />
+                        <FormControlLabel value={6} control={<Radio />} label='6 | Sat | Sun | Mon | Tue | Wed' />
+                        <FormControlLabel value={7} control={<Radio />} label='7 | Sun | Mon | Tue | Wed | Thu' />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : (
+            <></>
+          )}
+        </>
       )}
       {sessionStorage.getItem('isFullTime') === true ? (
         <>

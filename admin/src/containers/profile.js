@@ -378,7 +378,6 @@ const Profile = (props) => {
                         id='demo-simple-select'
                         value={rider.isFullTime}
                         name='isFullTime'
-                        disabled={true}
                         onChange={(event) => setRider({ ...rider, [event.target.name]: event.target.value })}
                       >
                         <MenuItem value={true}>Full Time</MenuItem>

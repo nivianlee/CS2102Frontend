@@ -668,7 +668,7 @@ const Login = (props) => {
                 <Grid container direction='row' spacing={2} className={classes.input}>
                   <Grid item xs={9} sm={9} md={9} lg={9}>
                     <TextField
-                      type='password'
+                      type='number'
                       id='standard-full-width'
                       name='otp'
                       fullWidth
